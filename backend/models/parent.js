@@ -1,27 +1,25 @@
 const mongoose = require("mongoose");
 
-const parentSchema = new mongoose.Schema({ 
-
+const parentSchema = new mongoose.Schema({
   // Display name
   name: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
     unique: true,
-    required: true,
+    required: true
   },
   // login name
   username: {
     type: String,
-    unique: true,
+    unique: true
   },
   password: {
     type: String,
-    unique: true,
-  },
-
+    unique: true
+  }
 });
 
 let parentModel = mongoose.model("Parent", parentSchema);
