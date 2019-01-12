@@ -111,6 +111,25 @@ const login = (request, response) => {
         });
       });
   };
+  const updateParent = (request, response) => {
+    const { _id, username, email } = request.body;
+    Parent.findById({ _id: request.params.id })
+      .then(function(user) {
+        if (user) {
+          (user.username = username), (user.email = email);
+          User.findByIdAndUpdate({ _id: request.params.id }, user)
+            .then(user => {
+              response.status(200).json(user);
+            })
+            .catch(err => {
+              response.status(500).json(`message: Error username or email: ${err}`);
+            });
+        }
+      })
+      .catch(function(error) {
+        response.status(500).json(`message: Error username or email: ${error}`);
+      });
+  };
 
 
 module.exports = {
@@ -118,5 +137,6 @@ module.exports = {
     login,
     getParentById,
     deleteParentById,
+    updateParent
   };
   

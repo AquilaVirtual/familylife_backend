@@ -23,4 +23,7 @@ router.get("/", (request, response) => {
   router.post("/api/user/:id", (request, response) => {
     ParentController.deleteParentById(request, response);
   });
+  router.post("/api/user/:id", (request, response) => {
+    ParentController.updateParent(request, response);
+  });
 module.exports = router;
