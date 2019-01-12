@@ -11,4 +11,8 @@ router.get("/", (request, response) => {
   router.post("/api/user/register", (request, response) => {
     ParentController.register(request, response);
   });
+
+  router.post("/api/user/login", (request, response) => {
+    ParentController.login(request, response);
+  });
 module.exports = router;

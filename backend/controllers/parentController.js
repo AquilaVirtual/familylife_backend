@@ -10,7 +10,6 @@ function generateToken(user) {
   secret = process.env.REACT_APP_SECRET;
   if (typeof secret !== "string") {
     secret = process.env.secret;  
-
   }
   return jwt.sign(payload, secret, options);
 }
@@ -62,8 +61,35 @@ const register = (request, response) => {
     });
 };
 
+const login = (request, response) => {
+    const { username, password } = request.body;
+    Parent.findOne({ username: username })
+      .then(userFound => {
+        if (!userFound) {
+          response.status(500).send({
+            errorMessage: "Login Failed.",
+          });
+        } else {
+          if (bcrypt.compareSync(password, userFound.password)) {
+            const token = generateToken({ userFound });
+            response.status(200).send({ ...userFound, token });
+          } else {
+            response.status(500).send({
+              errorMessage: "Login Failed.",
+            });
+          }
+        }
+      })
+      .catch(err => {
+        response.status(500).send({
+          errorMessage: "Failed to Login: " + err,
+        });
+      });
+  };
+
 
 module.exports = {
     register,
+    login,
   };
   
