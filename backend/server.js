@@ -2,6 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const bodyparser = require("body-parser");
+const routes = require("./routes");
 
 //Instantiate Server
 const server = express();
@@ -20,17 +21,13 @@ mongoose
 //Security
 server.use(helmet());
 
-//Insanity check
-server.get('/', (request, response) => {
-response.send("API: running")
-})
-
 //Permissions
 server.use(cors());
 
 //Enable to parse Json object
 server.use(express.json());
 server.use(bodyparser.json()); //express.jason;
+server.use("/", routes);
 
 server.use(require("body-parser").text());
 
