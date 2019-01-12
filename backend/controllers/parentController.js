@@ -87,9 +87,22 @@ const login = (request, response) => {
       });
   };
 
+  const getParentById = (request, response) => {
+   Parent.findById({ _id: request.params.id })
+      .then(function(user) {
+        response.status(200).json(user);
+      })
+      .catch(function(error) {
+        response.status(500).json({
+          error: "The user could not be retrieved.",
+        });
+      });
+  };
+
 
 module.exports = {
     register,
     login,
+    getParentById
   };
   

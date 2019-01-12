@@ -15,4 +15,8 @@ router.get("/", (request, response) => {
   router.post("/api/user/login", (request, response) => {
     ParentController.login(request, response);
   });
+
+  router.post("/api/user/:id", (request, response) => {
+    ParentController.getParentById(request, response);
+  });
 module.exports = router;
