@@ -5,13 +5,13 @@ const choreSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
-  },
-
+  }, 
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",
     required: true
-  }
+  },
+  children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
 });
 
 let choredModel = mongoose.model("Chore", choredSchema);

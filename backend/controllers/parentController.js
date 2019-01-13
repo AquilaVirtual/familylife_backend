@@ -11,7 +11,7 @@ function generateToken(user) {
   if (typeof secret !== "string") {
     secret = process.env.secret;
   }
-  secret  = "It is a family business"
+  secret = "It is a family business";
   return jwt.sign(payload, secret, options);
 }
 const bcryptRounds = 10;
@@ -48,6 +48,7 @@ const register = (request, response) => {
           })
           .catch(err => {
             response.status(500).send({
+              //placeholder error message
               errorMessage: "Level 1 Error occurred while saving: " + err
             });
           });
@@ -55,6 +56,7 @@ const register = (request, response) => {
     })
     .catch(err => {
       response.status(500).send({
+        //placeholder error message
         errorMessage: "Level 2 Error occurred while saving: " + err
       });
     });
@@ -99,8 +101,8 @@ const getParentById = (request, response) => {
 };
 
 const deleteParentById = (request, response) => {
-    const { _id } = request.body;
-    console.log("Take him out!", request.body)
+  const { _id } = request.body;
+  console.log("Take him out!", request.body);
   Parent.findByIdAndRemove({ id: request.params.id })
     .then(function(user) {
       response.status(200).json(user);

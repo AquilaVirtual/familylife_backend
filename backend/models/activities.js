@@ -14,7 +14,8 @@ const activitySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",
     required: true
-  }
+  },
+  children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
 });
 
 let activitydModel = mongoose.model("Activity", activitydSchema);
