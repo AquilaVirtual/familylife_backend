@@ -22,6 +22,6 @@ const assignmentSchema = new mongoose.Schema({
   children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
 });
 
-let assignmentdModel = mongoose.model("Assignment", assignmentdSchema);
+let assignmentdModel = mongoose.model("Assignment", assignmentSchema);
 
-module.exports = assignmentdModel;
+module.exports = assignmentModel;

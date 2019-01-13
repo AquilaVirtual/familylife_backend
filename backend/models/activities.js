@@ -18,6 +18,6 @@ const activitySchema = new mongoose.Schema({
   children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
 });
 
-let activitydModel = mongoose.model("Activity", activitydSchema);
+let activitydModel = mongoose.model("Activity", activitySchema);
 
 module.exports = activitydModel;
