@@ -1,3 +1,3 @@
-const Parent = require("../models/activities");
+const Activities = require("../models/activities");
 const Parent = require("../models/parent");
-const Parent = require("../models/child");
+const child = require("../models/child");

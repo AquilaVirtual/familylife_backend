@@ -1,3 +1,7 @@
-const Parent = require("../models/chores");
+const Chors = require("../models/chores");
 const Parent = require("../models/parent");
-const Parent = require("../models/child");
+const child = require("../models/child");
+
+const CreateChores = (request, response) => {
+
+} 
