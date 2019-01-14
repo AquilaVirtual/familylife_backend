@@ -7,7 +7,7 @@ const choreSchema = new mongoose.Schema({
     type: String,
     required: true
   }, 
-  author: { type: mongoose.Schema.Types.ObjectId, ref: "Parent"},
+  creator: { type: mongoose.Schema.Types.ObjectId, ref: "Parent"},
   children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
 });
 

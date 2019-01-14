@@ -4,7 +4,7 @@ const child = require("../models/child");
 
 const mongoose = require("mongoose");
 
-const createChores = (request, response) => {
+const createChore = (request, response) => {
   const { name, username } = request.body;
   const chore = new Chores({
     _id: new mongoose.Types.ObjectId(),
@@ -28,7 +28,7 @@ const createChores = (request, response) => {
 };
 const getChores = (request, response) => {
   Chores.find()
-    .populate("parent")
+    .populate("creator")
     .then(res => {
       response.status(200).json(res);
     })
@@ -37,6 +37,6 @@ const getChores = (request, response) => {
     });
 };
 module.exports = {
-  createChores,
+  createChore,
   getChores
 };

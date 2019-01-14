@@ -9,7 +9,8 @@ const assignmentSchema = new mongoose.Schema({
   },
   due: {
     type: Date,
-    required: true
+    required: true,
+    default: Date.now()
   },
   description: {
     type: String,
@@ -17,12 +18,11 @@ const assignmentSchema = new mongoose.Schema({
   },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Parent",
-    required: true
+    ref: "Parent",  
   },
   children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
 });
 
-let assignmentdModel = mongoose.model("Assignment", assignmentSchema);
+let assignmentModel = mongoose.model("Assignment", assignmentSchema);
 
 module.exports = assignmentModel;
