@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const parentSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   // Display name
   name: {
     type: String,
@@ -18,8 +19,10 @@ const parentSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    unique: true
-  }
+    required: true
+  
+  },
+     chores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
 });
 
 let parentModel = mongoose.model("Parent", parentSchema);

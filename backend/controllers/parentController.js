@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const Parent = require("../models/parent");
 const jwt = require("jsonwebtoken");
 
+const mongoose = require("mongoose");
+
 function generateToken(user) {
   const options = {
     expiresIn: "1h"
@@ -9,7 +11,7 @@ function generateToken(user) {
   const payload = { name: user.username };
   secret = process.env.REACT_APP_SECRET;
   if (typeof secret !== "string") {
-    secret = process.env.secret;
+    secret = process.env.secret;  
   }
   return jwt.sign(payload, secret, options);
 }
@@ -33,6 +35,7 @@ const register = (request, response) => {
         const encryptedPassword = bcrypt.hashSync(password, bcryptRounds);
         const token = generateToken({ username });
         const user = new Parent({
+          _id: new mongoose.Types.ObjectId(),
           name,
           username,
           password: encryptedPassword,
@@ -72,7 +75,7 @@ const login = (request, response) => {
       } else {
         if (bcrypt.compareSync(password, userFound.password)) {
           const token = generateToken({ userFound });
-          response.status(200).send({ ...userFound, token });
+          response.status(200).send({ userFound, token });
         } else {
           response.status(500).send({
             errorMessage: "Login Failed."
@@ -134,10 +137,23 @@ const updateParent = (request, response) => {
     });
 };
 
+const getAllParents = (request, response) => {
+  Parent.find({})
+    .then(function(users) {
+      response.status(200).json(users);
+    })
+    .catch(function(error) {
+      response.status(500).json({
+        error: "The information could not be retrieved."
+      });
+    });
+};
+
 module.exports = {
   register,
   login,
   getParentById,
   deleteParentById,
-  updateParent
+  updateParent,
+  getAllParents
 };
