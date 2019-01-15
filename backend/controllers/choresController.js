@@ -26,9 +26,20 @@ const createChore = (request, response) => {
       console.log("Error here", err);
     });
 };
-const getChores = (request, response) => {
-  Chores.find()
-    .populate("creator")
+
+const getChoresByParent = (request, response) => {
+  const { username } = request.body;
+  Parent.findOne({username: username})
+    .populate("chores")
+    .then(res => {
+      response.status(200).json(res);
+    })
+    .catch(err => {
+      console.log("Something bad", err);
+    });
+};
+const getAllChores = (request, response) => {
+  Chores.find({})    
     .then(res => {
       response.status(200).json(res);
     })
@@ -38,5 +49,6 @@ const getChores = (request, response) => {
 };
 module.exports = {
   createChore,
-  getChores
+  getChoresByParent,
+  getAllChores 
 };

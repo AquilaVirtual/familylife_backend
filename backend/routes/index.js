@@ -38,7 +38,10 @@ router.post("/api/chore/create", (request, response) => {
   ChoresController.createChore(request, response);
 });
 router.get("/api/chore", (request, response) => {
-  ChoresController.getChores(request, response);
+  ChoresController.getChoresByParent(request, response);
+});
+router.get("/api/chore/all", (request, response) => {
+  ChoresController.getAllChores(request, response);
 });
 
 //Assignments go here
