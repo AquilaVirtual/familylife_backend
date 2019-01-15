@@ -28,9 +28,19 @@ const createAssignment = (request, response) => {
       console.log("Error here", err);
     });
 };
-const getAssignments = (request, response) => {
-  Assignment.find()
-    .populate("creator")
+const getAssignmentsByParent = (request, response) => {
+  const { username } = request.body;
+  Parent.findOne({username: username})
+    .populate("assignments")
+    .then(res => {
+      response.status(200).json(res);
+    })
+    .catch(err => {
+      console.log("Something bad", err);
+    });
+};
+const getAllAssignments = (request, response) => {
+  Assignment.find({})   
     .then(res => {
       response.status(200).json(res);
     })
@@ -40,5 +50,6 @@ const getAssignments = (request, response) => {
 };
 module.exports = {
   createAssignment,
-  getAssignments
+  getAssignmentsByParent,
+  getAllAssignments 
 };

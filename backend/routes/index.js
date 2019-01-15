@@ -49,7 +49,10 @@ router.post("/api/assignment/create", (request, response) => {
   AssignmentController.createAssignment(request, response);
 });
 router.get("/api/assignment", (request, response) => {
-  AssignmentController.getAssignments(request, response);
+  AssignmentController.getAssignmentsByParent(request, response);
+});
+router.get("/api/assignment/all", (request, response) => {
+  AssignmentController.getAllAssignments(request, response);
 });
 
 //Activities go here
