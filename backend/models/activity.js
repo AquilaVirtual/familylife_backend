@@ -13,8 +13,7 @@ const activitySchema = new mongoose.Schema({
   },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Parent",
-    required: true
+    ref: "Parent",   
   },
   children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
 });

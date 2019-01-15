@@ -1,7 +1,8 @@
 const express = require("express");
 const ParentController = require("../controllers/parentController");
 const ChoresController = require("../controllers/choresController");
-const AssignmentController = require("../controllers/AssignmentController");
+const AssignmentController = require("../controllers/assignmentController");
+const ActivityController = require("../controllers/ActivityController");
 const router = express.Router();
 
 //Insanity check
@@ -45,5 +46,13 @@ router.post("/api/assignment/create", (request, response) => {
 });
 router.get("/api/assignment", (request, response) => {
   AssignmentController.getAssignments(request, response);
+});
+
+//Activities go here
+router.post("/api/activity/create", (request, response) => {
+  ActivityController.createActivity(request, response);
+});
+router.get("/api/activity", (request, response) => {
+  ActivityController.getActivities(request, response);
 });
 module.exports = router;
