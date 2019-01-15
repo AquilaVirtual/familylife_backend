@@ -9,7 +9,7 @@ const createActivity = (request, response) => {
   const activity = new Activity({
     _id: new mongoose.Types.ObjectId(),
     name,
-    type,   
+    type
   });
   activity
     .save()
@@ -17,8 +17,8 @@ const createActivity = (request, response) => {
       console.log("Activity here", activity);
       const id = activity._id;
       console.log("Before id", id);
-      Parent.findOneAndUpdate(username, { $push: { activities: id } })
-      .then(activity => {
+      Parent.findOneAndUpdate(username, { $push: { activities: id } }).then(
+        activity => {
           console.log("Before save1", activity);
           response.status(200).json(activity);
         }
@@ -30,8 +30,8 @@ const createActivity = (request, response) => {
 };
 
 const getActivitiesByParent = (request, response) => {
-  const { username } = request.body;
-  Parent.findOne({username: username})
+  const { username } = request.params;
+  Parent.findOne({ username: username })
     .populate("activies")
     .then(res => {
       response.status(200).json(res);
@@ -41,7 +41,7 @@ const getActivitiesByParent = (request, response) => {
     });
 };
 const getAllActivities = (request, response) => {
-  Activity.find({})   
+  Activity.find({})
     .then(res => {
       response.status(200).json(res);
     })

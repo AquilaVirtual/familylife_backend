@@ -11,7 +11,7 @@ function generateToken(user) {
   const payload = { name: user.username };
   secret = process.env.REACT_APP_SECRET;
   if (typeof secret !== "string") {
-    secret = process.env.secret; 
+    secret = process.env.secret;
   }
 
   return jwt.sign(payload, secret, options);
@@ -69,7 +69,7 @@ const login = (request, response) => {
   const { username, password } = request.body;
   Parent.findOne({ username: username })
     .then(userFound => {
-      console.log("User on backend", userFound)
+      console.log("User on backend", userFound);
       if (!userFound) {
         response.status(500).send({
           errorMessage: "Login Failed."

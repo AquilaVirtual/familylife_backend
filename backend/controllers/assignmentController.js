@@ -9,7 +9,7 @@ const createAssignment = (request, response) => {
   const assignment = new Assignment({
     _id: new mongoose.Types.ObjectId(),
     name,
-    due, 
+    due,
     description
   });
   assignment
@@ -17,8 +17,8 @@ const createAssignment = (request, response) => {
     .then(saveassignment => {
       const id = saveassignment._id;
       console.log("Before id", id);
-      Parent.findOneAndUpdate(username, { $push: { assignments: id } })
-      .then(saveAssignment => {
+      Parent.findOneAndUpdate(username, { $push: { assignments: id } }).then(
+        saveAssignment => {
           console.log("Before save1", saveAssignment);
           response.status(200).json(saveAssignment);
         }
@@ -29,8 +29,8 @@ const createAssignment = (request, response) => {
     });
 };
 const getAssignmentsByParent = (request, response) => {
-  const { username } = request.body;
-  Parent.findOne({username: username})
+  const { username } = request.params;
+  Parent.findOne({ username: username })
     .populate("assignments")
     .then(res => {
       response.status(200).json(res);
@@ -40,7 +40,7 @@ const getAssignmentsByParent = (request, response) => {
     });
 };
 const getAllAssignments = (request, response) => {
-  Assignment.find({})   
+  Assignment.find({})
     .then(res => {
       response.status(200).json(res);
     })
@@ -51,5 +51,5 @@ const getAllAssignments = (request, response) => {
 module.exports = {
   createAssignment,
   getAssignmentsByParent,
-  getAllAssignments 
+  getAllAssignments
 };
