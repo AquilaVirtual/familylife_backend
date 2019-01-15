@@ -28,9 +28,20 @@ const createActivity = (request, response) => {
       console.log("Error here", err);
     });
 };
-const getActivities = (request, response) => {
-  Activity.find()
-    .populate("creator")
+
+const getActivitiesByParent = (request, response) => {
+  const { username } = request.body;
+  Parent.findOne({username: username})
+    .populate("activies")
+    .then(res => {
+      response.status(200).json(res);
+    })
+    .catch(err => {
+      console.log("Something bad", err);
+    });
+};
+const getAllActivities = (request, response) => {
+  Activity.find({})   
     .then(res => {
       response.status(200).json(res);
     })
@@ -40,5 +51,6 @@ const getActivities = (request, response) => {
 };
 module.exports = {
   createActivity,
-  getActivities
+  getActivitiesByParent,
+  getAllActivities
 };

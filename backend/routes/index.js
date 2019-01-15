@@ -3,6 +3,7 @@ const ParentController = require("../controllers/parentController");
 const ChoresController = require("../controllers/choresController");
 const AssignmentController = require("../controllers/assignmentController");
 const ActivityController = require("../controllers/ActivityController");
+
 const router = express.Router();
 
 //Insanity check
@@ -53,6 +54,9 @@ router.post("/api/activity/create", (request, response) => {
   ActivityController.createActivity(request, response);
 });
 router.get("/api/activity", (request, response) => {
-  ActivityController.getActivities(request, response);
+  ActivityController.getActivitiesByParent(request, response);
+});
+router.get("/api/activity/all", (request, response) => {
+  ActivityController.getAllActivities(request, response);
 });
 module.exports = router;
