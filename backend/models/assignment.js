@@ -2,8 +2,13 @@ const mongoose = require("mongoose");
 
 const assignmentSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  // assignment name
-  name: {
+  //person's name
+  user: {
+    type: String,
+    required: true
+  },
+  // assignment title
+  title: {
     type: String,
     required: true
   },

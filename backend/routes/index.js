@@ -54,6 +54,12 @@ router.get("/api/assignment", (request, response) => {
 router.get("/api/assignment/all", (request, response) => {
   AssignmentController.getAllAssignments(request, response);
 });
+router.delete("/api/assignment/:_id", (request, response) => {
+  AssignmentController.deleteAssignment(request, response);
+});
+router.put("/api/assignment/:_id", (request, response) => {
+  AssignmentController.updateAssignment(request, response);
+});
 
 //Activities go here
 router.post("/api/activity/create", (request, response) => {

@@ -5,17 +5,18 @@ const Child = require("../models/child");
 const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
-  const { name, due, description, username } = request.body;
+  const { user, title, due, description, username } = request.body;
   const assignment = new Assignment({
     _id: new mongoose.Types.ObjectId(),
-    name,
+    user,
+    title,
     due,
-    description
+    description,
   });
   assignment
     .save()
-    .then(saveassignment => {
-      const id = saveassignment._id;
+    .then(saveAssignment => {
+      const id = saveAssignment._id;
       console.log("Before id", id);
       Parent.findOneAndUpdate(username, { $push: { assignments: id } }).then(
         saveAssignment => {
@@ -29,7 +30,7 @@ const createAssignment = (request, response) => {
     });
 };
 const getAssignmentsByParent = (request, response) => {
-  const { username } = request.params;
+  const { username } = request.body;
   Parent.findOne({ username: username })
     .populate("assignments")
     .then(res => {
@@ -48,8 +49,44 @@ const getAllAssignments = (request, response) => {
       console.log("Something bad", err);
     });
 };
+const deleteAssignment = (request, response) => {
+  const { _id } = request.body;
+  console.log("This id here!",request.params._id)
+  Assignment.findOneAndRemove({_id: request.params._id })
+  .then(assignment => {
+    response.status(200).json(assignment)
+  })
+  .catch(err => {
+    console.log("Bad!", err)
+  response.status(500).json({errorMessage: "Something went wrong while deleting assignment", err})
+  })
+}
+
+const updateAssignment = (request, response) => {
+  const { _id, user, title, due, description,} = request.body;
+  console.log("Update id here!",request.params._id)
+  Assignment.findById({_id: request.params._id })
+  .then(assignment => {
+    if(assignment) {
+      (assignment.user = user), (assignment.title = title), (assignment.due = due), (assignment.description = description)
+      Assignment.findByIdAndUpdate({_id: request.params._id }, assignment)
+      .then(assignment => {
+        response.status(200).json(assignment)
+      })
+      .catch(err => {
+        response.status(500).json({errorMessage: "Editing error", err})
+      })
+    }
+  })
+  .catch(err => {
+    console.log("Bad!", err)
+  response.status(500).json({errorMessage: "Something went wrong while editing assignment", err})
+  })
+}
 module.exports = {
   createAssignment,
   getAssignmentsByParent,
-  getAllAssignments
+  getAllAssignments,
+  deleteAssignment,
+  updateAssignment
 };
