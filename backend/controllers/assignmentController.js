@@ -67,9 +67,10 @@ const updateAssignment = (request, response) => {
   console.log("Update id here!",request.params._id)
   Assignment.findById({_id: request.params._id })
   .then(assignment => {
+    console.log("Hitting here", assignment)
     if(assignment) {
       (assignment.user = user), (assignment.title = title), (assignment.due = due), (assignment.description = description)
-      Assignment.findByIdAndUpdate({_id: request.params._id }, assignment)
+      Assignment.findByIdAndUpdate({_id: request.params._id }, assignment, {new:true})
       .then(assignment => {
         response.status(200).json(assignment)
       })

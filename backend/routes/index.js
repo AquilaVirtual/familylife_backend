@@ -71,4 +71,7 @@ router.get("/api/activity", (request, response) => {
 router.get("/api/activity/all", (request, response) => {
   ActivityController.getAllActivities(request, response);
 });
+router.put("/api/activity/:_id", (request, response) => {
+  ActivityController.updateActivity(request, response);
+});
 module.exports = router;
