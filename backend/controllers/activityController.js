@@ -49,32 +49,54 @@ const getAllActivities = (request, response) => {
       console.log("Something bad", err);
     });
 };
-
 const updateActivity = (request, response) => {
-  const { _id, name, type,} = request.body;
-  console.log("Update id here!",request.params._id)
-  Activity.findById({_id: request.params._id })
-  .then(activity => {
-    console.log("Hitting here", activity)
-    if(activity) {
-       (activity.name = name), (activity.type = type)
-      Activity.findByIdAndUpdate({_id: request.params._id }, activity, {new:true})
-      .then(activity => {
-        response.status(200).json(activity)
-      })
-      .catch(err => {
-        response.status(500).json({errorMessage: "Editing error", err})
-      })
-    }
-  })
-  .catch(err => {
-    console.log("Bad!", err)
-  response.status(500).json({errorMessage: "Something went wrong while editing activity", err})
-  })
-}
+  const { _id, name, type } = request.body;
+  console.log("Update id here!", request.params._id);
+  Activity.findById({ _id: request.params._id })
+    .then(activity => {
+      console.log("Hitting here", activity);
+      if (activity) {
+        (activity.name = name), (activity.type = type);
+        Activity.findByIdAndUpdate({ _id: request.params._id }, activity, {
+          new: true
+        })
+          .then(activity => {
+            response.status(200).json(activity);
+          })
+          .catch(err => {
+            response.status(500).json({ errorMessage: "Editing error", err });
+          });
+      }
+    })
+    .catch(err => {
+      console.log("Bad!", err);
+      response
+        .status(500)
+        .json({
+          errorMessage: "Something went wrong while editing activity",
+          err
+        });
+    });
+};
+const deleteActivity = (request, response) => {
+  const { _id } = request.body;
+  Activity.findOneAndRemove({ _id: request.params._id })
+    .then(activity => {
+      response.status(200).json(activity);
+    })
+    .catch(err => {
+      response
+        .status(500)
+        .json({
+          errorMessage: "Something went wrong while deleting activity",
+          err
+        });
+    });
+};
 module.exports = {
   createActivity,
   getActivitiesByParent,
   getAllActivities,
-  updateActivity
+  updateActivity,
+  deleteActivity
 };

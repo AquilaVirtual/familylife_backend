@@ -50,8 +50,7 @@ const getAllAssignments = (request, response) => {
     });
 };
 const deleteAssignment = (request, response) => {
-  const { _id } = request.body;
-  console.log("This id here!",request.params._id)
+  const { _id } = request.body;  
   Assignment.findOneAndRemove({_id: request.params._id })
   .then(assignment => {
     response.status(200).json(assignment)

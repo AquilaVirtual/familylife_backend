@@ -13,7 +13,7 @@ function generateToken(user) {
   if (typeof secret !== "string") {
     secret = process.env.secret;
   }
- 
+  
   return jwt.sign(payload, secret, options);
 }
 const bcryptRounds = 10;
@@ -94,10 +94,10 @@ const login = (request, response) => {
 
 const getParentById = (request, response) => {
   Parent.findById({ _id: request.params.id })
-    .then(function(user) {
+    .then(user => {
       response.status(200).json(user);
     })
-    .catch(function(error) {
+    .catch(error => {
       response.status(500).json({
         error: "The user could not be retrieved."
       });
@@ -108,10 +108,10 @@ const deleteParentById = (request, response) => {
   const { _id } = request.body;
   console.log("Take him out!", request.body);
   Parent.findByIdAndRemove({ id: request.params.id })
-    .then(function(user) {
+    .then(user => {
       response.status(200).json(user);
     })
-    .catch(function(error) {
+    .catch(error => {
       response.status(500).json({
         error: "The user could not be removed."
       });
@@ -120,7 +120,7 @@ const deleteParentById = (request, response) => {
 const updateParent = (request, response) => {
   const { _id, username, email } = request.body;
   Parent.findById({ _id: request.params.id })
-    .then(function(user) {
+    .then(user => {
       if (user) {
         (user.username = username), (user.email = email);
         User.findByIdAndUpdate({ _id: request.params.id }, user)
@@ -134,17 +134,17 @@ const updateParent = (request, response) => {
           });
       }
     })
-    .catch(function(error) {
+    .catch(error => {
       response.status(500).json(`message: Error username or email: ${error}`);
     });
 };
 
 const getAllParents = (request, response) => {
   Parent.find({})
-    .then(function(users) {
+    .then(users => {
       response.status(200).json(users);
     })
-    .catch(function(error) {
+    .catch(error => {
       response.status(500).json({
         error: "The information could not be retrieved."
       });
