@@ -60,7 +60,6 @@ const deleteAssignment = (request, response) => {
   response.status(500).json({errorMessage: "Something went wrong while deleting assignment", err})
   })
 }
-
 const updateAssignment = (request, response) => {
   const { _id, user, title, due, description,} = request.body;
   console.log("Update id here!",request.params._id)
