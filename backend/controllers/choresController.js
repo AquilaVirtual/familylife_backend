@@ -5,7 +5,7 @@ const child = require("../models/child");
 const mongoose = require("mongoose");
 
 const createChore = (request, response) => {
-  const { name, status, username } = request.body;
+  const { title, status, username } = request.body;
   const chore = new Chores({
     _id: new mongoose.Types.ObjectId(),
     title,
