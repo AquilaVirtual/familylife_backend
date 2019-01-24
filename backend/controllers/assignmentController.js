@@ -5,9 +5,10 @@ const Child = require("../models/child");
 const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
-  const { user, title, due, description, username } = request.body;
+  const { creator, user, title, due, description, username } = request.body;
   const assignment = new Assignment({
     _id: new mongoose.Types.ObjectId(),
+    creator,
     user,
     title,
     due,
@@ -31,8 +32,8 @@ const createAssignment = (request, response) => {
 };
 const getAssignmentsByParent = (request, response) => {
   const { username } = request.body;
-  Parent.findOne({ username: username })
-    .populate("assignments")
+  Assignment.findOne({ username: username })
+    .populate("creator")
     .then(res => {
       response.status(200).json(res);
     })
