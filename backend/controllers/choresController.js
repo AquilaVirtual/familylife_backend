@@ -5,10 +5,11 @@ const child = require("../models/child");
 const mongoose = require("mongoose");
 
 const createChore = (request, response) => {
-  const { name, username } = request.body;
+  const { name, status, username } = request.body;
   const chore = new Chores({
     _id: new mongoose.Types.ObjectId(),
-    name
+    title,
+    status
   });
   chore
     .save()
