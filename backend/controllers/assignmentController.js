@@ -19,8 +19,8 @@ const createAssignment = (request, response) => {
     .then(saveAssignment => {
       const id = saveAssignment._id;
       console.log("Before id", id);
-      Parent.findOneAndUpdate(username, { $push: { assignments: id } }).then(
-        saveAssignment => {
+      Parent.findOneAndUpdate(username, { $push: { assignments: id } })
+      .then(saveAssignment => {
           console.log("Before save1", saveAssignment);
           response.status(200).json(saveAssignment);
         }
@@ -32,10 +32,13 @@ const createAssignment = (request, response) => {
 };
 const getAssignmentsByParent = (request, response) => {
   const { username } = request.body;
-  Assignment.findOne({ username: username })
+  let assignments = [];
+  Assignment.findOne({ username: username })      
     .populate("creator")
     .then(res => {
-      response.status(200).json(res);
+      assignments.push(res)
+     console.log("God Assignments", assignments) 
+      response.status(200).json(assignments);
     })
     .catch(err => {
       console.log("Something bad", err);

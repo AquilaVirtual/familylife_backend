@@ -3,6 +3,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const bodyparser = require("body-parser");
 const routes = require("./routes");
+const session = require("express-session");
 
 //Instantiate Server
 const server = express();
@@ -20,6 +21,7 @@ mongoose
 
 //Security
 server.use(helmet());
+server.use(session({secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true}))
 
 //Permissions
 server.use(cors());

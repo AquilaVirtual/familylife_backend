@@ -30,8 +30,8 @@ const createChore = (request, response) => {
 
 const getChoresByParent = (request, response) => {
   const { username } = request.params;
-  Parent.findOne({ username: username })
-    .populate("chores")
+  Chores.findOne({ username: username })
+    .populate("creator")
     .then(res => {
       response.status(200).json(res);
     })

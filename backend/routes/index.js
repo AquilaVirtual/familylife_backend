@@ -32,6 +32,9 @@ router.delete("/api/user/:id", (request, response) => {
 router.put("/api/user/:id", (request, response) => {
   ParentController.updateParent(request, response);
 });
+router.get("api/user/logout", (request, response) => {
+  ParentController.logoutParent(request, response);
+})
 
 //Chores go here
 router.post("/api/chore/create", (request, response) => {

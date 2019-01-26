@@ -17,8 +17,8 @@ const createActivity = (request, response) => {
       console.log("Activity here", activity);
       const id = activity._id;
       console.log("Before id", id);
-      Parent.findOneAndUpdate(username, { $push: { activities: id } }).then(
-        activity => {
+      Parent.findOneAndUpdate(username, { $push: { activities: id } })
+      .then(activity => {
           console.log("Before save1", activity);
           response.status(200).json(activity);
         }
@@ -31,8 +31,8 @@ const createActivity = (request, response) => {
 
 const getActivitiesByParent = (request, response) => {
   const { username } = request.params;
-  Parent.findOne({ username: username })
-    .populate("activies")
+  Activity.findOne({ username: username })
+    .populate("creator")
     .then(res => {
       response.status(200).json(res);
     })
