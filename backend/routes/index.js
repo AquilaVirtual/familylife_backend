@@ -3,7 +3,7 @@ const ParentController = require("../controllers/parentController");
 const ChoresController = require("../controllers/choresController");
 const AssignmentController = require("../controllers/assignmentController");
 const ActivityController = require("../controllers/ActivityController");
-
+const  { authenticate }  = require("../authenticate")
 
 const router = express.Router();
 
@@ -49,10 +49,10 @@ router.get("/api/chore/all", (request, response) => {
 });
 
 //Assignments go here
-router.post("/api/assignment/create", (request, response) => {
+router.post("/api/assignment/create", authenticate, (request, response) => {
   AssignmentController.createAssignment(request, response);
 });
-router.get("/api/assignment", (request, response) => {
+router.get("/api/assignment", authenticate, (request, response) => {
   AssignmentController.getAssignmentsByParent(request, response);
 });
 router.get("/api/assignment/all", (request, response) => {

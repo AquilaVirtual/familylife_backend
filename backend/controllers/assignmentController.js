@@ -7,46 +7,39 @@ const  authenticate  = require("../authenticate")
 const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
-  const { creator, user, title, due, description,  username } = request.body;
-  // const assignment = new Assignment({
-  //   _id: new mongoose.Types.ObjectId(), 
-  //   user,
-  //   title,
-  //   due,
-  //   description,
-  // });
-  // Parent.findOne(username)
-  // .then(user => {
-  //   const noteInfo = request.body;
-  //   console.log("The request body", noteInfo)
-  //   console.log("The user returned", user)
-  //   // const  email  = request.jwtObj;
-  //   const assignment = Assignment({
-  //    _id: new mongoose.Types.ObjectId(), 
-  //     ...noteInfo, email: user.email,
-  //   });
-  //   console.log("Assignment package", assignment)
-  const assignmentInfo = request.body;
-  const  email  = request.jwtObj;
-  const    assignment = new Assignment({
-    ...assignmentInfo, email,
+  const { creator, user, title, due, description, username } = request.body;
+  const assignment = new Assignment({
+    _id: new mongoose.Types.ObjectId(), 
+    user,
+    title,
+    due,
+    description,
   });
     assignment
       .save()      
-        .then(saveAssignment => {       
+        .then(saveAssignment => {  
+          const id = saveAssignment._id;
+          console.log("logging ID", id)
+          Parent.findOneAndUpdate(username , { $push: { assignments: id }})
+          .then(saveAssignment => {
+            console.log("logging saveAssignemtn", saveAssignment)
             response.status(200).json(saveAssignment);     
+          })
+          .catch(err => {
+            console.log("Error here", err);
+          })      
       })
       .catch(err => {
         console.log("Error here", err);
       })   
 };
 const getAssignmentsByParent = (request, response) => { 
-  const email  = request.jwtObj;
-  console.log("Email", request.jwtObj)
-  Assignment.find({ email })
-  .then(user => {
-    console.log("Found User", user);          
-      response.status(200).json(user);      
+    const { username } = request.body;
+  console.log("Email", username)
+  Parent.findOne({ username: username })
+  .then(assignment => {
+    console.log("Found User", assignment);          
+      response.status(200).json(assignment);      
     })
   .catch(err => {
     console.log("Something bad", err);
