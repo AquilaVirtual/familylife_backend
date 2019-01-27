@@ -1,49 +1,58 @@
 const Assignment = require("../models/assignment");
 const Parent = require("../models/parent");
 const Child = require("../models/child");
+const  authenticate  = require("../authenticate")
+
 
 const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
-  const { creator, user, title, due, description, username } = request.body;
-  const assignment = new Assignment({
-    _id: new mongoose.Types.ObjectId(),
-    creator,
-    user,
-    title,
-    due,
-    description,
+  const { creator, user, title, due, description,  username } = request.body;
+  // const assignment = new Assignment({
+  //   _id: new mongoose.Types.ObjectId(), 
+  //   user,
+  //   title,
+  //   due,
+  //   description,
+  // });
+  // Parent.findOne(username)
+  // .then(user => {
+  //   const noteInfo = request.body;
+  //   console.log("The request body", noteInfo)
+  //   console.log("The user returned", user)
+  //   // const  email  = request.jwtObj;
+  //   const assignment = Assignment({
+  //    _id: new mongoose.Types.ObjectId(), 
+  //     ...noteInfo, email: user.email,
+  //   });
+  //   console.log("Assignment package", assignment)
+  const assignmentInfo = request.body;
+  const  email  = request.jwtObj;
+  const    assignment = new Assignment({
+    ...assignmentInfo, email,
   });
-  assignment
-    .save()
-    .then(saveAssignment => {
-      const id = saveAssignment._id;
-      console.log("Before id", id);
-      Parent.findOneAndUpdate(username, { $push: { assignments: id } })
-      .then(saveAssignment => {
-          console.log("Before save1", saveAssignment);
-          response.status(200).json(saveAssignment);
-        }
-      );
-    })
-    .catch(err => {
-      console.log("Error here", err);
-    });
+    assignment
+      .save()      
+        .then(saveAssignment => {       
+            response.status(200).json(saveAssignment);     
+      })
+      .catch(err => {
+        console.log("Error here", err);
+      })   
 };
-const getAssignmentsByParent = (request, response) => {
-  const { username } = request.body;
-  let assignments = [];
-  Assignment.findOne({ username: username })      
-    .populate("creator")
-    .then(res => {
-      assignments.push(res)
-     console.log("God Assignments", assignments) 
-      response.status(200).json(assignments);
+const getAssignmentsByParent = (request, response) => { 
+  const email  = request.jwtObj;
+  console.log("Email", request.jwtObj)
+  Assignment.find({ email })
+  .then(user => {
+    console.log("Found User", user);          
+      response.status(200).json(user);      
     })
-    .catch(err => {
-      console.log("Something bad", err);
-    });
+  .catch(err => {
+    console.log("Something bad", err);
+  });
 };
+
 const getAllAssignments = (request, response) => {
   Assignment.find({})
     .then(res => {

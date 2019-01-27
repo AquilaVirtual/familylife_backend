@@ -13,6 +13,7 @@ function generateToken(user) {
   if (typeof secret !== "string") {
     secret = process.env.secret;
   }
+  secret = "It is a family business"
 
   return jwt.sign(payload, secret, options);
 }
@@ -76,6 +77,9 @@ const login = (request, response) => {
         });
       } else {
         if (bcrypt.compareSync(password, userFound.password)) {
+          request.session.userFound = userFound;
+          console.log("We found a user",  username)
+          console.log("Session business",  request.session.userFound)
           const token = generateToken({ userFound });
           response.status(200).send({ userFound, token });
         } else {

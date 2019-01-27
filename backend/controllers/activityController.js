@@ -31,6 +31,10 @@ const createActivity = (request, response) => {
 
 const getActivitiesByParent = (request, response) => {
   const { username } = request.params;
+  // if(!request.session.username) {
+  //   response.status(401).json({errorMessage: "You're not authorized"})
+  // }
+  //else {
   Activity.findOne({ username: username })
     .populate("creator")
     .then(res => {
@@ -39,6 +43,7 @@ const getActivitiesByParent = (request, response) => {
     .catch(err => {
       console.log("Something bad", err);
     });
+  //}
 };
 const getAllActivities = (request, response) => {
   Activity.find({})

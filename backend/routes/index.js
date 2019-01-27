@@ -4,6 +4,7 @@ const ChoresController = require("../controllers/choresController");
 const AssignmentController = require("../controllers/assignmentController");
 const ActivityController = require("../controllers/ActivityController");
 
+
 const router = express.Router();
 
 //Insanity check
