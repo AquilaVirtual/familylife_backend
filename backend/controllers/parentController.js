@@ -14,6 +14,7 @@ function generateToken(user) {
     secret = process.env.secret;
   }
 
+
   return jwt.sign(payload, secret, options);
 }
 const bcryptRounds = 10;

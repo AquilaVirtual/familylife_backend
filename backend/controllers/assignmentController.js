@@ -1,3 +1,5 @@
+
+
 const Assignment = require("../models/assignment");
 const Parent = require("../models/parent");
 const Child = require("../models/child");
@@ -19,7 +21,7 @@ const createAssignment = (request, response) => {
         });
         assignment
           .save()
-          .then(saveAssignment => {       
+          .then(saveAssignment => {
             response.status(200).json(saveAssignment);
           })
           .catch(err => {
@@ -39,19 +41,30 @@ const createAssignment = (request, response) => {
     response.status(422).json({ message: "User Not Logged In" });
   }
 };
+
 const getAssignmentsByParent = (request, response) => {
   const { username } = request.body;
-  let assignments = [];
-  Assignment.findOne({ username: username })
-    .populate("creator")
-    .then(res => {
-      assignments.push(res);
-      console.log("God Assignments", assignments);
-      response.status(200).json(assignments);
-    })
-    .catch(err => {
-      console.log("Something bad", err);
-    });
+  if (request.decoded) {
+    Parent.findOne(username )
+      .then(user => {
+        id = user._id;
+        console.log("User Id", id)
+        Assignment.find({ author: id })
+          .then(assignments => {
+            response.json(assignments);
+          })
+          .catch(err => {
+            response.status(500).json(err);
+          });
+      })
+      .catch(err => {
+        response.status(500).json(err);
+      });
+  } else {
+    return response
+      .status(422)
+      .json({ error: "Login is required before assignments can be viewed" });
+  }
 };
 const getAllAssignments = (request, response) => {
   Assignment.find({})
@@ -70,12 +83,10 @@ const deleteAssignment = (request, response) => {
     })
     .catch(err => {
       console.log("Bad!", err);
-      response
-        .status(500)
-        .json({
-          errorMessage: "Something went wrong while deleting assignment",
-          err
-        });
+      response.status(500).json({
+        errorMessage: "Something went wrong while deleting assignment",
+        err
+      });
     });
 };
 const updateAssignment = (request, response) => {
@@ -102,12 +113,10 @@ const updateAssignment = (request, response) => {
     })
     .catch(err => {
       console.log("Bad!", err);
-      response
-        .status(500)
-        .json({
-          errorMessage: "Something went wrong while editing assignment",
-          err
-        });
+      response.status(500).json({
+        errorMessage: "Something went wrong while editing assignment",
+        err
+      });
     });
 };
 module.exports = {
