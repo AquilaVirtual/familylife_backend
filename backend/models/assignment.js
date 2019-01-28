@@ -5,12 +5,12 @@ const assignmentSchema = new mongoose.Schema({
   //person's name
   user: {
     type: String,
-    required: true
+    //required: true
   },
   // assignment title
   title: {
     type: String,
-    required: true
+    //required: true
   },
   due: {
     type: Date,
@@ -19,7 +19,7 @@ const assignmentSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true
+    //required: true
   },
   // email: {
   //   type: String,

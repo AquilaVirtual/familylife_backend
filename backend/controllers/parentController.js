@@ -14,7 +14,6 @@ function generateToken(user) {
     secret = process.env.secret;
   }
 
-
   return jwt.sign(payload, secret, options);
 }
 const bcryptRounds = 10;
@@ -81,7 +80,7 @@ const login = (request, response) => {
           console.log("We found a user",  userFound)
           console.log("Session business",  request.session.userFound)
           const token = generateToken({ userFound });
-          response.status(200).send({ userFound, token });
+          response.status(200).send({ userFound, token, userId: userFound._id});
         } else {
           response.status(500).send({
             errorMessage: "Login Failed."
@@ -95,7 +94,6 @@ const login = (request, response) => {
       });
     });
 };
-
 const getParentById = (request, response) => {
   Parent.findById({ _id: request.params.id })
     .then(user => {

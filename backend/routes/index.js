@@ -52,7 +52,7 @@ router.get("/api/chore/all", (request, response) => {
 router.post("/api/assignment/create", authenticate, (request, response) => {
   AssignmentController.createAssignment(request, response);
 });
-router.get("/api/assignment", authenticate, (request, response) => {
+router.get("/api/assignment", authenticate,(request, response) => {
   AssignmentController.getAssignmentsByParent(request, response);
 });
 router.get("/api/assignment/all", (request, response) => {

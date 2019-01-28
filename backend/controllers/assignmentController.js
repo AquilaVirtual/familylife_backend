@@ -1,51 +1,58 @@
 const Assignment = require("../models/assignment");
 const Parent = require("../models/parent");
 const Child = require("../models/child");
-const  authenticate  = require("../authenticate")
-
 
 const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
-  const { creator, user, title, due, description, username } = request.body;
-  const assignment = new Assignment({
-    _id: new mongoose.Types.ObjectId(), 
-    user,
-    title,
-    due,
-    description,
-  });
-    assignment
-      .save()      
-        .then(saveAssignment => {  
-          const id = saveAssignment._id;
-          console.log("logging ID", id)
-          Parent.findOneAndUpdate(username , { $push: { assignments: id }})
-          .then(saveAssignment => {
-            console.log("logging saveAssignemtn", saveAssignment)
-            response.status(200).json(saveAssignment);     
+  const { user, title, due, description, username, creator } = request.body;
+  if (request.jwtObj) {
+    Parent.findOne(username)
+      .then(user => {
+        const assignment = new Assignment({
+          _id: new mongoose.Types.ObjectId(),
+          user,
+          title,
+          due,
+          description,
+          creator: user._id
+        });
+        assignment
+          .save()
+          .then(saveAssignment => {       
+            response.status(200).json(saveAssignment);
           })
           .catch(err => {
             console.log("Error here", err);
-          })      
+            response
+              .status(500)
+              .json({ message: "Error creating assignment", err });
+          });
       })
       .catch(err => {
         console.log("Error here", err);
-      })   
+        response
+          .status(500)
+          .json({ message: "Error creating assignment", err });
+      });
+  } else {
+    response.status(422).json({ message: "User Not Logged In" });
+  }
 };
-const getAssignmentsByParent = (request, response) => { 
-    const { username } = request.body;
-  console.log("Email", username)
-  Parent.findOne({ username: username })
-  .then(assignment => {
-    console.log("Found User", assignment);          
-      response.status(200).json(assignment);      
+const getAssignmentsByParent = (request, response) => {
+  const { username } = request.body;
+  let assignments = [];
+  Assignment.findOne({ username: username })
+    .populate("creator")
+    .then(res => {
+      assignments.push(res);
+      console.log("God Assignments", assignments);
+      response.status(200).json(assignments);
     })
-  .catch(err => {
-    console.log("Something bad", err);
-  });
+    .catch(err => {
+      console.log("Something bad", err);
+    });
 };
-
 const getAllAssignments = (request, response) => {
   Assignment.find({})
     .then(res => {
@@ -56,38 +63,53 @@ const getAllAssignments = (request, response) => {
     });
 };
 const deleteAssignment = (request, response) => {
-  const { _id } = request.body;  
-  Assignment.findOneAndRemove({_id: request.params._id })
-  .then(assignment => {
-    response.status(200).json(assignment)
-  })
-  .catch(err => {
-    console.log("Bad!", err)
-  response.status(500).json({errorMessage: "Something went wrong while deleting assignment", err})
-  })
-}
+  const { _id } = request.body;
+  Assignment.findOneAndRemove({ _id: request.params._id })
+    .then(assignment => {
+      response.status(200).json(assignment);
+    })
+    .catch(err => {
+      console.log("Bad!", err);
+      response
+        .status(500)
+        .json({
+          errorMessage: "Something went wrong while deleting assignment",
+          err
+        });
+    });
+};
 const updateAssignment = (request, response) => {
-  const { _id, user, title, due, description,} = request.body;
-  console.log("Update id here!",request.params._id)
-  Assignment.findById({_id: request.params._id })
-  .then(assignment => {
-    console.log("Hitting here", assignment)
-    if(assignment) {
-      (assignment.user = user), (assignment.title = title), (assignment.due = due), (assignment.description = description)
-      Assignment.findByIdAndUpdate({_id: request.params._id }, assignment, {new:true})
-      .then(assignment => {
-        response.status(200).json(assignment)
-      })
-      .catch(err => {
-        response.status(500).json({errorMessage: "Editing error", err})
-      })
-    }
-  })
-  .catch(err => {
-    console.log("Bad!", err)
-  response.status(500).json({errorMessage: "Something went wrong while editing assignment", err})
-  })
-}
+  const { _id, user, title, due, description } = request.body;
+  console.log("Update id here!", request.params._id);
+  Assignment.findById({ _id: request.params._id })
+    .then(assignment => {
+      console.log("Hitting here", assignment);
+      if (assignment) {
+        (assignment.user = user),
+          (assignment.title = title),
+          (assignment.due = due),
+          (assignment.description = description);
+        Assignment.findByIdAndUpdate({ _id: request.params._id }, assignment, {
+          new: true
+        })
+          .then(assignment => {
+            response.status(200).json(assignment);
+          })
+          .catch(err => {
+            response.status(500).json({ errorMessage: "Editing error", err });
+          });
+      }
+    })
+    .catch(err => {
+      console.log("Bad!", err);
+      response
+        .status(500)
+        .json({
+          errorMessage: "Something went wrong while editing assignment",
+          err
+        });
+    });
+};
 module.exports = {
   createAssignment,
   getAssignmentsByParent,

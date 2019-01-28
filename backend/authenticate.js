@@ -6,7 +6,7 @@ const authenticate = (request, response, next) => {
   console.log("Got some token", token)
   if (token) {
     jwt.verify(token, secret, (err, jwtObj) => {
-      if (err) return response.status(422).json(err);
+      if (err) return response.status(422).json({error: 'Authentication error', err});
       request.jwtObj = jwtObj;
       next();
     });
