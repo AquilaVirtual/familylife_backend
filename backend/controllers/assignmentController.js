@@ -1,5 +1,3 @@
-
-
 const Assignment = require("../models/assignment");
 const Parent = require("../models/parent");
 const Child = require("../models/child");
@@ -41,14 +39,13 @@ const createAssignment = (request, response) => {
     response.status(422).json({ message: "User Not Logged In" });
   }
 };
-
 const getAssignmentsByParent = (request, response) => {
   const { username } = request.body;
-  if (request.jwtObj) {   
-    Parent.findOne(username )
+  if (request.jwtObj) {
+    Parent.findOne(username)
       .then(user => {
-        id = user._id;        
-        Assignment.find({ creator: id })           
+        id = user._id;
+        Assignment.find({ creator: id })
           .then(assignments => {
             response.json(assignments);
           })

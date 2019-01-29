@@ -8,55 +8,61 @@ const createActivity = (request, response) => {
   const { name, type, username, creator } = request.body;
   if (request.jwtObj) {
     Parent.findOne(username)
-    .then(user => {
-      const activity = new Activity({
-        _id: new mongoose.Types.ObjectId(),
-        name,
-        type,
-        creator: user._id,
-      });   
-  activity
-    .save()
-    .then(activity => {
-      console.log("Activity here", activity);
-      const id = activity._id;
-      console.log("Before id", id);
-      Parent.findOneAndUpdate(username, { $push: { activities: id } })
-      .then(activity => {
-          console.log("Before save1", activity);
-          response.status(200).json(activity);
-        }
-      );
-    })
-    .catch(err => {
-      console.log("Error here", err);
-    })
-  })
-    .catch(err => {
-      console.log("Error here", err);
-    });
+      .then(user => {
+        const activity = new Activity({
+          _id: new mongoose.Types.ObjectId(),
+          name,
+          type,
+          creator: user._id
+        });
+        activity
+          .save()
+          .then(activity => {
+            console.log("Activity here", activity);
+            const id = activity._id;
+            console.log("Before id", id);
+            Parent.findOneAndUpdate(username, {
+              $push: { activities: id }
+            }).then(activity => {
+              console.log("Before save1", activity);
+              response.status(200).json(activity);
+            });
+          })
+          .catch(err => {
+            console.log("Error here", err);
+          });
+      })
+      .catch(err => {
+        console.log("Error here", err);
+      });
   } else {
-  return response
-  .status(422)
-  .json({ error: "Login is required before activity can be created" });
-}
+    return response
+      .status(422)
+      .json({ error: "Login is required before activity can be created" });
+  }
 };
 
 const getActivitiesByParent = (request, response) => {
-  const { username } = request.params;
-  // if(!request.session.username) {
-  //   response.status(401).json({errorMessage: "You're not authorized"})
-  // }
-  //else {
-  Activity.findOne({ username: username })
-    .populate("creator")
-    .then(res => {
-      response.status(200).json(res);
-    })
-    .catch(err => {
-      console.log("Something bad", err);
-    });
-  //}
+  const { username } = request.body;
+  if (request.jwtObj) {
+    Parent.findOne(username)
+      .then(user => {
+        Activity.find({ creator: user._id })
+          .then(activities => {
+            response.status(200).json(activities);
+          })
+          .catch(err => {
+            console.log("Something bad", err);
+          });
+      })
+      .catch(err => {
+        console.log("No user found", err);
+      });
+  } else {
+    return response
+      .status(422)
+      .json({ error: "Login is required before activity can be viewed" });
+  }
 };
 const getAllActivities = (request, response) => {
   Activity.find({})
@@ -88,12 +94,10 @@ const updateActivity = (request, response) => {
     })
     .catch(err => {
       console.log("Bad!", err);
-      response
-        .status(500)
-        .json({
-          errorMessage: "Something went wrong while editing activity",
-          err
-        });
+      response.status(500).json({
+        errorMessage: "Something went wrong while editing activity",
+        err
+      });
     });
 };
 const deleteActivity = (request, response) => {
@@ -103,12 +107,10 @@ const deleteActivity = (request, response) => {
       response.status(200).json(activity);
     })
     .catch(err => {
-      response
-        .status(500)
-        .json({
-          errorMessage: "Something went wrong while deleting activity",
-          err
-        });
+      response.status(500).json({
+        errorMessage: "Something went wrong while deleting activity",
+        err
+      });
     });
 };
 module.exports = {
