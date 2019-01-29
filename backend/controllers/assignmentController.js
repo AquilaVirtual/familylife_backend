@@ -44,12 +44,11 @@ const createAssignment = (request, response) => {
 
 const getAssignmentsByParent = (request, response) => {
   const { username } = request.body;
-  if (request.decoded) {
+  if (request.jwtObj) {   
     Parent.findOne(username )
       .then(user => {
-        id = user._id;
-        console.log("User Id", id)
-        Assignment.find({ author: id })
+        id = user._id;        
+        Assignment.find({ creator: id })           
           .then(assignments => {
             response.json(assignments);
           })

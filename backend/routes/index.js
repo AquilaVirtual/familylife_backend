@@ -52,7 +52,7 @@ router.get("/api/chore/all", (request, response) => {
 router.post("/api/assignment/create", authenticate, (request, response) => {
   AssignmentController.createAssignment(request, response);
 });
-router.get("/api/assignment", authenticate,(request, response) => {
+router.get("/api/assignment", authenticate, (request, response) => {
   AssignmentController.getAssignmentsByParent(request, response);
 });
 router.get("/api/assignment/all", (request, response) => {
@@ -66,7 +66,7 @@ router.put("/api/assignment/:_id", (request, response) => {
 });
 
 //Activities go here
-router.post("/api/activity/create", (request, response) => {
+router.post("/api/activity/create", authenticate, (request, response) => {
   ActivityController.createActivity(request, response);
 });
 router.get("/api/activity", (request, response) => {

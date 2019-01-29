@@ -14,7 +14,6 @@ function generateToken(user) {
     secret = process.env.secret;
   }
 
-
   return jwt.sign(payload, secret, options);
 }
 const bcryptRounds = 10;
@@ -95,6 +94,7 @@ const login = (request, response) => {
       });
     });
 };
+
 const getParentById = (request, response) => {
   Parent.findById({ _id: request.params.id })
     .then(user => {

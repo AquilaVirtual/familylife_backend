@@ -5,12 +5,16 @@ const child = require("../models/child");
 const mongoose = require("mongoose");
 
 const createActivity = (request, response) => {
-  const { name, type, username } = request.body;
-  const activity = new Activity({
-    _id: new mongoose.Types.ObjectId(),
-    name,
-    type
-  });
+  const { name, type, username, creator } = request.body;
+  if (request.jwtObj) {
+    Parent.findOne(username)
+    .then(user => {
+      const activity = new Activity({
+        _id: new mongoose.Types.ObjectId(),
+        name,
+        type,
+        creator: user._id,
+      });   
   activity
     .save()
     .then(activity => {
@@ -26,7 +30,16 @@ const createActivity = (request, response) => {
     })
     .catch(err => {
       console.log("Error here", err);
+    })
+  })
+    .catch(err => {
+      console.log("Error here", err);
     });
+  } else {
+  return response
+  .status(422)
+  .json({ error: "Login is required before activity can be created" });
+}
 };
 
 const getActivitiesByParent = (request, response) => {
