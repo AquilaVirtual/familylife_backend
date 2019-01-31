@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const assignmentSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   //person's name
-  user: {
+  name: {
     type: String,
     //required: true
   },

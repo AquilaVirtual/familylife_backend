@@ -13,7 +13,6 @@ function generateToken(user) {
   if (typeof secret !== "string") {
     secret = process.env.secret;
   }
- 
 
   return jwt.sign(payload, secret, options);
 }
@@ -78,10 +77,12 @@ const login = (request, response) => {
       } else {
         if (bcrypt.compareSync(password, userFound.password)) {
           request.session.userFound = userFound;
-          console.log("We found a user",  userFound)
-          console.log("Session business",  request.session.userFound)
+          console.log("We found a user", userFound);
+          console.log("Session business", request.session.userFound);
           const token = generateToken({ userFound });
-          response.status(200).send({ userFound, token, userId: userFound._id});
+          response
+            .status(200)
+            .send({ userFound, token, userId: userFound._id });
         } else {
           response.status(500).send({
             errorMessage: "Login Failed."

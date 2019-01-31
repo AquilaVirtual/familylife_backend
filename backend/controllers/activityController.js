@@ -6,8 +6,9 @@ const mongoose = require("mongoose");
 
 const createActivity = (request, response) => {
   const { name, type, username, creator } = request.body;
+  console.log("Getting username for activity", username);
   if (request.jwtObj) {
-    Parent.findOne({username: username})
+    Parent.findOne({ username: username })
       .then(user => {
         const activity = new Activity({
           _id: new mongoose.Types.ObjectId(),
@@ -43,9 +44,10 @@ const createActivity = (request, response) => {
 };
 
 const getActivitiesByParent = (request, response) => {
-  const { username } = request.body;
+  const { username } = request.params;
+  console.log("Getting some Activity here", username);
   if (request.jwtObj) {
-    Parent.findOne(username)
+    Parent.findOne({ username: username })
       .then(user => {
         Activity.find({ creator: user._id })
           .then(activities => {

@@ -69,7 +69,7 @@ router.put("/api/assignment/:_id", (request, response) => {
 router.post("/api/activity/create", authenticate, (request, response) => {
   ActivityController.createActivity(request, response);
 });
-router.get("/api/activity", authenticate, (request, response) => {
+router.get("/api/activity/:username", authenticate, (request, response) => {
   ActivityController.getActivitiesByParent(request, response);
 });
 router.get("/api/activity/all", (request, response) => {
