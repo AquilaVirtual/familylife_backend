@@ -6,8 +6,10 @@ const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
   const { user, title, due, description, username, creator } = request.body;
+  console.log("Username of the body", username)
+  console.log("All of the body", request.body)
   if (request.jwtObj) {
-    Parent.findOne(username)
+    Parent.findOne({username: username})
       .then(user => {
         const assignment = new Assignment({
           _id: new mongoose.Types.ObjectId(),
@@ -20,6 +22,8 @@ const createAssignment = (request, response) => {
         assignment
           .save()
           .then(saveAssignment => {
+            console.log("A bounch created here", saveAssignment)
+            
             response.status(200).json(saveAssignment);
           })
           .catch(err => {
@@ -40,13 +44,17 @@ const createAssignment = (request, response) => {
   }
 };
 const getAssignmentsByParent = (request, response) => {
-  const { username } = request.body;
+  const { username } = request.params;
+    console.log("This params here", username)
   if (request.jwtObj) {
-    Parent.findOne(username)
+    Parent.findOne({username: username})
       .then(user => {
+        console.log("This user right here", user)
         id = user._id;
-        Assignment.find({ creator: id })
-          .then(assignments => {
+        console.log("ID ID ID ", id)
+        Assignment.findMany({ creator: id })
+        .then(assignments => {
+          console.log("Assignemns Assignemns right here", assignments)
             response.json(assignments);
           })
           .catch(err => {

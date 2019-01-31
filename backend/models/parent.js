@@ -23,6 +23,7 @@ const parentSchema = new mongoose.Schema({
     required: true
   
   },
+     children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }],  
      chores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
      assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],  
      activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],  
