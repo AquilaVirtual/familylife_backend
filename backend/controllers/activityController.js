@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const createActivity = (request, response) => {
   const { name, type, username, creator } = request.body;
   if (request.jwtObj) {
-    Parent.findOne(username)
+    Parent.findOne({username: username})
       .then(user => {
         const activity = new Activity({
           _id: new mongoose.Types.ObjectId(),
