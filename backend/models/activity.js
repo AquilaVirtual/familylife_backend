@@ -15,7 +15,7 @@ const activitySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",   
   },
-  children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
+  family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }]
 });
 
 let activitydModel = mongoose.model("Activity", activitySchema);

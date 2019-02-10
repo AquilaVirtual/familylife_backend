@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const childSchema = new mongoose.Schema({
+const memberSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   // Display name
   name: {
@@ -22,6 +22,10 @@ const childSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  AccountType: {
+    type: String,
+    default: "Child"
+   },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",
@@ -29,6 +33,6 @@ const childSchema = new mongoose.Schema({
   }
 });
 
-let childModel = mongoose.model("Child", childSchema);
+let memberModel = mongoose.model("Member", memberSchema);
 
-module.exports = childModel;
+module.exports = memberdModel;

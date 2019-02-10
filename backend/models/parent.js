@@ -23,7 +23,11 @@ const parentSchema = new mongoose.Schema({
     required: true
   
   },
-     children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }],  
+  AccountType: {
+   type: String,
+   default: "Primary"
+  },
+     family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }],  
      chores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
      assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],  
      activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],  

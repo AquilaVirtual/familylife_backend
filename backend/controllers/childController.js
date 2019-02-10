@@ -1,4 +1,4 @@
 const bcrypt = require("bcrypt");
 const Parent = require("../models/parent");
-const Parent = require("../models/child");
+const Member = require("../models/member");
 const jwt = require("jsonwebtoken");

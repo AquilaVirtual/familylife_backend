@@ -30,7 +30,7 @@ const assignmentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",  
   },
-  children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' }]
+  family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }]
 });
 
 let assignmentModel = mongoose.model("Assignment", assignmentSchema);
