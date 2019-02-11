@@ -3,7 +3,7 @@ const ParentController = require("../controllers/parentController");
 const ChoresController = require("../controllers/choresController");
 const AssignmentController = require("../controllers/assignmentController");
 const ActivityController = require("../controllers/ActivityController");
-const  { authenticate }  = require("../authenticate")
+const  { authenticate }  = require("../services/authenticate")
 
 const router = express.Router();
 

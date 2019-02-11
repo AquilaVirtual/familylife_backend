@@ -11,6 +11,11 @@ const activitySchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  when: {
+    type: Date,
+    required: true,
+    default: Date.now()
+  },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",   

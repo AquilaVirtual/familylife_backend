@@ -1,6 +1,6 @@
 const Assignment = require("../models/assignment");
 const Parent = require("../models/parent");
-const Child = require("../models/child");
+const Child = require("../models/member");
 
 const mongoose = require("mongoose");
 

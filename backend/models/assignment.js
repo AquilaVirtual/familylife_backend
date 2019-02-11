@@ -17,15 +17,19 @@ const assignmentSchema = new mongoose.Schema({
     required: true,
     default: Date.now()
   },
+  status: {
+    type: String,
+    default: "not started"
+  },
   description: {
     type: String,
     //required: true
   },
-  // email: {
-  //   type: String,
-  //   lowercase: true,
-  //   required: true,
-  // },
+  email: {
+    type: String,
+    lowercase: true,
+    required: true,
+  },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",  

@@ -16,7 +16,8 @@ const memberSchema = new mongoose.Schema({
   // login name
   username: {
     type: String,
-    unique: true
+    unique: true,
+    required: true,
   },
   password: {
     type: String,
@@ -35,4 +36,4 @@ const memberSchema = new mongoose.Schema({
 
 let memberModel = mongoose.model("Member", memberSchema);
 
-module.exports = memberdModel;
+module.exports = memberModel;

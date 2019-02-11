@@ -1,20 +1,10 @@
 const bcrypt = require("bcrypt");
 const Parent = require("../models/parent");
 const jwt = require("jsonwebtoken");
+const { generateToken } = require("../services/generateToken");
 
 const mongoose = require("mongoose");
 
-function generateToken(user) {
-  const options = {
-    expiresIn: "1h"
-  };
-  const payload = { name: user.username };
-  secret = process.env.REACT_APP_SECRET;
-  if (typeof secret !== "string") {
-    secret = process.env.secret;
-  } 
-  return jwt.sign(payload, secret, options);
-}
 const bcryptRounds = 10;
 
 const register = (request, response) => {

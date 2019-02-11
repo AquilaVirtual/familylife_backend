@@ -1,6 +1,6 @@
 const Chores = require("../models/chores");
 const Parent = require("../models/parent");
-const child = require("../models/child");
+const child = require("../models/member");
 
 const mongoose = require("mongoose");
 
