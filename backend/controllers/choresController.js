@@ -15,11 +15,9 @@ const createChore = (request, response) => {
   chore
     .save()
     .then(saveChore => {
-      const id = saveChore._id;
-      console.log("Before id", id);
+      const id = saveChore._id;      
       Parent.findOneAndUpdate(username, { $push: { chores: id } }).then(
-        saveChore1 => {
-          console.log("Before save1", saveChore1);
+        saveChore1 => {         
           response.status(200).json(saveChore);
         }
       );

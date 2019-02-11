@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 
 const createActivity = (request, response) => {
   const { name, type, username, creator } = request.body;
-  console.log("Getting username for activity", username);
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
@@ -19,13 +18,11 @@ const createActivity = (request, response) => {
         activity
           .save()
           .then(activity => {
-            console.log("Activity here", activity);
             const id = activity._id;
-            console.log("Before id", id);
+
             Parent.findOneAndUpdate(username, {
               $push: { activities: id }
             }).then(activity => {
-              console.log("Before save1", activity);
               response.status(200).json(activity);
             });
           })
@@ -42,10 +39,8 @@ const createActivity = (request, response) => {
       .json({ error: "Login is required before activity can be created" });
   }
 };
-
 const getActivitiesByParent = (request, response) => {
   const { username } = request.params;
-  console.log("Getting some Activity here", username);
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
@@ -77,7 +72,6 @@ const getAllActivities = (request, response) => {
 };
 const updateActivity = (request, response) => {
   const { _id, name, type } = request.body;
-  console.log("Update id here!", request.params._id);
   Activity.findById({ _id: request.params._id })
     .then(activity => {
       console.log("Hitting here", activity);
