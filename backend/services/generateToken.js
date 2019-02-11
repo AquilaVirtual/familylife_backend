@@ -6,9 +6,9 @@ const generateToken = user => {
   };
   const payload = { name: user.username };
   secret = process.env.REACT_APP_SECRET;
-  if (typeof secret !== "string") {    
-  }
-  secret = "It is a family business";
+  if (typeof secret !== "string") {
+    secret = process.env.secret;
+  }  
   return jwt.sign(payload, secret, options);
 };
 

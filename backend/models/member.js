@@ -27,6 +27,7 @@ const memberSchema = new mongoose.Schema({
     type: String,
     default: "Child"
    },
+   family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }],
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",

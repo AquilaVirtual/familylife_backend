@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const createChore = (request, response) => {
   const { title, status, username } = request.body;
+  if (request.jwtObj) {
   const chore = new Chores({
     _id: new mongoose.Types.ObjectId(),
     title,
@@ -26,6 +27,11 @@ const createChore = (request, response) => {
     .catch(err => {
       console.log("Error here", err);
     });
+  } else {
+    return response
+      .status(422)
+      .json({ error: "Login is required before chores can be created" });
+  }
 };
 
 const getChoresByParent = (request, response) => {

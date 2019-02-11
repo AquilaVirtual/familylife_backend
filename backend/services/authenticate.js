@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
  secret = process.env.REACT_APP_SECRET;
-
 const authenticate = (request, response, next) => {
   const token = request.get("Authorization");
   console.log("Got some token", token);
@@ -10,7 +9,7 @@ const authenticate = (request, response, next) => {
         return response
           .status(422)
           .json({ error: "Authentication error", err });
-      request.jwtObj = jwtObj;
+      request.jwtObj = jwtObj;     
       next();
     });
   } else {

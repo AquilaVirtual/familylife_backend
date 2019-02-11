@@ -3,6 +3,7 @@ const ParentController = require("../controllers/parentController");
 const ChoresController = require("../controllers/choresController");
 const AssignmentController = require("../controllers/assignmentController");
 const ActivityController = require("../controllers/ActivityController");
+const MemberController = require("../controllers/memberController");
 const  { authenticate }  = require("../services/authenticate")
 
 const router = express.Router();
@@ -67,7 +68,7 @@ router.put("/api/assignment/:_id", (request, response) => {
 
 //Activities go here
 router.post("/api/activity/create", authenticate, (request, response) => {
-  ActivityController.createActivity(request, response);
+  ActivityController.createActivity(request, response); 
 });
 router.get("/api/activity/:username", authenticate, (request, response) => {
   ActivityController.getActivitiesByParent(request, response);
@@ -80,5 +81,9 @@ router.put("/api/activity/:_id", (request, response) => {
 });
 router.delete("/api/activity/:_id", (request, response) => {
   ActivityController.deleteActivity(request, response);
+});
+//Members go here
+router.post("/api/member/create", authenticate, (request, response) => {
+  MemberController.createMember(request, response); 
 });
 module.exports = router;

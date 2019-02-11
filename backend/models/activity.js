@@ -12,7 +12,7 @@ const activitySchema = new mongoose.Schema({
     required: true
   },
   when: {
-    type: Date,
+  type: Date,
     required: true,
     default: Date.now()
   },

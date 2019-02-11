@@ -25,11 +25,11 @@ const assignmentSchema = new mongoose.Schema({
     type: String,
     //required: true
   },
-  email: {
-    type: String,
-    lowercase: true,
-    required: true,
-  },
+  // email: {
+  //   type: String,
+  //   lowercase: true,
+  //   required: true,
+  // },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",  
