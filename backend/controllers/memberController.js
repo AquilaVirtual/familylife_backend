@@ -13,10 +13,12 @@ const createMember = (request, response) => {
     username,
     email,
     password,
+    accountType,
     creator,
     username_primary
   } = request.body;
   if (request.jwtObj) {
+      console.log("This body", request.body)
     if (!name || !username || !email || !password) {
       response.status(400).json({
         errorMessage: "Please provide a name, username, email, and password!"
@@ -24,25 +26,28 @@ const createMember = (request, response) => {
     }
     Parent.findOne({ username: username_primary })
       .then(primary_user => {
-        Member.findOne({ username })
+        Member.findOne({ username: username})
           .then(user => {
             console.log("getting user here", user);
             if (user) {
-              response
+                response
                 .status(401)
                 .json({ errorMessage: "This username already exists" });
             } else {
-              const encryptedPassword = bcrypt.hashSync(password, bcryptRounds);
+                const encryptedPassword = bcrypt.hashSync(password, bcryptRounds);
+                console.log("encrypting some here", encryptedPassword);
               const token = generateToken({ username });
-              const user = new Member({
+              const mem = new Member({
                 _id: new mongoose.Types.ObjectId(),
                 name,
                 username,
                 password: encryptedPassword,
                 token,
                 email,
+                accountType,
                 creator: primary_user._id
               });
+              console.log("Newly created member", user)
               user
                 .save()
                 .then(savedUser => {

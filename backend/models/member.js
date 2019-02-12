@@ -23,7 +23,7 @@ const memberSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  AccountType: {
+  accountType: {
     type: String,
     default: "Child"
    },
