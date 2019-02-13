@@ -6,8 +6,6 @@ const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
   const { name, title, due, description, username, creator } = request.body;
-  console.log("Username of the body", username);
-  console.log("All of the body", request.body);
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
@@ -22,8 +20,6 @@ const createAssignment = (request, response) => {
         assignment
           .save()
           .then(saveAssignment => {
-            console.log("A bounch created here", saveAssignment);
-
             response.status(200).json(saveAssignment);
           })
           .catch(err => {
@@ -45,16 +41,12 @@ const createAssignment = (request, response) => {
 };
 const getAssignmentsByParent = (request, response) => {
   const { username } = request.params;
-  console.log("This params here", username);
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
-        console.log("This user right here", user);
         id = user._id;
-        console.log("ID ID ID ", id);
         Assignment.find({ creator: id })
           .then(assignments => {
-            console.log("Assignemns Assignemns right here", assignments);
             response.json(assignments);
           })
           .catch(err => {
@@ -95,10 +87,8 @@ const deleteAssignment = (request, response) => {
 };
 const updateAssignment = (request, response) => {
   const { _id, user, title, due, description } = request.body;
-  console.log("Update id here!", request.params._id);
   Assignment.findById({ _id: request.params._id })
     .then(assignment => {
-      console.log("Hitting here", assignment);
       if (assignment) {
         (assignment.user = user),
           (assignment.title = title),

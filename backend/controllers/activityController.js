@@ -19,7 +19,7 @@ const createActivity = (request, response) => {
           .save()
           .then(activity => {
             const id = activity._id;
-            Parent.findOneAndUpdate(username, {
+            Parent.findOneAndUpdate({username: username}, {
               $push: { activities: id }
             }).then(activity => {
               response.status(200).json(activity);
@@ -72,8 +72,7 @@ const getAllActivities = (request, response) => {
 const updateActivity = (request, response) => {
   const { _id, name, type } = request.body;
   Activity.findById({ _id: request.params._id })
-    .then(activity => {
-      console.log("Hitting here", activity);
+    .then(activity => {      
       if (activity) {
         (activity.name = name), (activity.type = type);
         Activity.findByIdAndUpdate({ _id: request.params._id }, activity, {
