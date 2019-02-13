@@ -19,8 +19,7 @@ const createChore = (request, response) => {
       Parent.findOneAndUpdate(username, { $push: { chores: id } }).then(
         saveChore1 => {         
           response.status(200).json(saveChore);
-        }
-      );
+        });
     })
     .catch(err => {
       console.log("Error here", err);
