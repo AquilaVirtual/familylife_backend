@@ -19,7 +19,6 @@ const createActivity = (request, response) => {
           .save()
           .then(activity => {
             const id = activity._id;
-
             Parent.findOneAndUpdate(username, {
               $push: { activities: id }
             }).then(activity => {

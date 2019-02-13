@@ -47,8 +47,13 @@ const createMember = (request, response) => {
                newMember 
                 .save()
                 .then(savedUser => {
+                    const id = savedUser._id;
+                    Parent.findOneAndUpdate(username_primary, {
+                        $push: { family: id }
+                      }).then(savedUser => {                    
                   console.log("User getting saved", savedUser);
                   response.status(200).send(savedUser);
+                      })
                 })
                 .catch(err => {
                   response.status(500).send({
