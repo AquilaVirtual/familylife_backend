@@ -6,7 +6,8 @@ const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
   const { name, title, due, description, username, creator } = request.body;
-  if (request.jwtObj) {
+  console.log("Giving jwt", request.jwtObj)
+  //if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
         const assignment = new Assignment({
@@ -35,13 +36,13 @@ const createAssignment = (request, response) => {
           .status(500)
           .json({ message: "Error creating assignment", err });
       });
-  } else {
-    response.status(422).json({ message: "User Not Logged In" });
-  }
+  // } else {
+  //   response.status(422).json({ message: "User Not Logged In" });
+  // }
 };
 const getAssignmentsByParent = (request, response) => {
   const { username } = request.params;
-  if (request.jwtObj) {
+  //if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
         id = user._id;
@@ -56,11 +57,11 @@ const getAssignmentsByParent = (request, response) => {
       .catch(err => {
         response.status(500).json(err);
       });
-  } else {
-    return response
-      .status(422)
-      .json({ error: "Login is required before assignments can be viewed" });
-  }
+  // } else {
+  //   return response
+  //     .status(422)
+  //     .json({ error: "Login is required before assignments can be viewed" });
+  // }
 };
 const getAllAssignments = (request, response) => {
   Assignment.find({})
@@ -73,17 +74,42 @@ const getAllAssignments = (request, response) => {
 };
 const deleteAssignment = (request, response) => {
   const { _id } = request.body;
-  Assignment.findOneAndRemove({ _id: request.params._id })
-    .then(assignment => {
-      response.status(200).json(assignment);
-    })
-    .catch(err => {
-      console.log("Bad!", err);
-      response.status(500).json({
-        errorMessage: "Something went wrong while deleting assignment",
-        err
-      });
-    });
+  // if (request.jwtObj) {  
+   Assignment.findOne({_id: request.params._id})
+   .then(assignment => {
+     const id = assignment.creator;
+     //Here we delete referenced id of deleted assignment from Parent
+     Parent.findOneAndUpdate({_id: id}, { $pull: {assignments:  request.params._id}})
+     .then(user => {      
+       Assignment.findOneAndRemove({ _id: request.params._id })
+       .then(assignment => {
+         response.status(200).json(assignment);
+       })
+       .catch(err => {
+         aresponse.status(500).json({
+           errorMessage: "Something went wrong while deleting assignment",
+           err
+         });
+       })
+       .catch(err => {
+         response.status(500).json({
+           errorMessage: "Something went wrong while finding assignment",
+           err
+         });
+       })   
+     })
+       })
+     .catch(err => {
+       response.status(500).json({
+         errorMessage: "Something went wrong while deleting assignment from assignments array",
+         err
+       });
+     });
+     // } else {
+  //   return response
+  //     .status(422)
+  //     .json({ error: "Login is required before activity can be viewed" });
+  // }
 };
 const updateAssignment = (request, response) => {
   const { _id, user, title, due, description } = request.body;

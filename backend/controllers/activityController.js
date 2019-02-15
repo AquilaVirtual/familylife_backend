@@ -96,16 +96,14 @@ const updateActivity = (request, response) => {
 };
 const deleteActivity = (request, response) => {
 
-  const { _id, username } = request.body;
- // if (request.jwtObj) {
-  console.log("Getting username from client",  username);
+  const { _id } = request.body;
+ // if (request.jwtObj) {  
   Activity.findOne({_id: request.params._id})
   .then(activity => {
     const id = activity.creator;
     //Here we delete referenced id of deleted activity from Parent
     Parent.findOneAndUpdate({_id: id}, { $pull: {activities:  request.params._id}})
-    .then(user => {
-      console.log("Getting Creator's info",  user);
+    .then(user => {      
       Activity.findOneAndRemove({ _id: request.params._id })
       .then(activity => {
         response.status(200).json(activity);
@@ -118,7 +116,7 @@ const deleteActivity = (request, response) => {
       })
       .catch(err => {
         response.status(500).json({
-          errorMessage: "Something went wrong while deleting activity",
+          errorMessage: "Something went wrong while finding activity",
           err
         });
       })   
@@ -126,7 +124,7 @@ const deleteActivity = (request, response) => {
       })
     .catch(err => {
       response.status(500).json({
-        errorMessage: "Something went wrong while deleting activity",
+        errorMessage: "Something went wrong while deleting activity from activities array",
         err
       });
     });

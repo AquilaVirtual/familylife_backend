@@ -50,10 +50,10 @@ router.get("/api/chore/all", (request, response) => {
 });
 
 //Assignments go here
-router.post("/api/assignment/create", authenticate, (request, response) => {
+router.post("/api/assignment/create", (request, response) => {
   AssignmentController.createAssignment(request, response);
 });
-router.get("/api/assignment/:username", authenticate, (request, response) => {
+router.get("/api/assignment/:username", (request, response) => {
   AssignmentController.getAssignmentsByParent(request, response);
 });
 router.get("/api/assignment/all", (request, response) => {
