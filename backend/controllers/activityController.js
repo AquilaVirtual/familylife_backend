@@ -102,27 +102,27 @@ const deleteActivity = (request, response) => {
   Activity.findOne({_id: request.params._id})
   .then(activity => {
     const id = activity.creator;
-    //Here we delete referenced id of deleted activity
-    Parent.findOneAndUpdate({_id: id}, { $pull: {activities: request.params._id}})
+    //Here we delete referenced id of deleted activity from Parent
+    Parent.findOneAndUpdate({_id: id}, { $pull: {activities:  request.params._id}})
     .then(user => {
       console.log("Getting Creator's info",  user);
-    })
-    .catch(err => {
-      response.status(500).json({
-        errorMessage: "Something went wrong while deleting activity",
-        err
-      });
-    })   
-  })
-  Activity.findOneAndRemove({ _id: request.params._id })
-    .then(activity => {
-      response.status(200).json(activity);
-    })
+      Activity.findOneAndRemove({ _id: request.params._id })
+      .then(activity => {
+        response.status(200).json(activity);
+      })
       .catch(err => {
         aresponse.status(500).json({
           errorMessage: "Something went wrong while deleting activity",
           err
         });
+      })
+      .catch(err => {
+        response.status(500).json({
+          errorMessage: "Something went wrong while deleting activity",
+          err
+        });
+      })   
+    })
       })
     .catch(err => {
       response.status(500).json({
