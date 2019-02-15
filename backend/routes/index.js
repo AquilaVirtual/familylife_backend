@@ -79,7 +79,7 @@ router.get("/api/activity/all", (request, response) => {
 router.put("/api/activity/:_id", (request, response) => {
   ActivityController.updateActivity(request, response);
 });
-router.delete("/api/activity/:_id", (request, response) => {
+router.delete("/api/activity/:_id",  (request, response) => {
   ActivityController.deleteActivity(request, response);
 });
 //Members go here

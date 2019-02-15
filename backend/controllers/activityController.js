@@ -95,17 +95,47 @@ const updateActivity = (request, response) => {
     });
 };
 const deleteActivity = (request, response) => {
-  const { _id } = request.body;
-  Activity.findOneAndRemove({ _id: request.params._id })
-    .then(activity => {
-      response.status(200).json(activity);
+
+  const { _id, username } = request.body;
+ // if (request.jwtObj) {
+  console.log("Getting username from client",  username);
+  Activity.findOne({_id: request.params._id})
+  .then(activity => {
+    const id = activity.creator;
+    //Here we delete referenced id of deleted activity
+    Parent.findOneAndUpdate({_id: id}, { $pull: {activities: request.params._id}})
+    .then(user => {
+      console.log("Getting Creator's info",  user);
     })
     .catch(err => {
       response.status(500).json({
         errorMessage: "Something went wrong while deleting activity",
         err
       });
+    })   
+  })
+  Activity.findOneAndRemove({ _id: request.params._id })
+    .then(activity => {
+      response.status(200).json(activity);
+    })
+      .catch(err => {
+        aresponse.status(500).json({
+          errorMessage: "Something went wrong while deleting activity",
+          err
+        });
+      })
+    .catch(err => {
+      response.status(500).json({
+        errorMessage: "Something went wrong while deleting activity",
+        err
+      });
     });
+
+  // } else {
+  //   return response
+  //     .status(422)
+  //     .json({ error: "Login is required before activity can be viewed" });
+  // }
 };
 module.exports = {
   createActivity,
