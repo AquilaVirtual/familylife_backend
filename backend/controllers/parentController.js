@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const Parent = require("../models/parent");
+const Member = require("../models/member");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require("../services/generateToken");
 
@@ -144,6 +145,29 @@ const getAllParents = (request, response) => {
       });
     });
 };
+const getAllFamilyMebers = (request, response ) => {
+  const { username } = request.params;
+  if (request.jwtObj) {
+    Parent.findOne({ username: username })
+      .then(user => {
+        Activity.find({ creator: user._id })
+          .then(activities => {
+            response.status(200).json(activities);
+          })
+          .catch(err => {
+            console.log("Something bad", err);
+          });
+      })
+      .catch(err => {
+        console.log("No user found", err);
+      });
+  } else {
+    return response
+      .status(422)
+      .json({ error: "Login is required before activity can be viewed" });
+  }
+
+}
 
 module.exports = {
   register,
