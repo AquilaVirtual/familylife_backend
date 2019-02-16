@@ -83,6 +83,39 @@ const createMember = (request, response) => {
   }
 };
 
+logInMember = (request, response) => {
+  const { username, password } = request.body;
+  Member.findOne({ username: username })
+    .then(member => {
+      console.log("User on backend", member);
+      if (!member) {
+        response.status(500).send({
+          errorMessage: "Login Failed."
+        });
+      } else {
+        if (bcrypt.compareSync(password, member.password)) {
+          request.session.member = member;
+          // console.log("We found a user", member);
+          // console.log("Session business", request.session.member);
+          const token = generateToken({ member });
+          response
+            .status(200)
+            .send({ member, token, userId: member._id });
+        } else {
+          response.status(500).send({
+            errorMessage: "Login Failed."
+          });
+        }
+      }
+    })
+    .catch(err => {
+      response.status(500).send({
+        errorMessage: "Failed to Login: " + err
+      });
+    });
+
+}
+
 module.exports = {
   createMember
 };
