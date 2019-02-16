@@ -66,8 +66,8 @@ const login = (request, response) => {
       } else {
         if (bcrypt.compareSync(password, userFound.password)) {
           request.session.userFound = userFound;
-          console.log("We found a user", userFound);
-          console.log("Session business", request.session.userFound);
+          // console.log("We found a user", userFound);
+          // console.log("Session business", request.session.userFound);
           const token = generateToken({ userFound });
           response
             .status(200)
