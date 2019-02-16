@@ -50,16 +50,16 @@ router.get("/api/chore/all", (request, response) => {
 });
 
 //Assignments go here
-router.post("/api/assignment/create", (request, response) => {
+router.post("/api/assignment/create", authenticate, (request, response) => {
   AssignmentController.createAssignment(request, response);
 });
-router.get("/api/assignment/:username", (request, response) => {
+router.get("/api/assignment/:username", authenticate, (request, response) => {
   AssignmentController.getAssignmentsByParent(request, response);
 });
 router.get("/api/assignment/all", (request, response) => {
   AssignmentController.getAllAssignments(request, response);
 });
-router.delete("/api/assignment/:_id", (request, response) => {
+router.delete("/api/assignment/:_id",  authenticate, (request, response) => {
   AssignmentController.deleteAssignment(request, response);
 });
 router.put("/api/assignment/:_id", (request, response) => {
@@ -79,7 +79,7 @@ router.get("/api/activity/all", (request, response) => {
 router.put("/api/activity/:_id", (request, response) => {
   ActivityController.updateActivity(request, response);
 });
-router.delete("/api/activity/:_id",  (request, response) => {
+router.delete("/api/activity/:_id", authenticate, (request, response) => {
   ActivityController.deleteActivity(request, response);
 });
 //Members go here

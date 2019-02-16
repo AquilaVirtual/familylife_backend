@@ -8,12 +8,12 @@ const authenticate = (request, response, next) => {
       if (err)
         return response
           .status(422)
-          .json({ error: "Authentication error", err });
+          .json({ errorMessage: "Authentication error", err });
       request.jwtObj = jwtObj;     
       next();
     });
   } else {
-    return response.status(403).json({ error: "No token provided" });
+    return response.status(403).json({ errorMessage: "No token provided" });
   }
 };
 module.exports = {

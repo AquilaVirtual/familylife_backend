@@ -35,12 +35,12 @@ const createActivity = (request, response) => {
   } else {
     return response
       .status(422)
-      .json({ error: "Login is required before activity can be created" });
+      .json({ errorMessage: "Login is required before activity can be created" });
   }
 };
 const getActivitiesByParent = (request, response) => {
   const { username } = request.params;
-  if (request.jwtObj) {
+  if (request.jwtObj) { //authenticate user
     Parent.findOne({ username: username })
       .then(user => {
         Activity.find({ creator: user._id })
@@ -57,7 +57,7 @@ const getActivitiesByParent = (request, response) => {
   } else {
     return response
       .status(422)
-      .json({ error: "Login is required before activity can be viewed" });
+      .json({ errorMessage: "Login is required before activities can be viewed" });
   }
 };
 const getAllActivities = (request, response) => {
@@ -95,9 +95,8 @@ const updateActivity = (request, response) => {
     });
 };
 const deleteActivity = (request, response) => {
-
   const { _id } = request.body;
- // if (request.jwtObj) {  
+ if (request.jwtObj) {  
   Activity.findOne({_id: request.params._id})
   .then(activity => {
     const id = activity.creator;
@@ -129,11 +128,11 @@ const deleteActivity = (request, response) => {
       });
     });
 
-  // } else {
-  //   return response
-  //     .status(422)
-  //     .json({ error: "Login is required before activity can be viewed" });
-  // }
+  } else {
+    return response
+      .status(422)
+      .json({ errorMessage: "Login is required before activity can be viewed" });
+  }
 };
 module.exports = {
   createActivity,

@@ -16,7 +16,7 @@ const createChore = (request, response) => {
     .save()
     .then(saveChore => {
       const id = saveChore._id;      
-      Parent.findOneAndUpdate(username, { $push: { chores: id } }).then(
+      Parent.findOneAndUpdate({username: username}, { $push: { chores: id } }).then(
         saveChore1 => {         
           response.status(200).json(saveChore);
         });
@@ -27,7 +27,7 @@ const createChore = (request, response) => {
   } else {
     return response
       .status(422)
-      .json({ error: "Login is required before chores can be created" });
+      .json({ errorMessage: "Login is required before chores can be created" });
   }
 };
 
