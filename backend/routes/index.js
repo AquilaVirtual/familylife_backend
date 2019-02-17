@@ -37,6 +37,9 @@ router.put("/api/user/:id", (request, response) => {
 router.get("api/user/logout", (request, response) => {
   ParentController.logoutParent(request, response);
 })
+router.get("/api/user/family/:username", authenticate, (request, response) => {
+  ParentController.getAllFamilyMembers(request, response);
+})
 
 //Chores go here
 router.post("/api/chore/create", (request, response) => {

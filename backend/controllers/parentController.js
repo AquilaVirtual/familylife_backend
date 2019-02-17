@@ -145,35 +145,30 @@ const getAllParents = (request, response) => {
       });
     });
 };
-const getAllFamilyMebers = (request, response ) => {
+const getAllFamilyMembers = (request, response) => {
   const { username } = request.params;
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
-        Activity.find({ creator: user._id })
-          .then(activities => {
-            response.status(200).json(activities);
+        Member.find({ creator: user._id })
+          .then(members => {
+            response.status(200).json(members);
           })
           .catch(err => {
-            console.log("Something bad", err);
+            console.log("Error getting family members", err);
           });
       })
-      .catch(err => {
-        console.log("No user found", err);
-      });
+      .catch(err => {});
   } else {
-    return response
-      .status(422)
-      .json({ error: "Login is required before activity can be viewed" });
+    return response.status(422).json({ errorMessage: "User Not Logged In" });
   }
-
-}
-
+};
 module.exports = {
   register,
   login,
   getParentById,
   deleteParentById,
   updateParent,
-  getAllParents
+  getAllParents,
+  getAllFamilyMembers
 };
