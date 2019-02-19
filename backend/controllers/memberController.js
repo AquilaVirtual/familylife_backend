@@ -98,9 +98,7 @@ logInMember = (request, response) => {
           // console.log("We found a user", member);
           // console.log("Session business", request.session.member);
           const token = generateToken({ member });
-          response
-            .status(200)
-            .send({ member, token, userId: member._id });
+          response.status(200).send({ member, token, userId: member._id });
         } else {
           response.status(500).send({
             errorMessage: "Login Failed."
@@ -113,13 +111,41 @@ logInMember = (request, response) => {
         errorMessage: "Failed to Login: " + err
       });
     });
-}
+};
+
+const resetPassword = (request, response) => {
+  const { _id, newPassword, verifyPassword, password } = request.body;
+  Member.findOne({ _id: request.params.id })
+    .then(user => {
+      if (user) {
+        if (bcrypt.compareSync(password, user.password)) {
+          if (newPassword === verifyPassword) {
+            user.password = bcrypt.hashSync(newPassword, bcryptRounds);
+            Member.findOneAndUpdate({ _id: request.params.id }, user)
+              .then(user => {
+                response.status(200).json(user);
+              })
+              .catch(err => {
+                response
+                  .status(500)
+                  .json("errorMessage: Error reseting password:", err);
+              });
+          }
+        }
+      }
+    })
+    .catch(function(err) {
+      response
+        .status(500)
+        .json("errorMessage: something bahd! error:", err);
+    });
+};
 
 //Here, a newly added family member can login with their temp credentials
-// and change them to what they want  
+// and change them to what they want
 const updateMember = (request, response) => {
   const { newUsername, newEmail, username } = request.params;
-  Member.findOne({username: username})
+  Member.findOne({ username: username })
     .then(user => {
       if (user) {
         (user.username = newUsername), (user.email = newEmail);
@@ -141,5 +167,6 @@ const updateMember = (request, response) => {
 module.exports = {
   createMember,
   logInMember,
-  updateMember  
+  updateMember,
+  resetPassword
 };

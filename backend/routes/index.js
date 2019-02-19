@@ -92,4 +92,7 @@ router.post("/api/member/create", authenticate, (request, response) => {
 router.put("/api/member/update/:username", authenticate, (request, response) => {
   MemberController.updateMember(request, response); 
 });
+router.put("/api/member/resetpassword/:id", authenticate, (request, response) => {
+  MemberController.resetPassword(request, response); 
+});
 module.exports = router;
