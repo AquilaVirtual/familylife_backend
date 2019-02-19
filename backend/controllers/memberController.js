@@ -113,9 +113,33 @@ logInMember = (request, response) => {
         errorMessage: "Failed to Login: " + err
       });
     });
-
 }
 
+//Here, a newly added family member can login with their temp credentials
+// and change them to what they want  
+const updateMember = (request, response) => {
+  const { newUsername, newEmail, username } = request.params;
+  Member.findOne({username: username})
+    .then(user => {
+      if (user) {
+        (user.username = newUsername), (user.email = newEmail);
+        User.findOneAndUpdate({ _id: user._id }, user)
+          .then(user => {
+            response.status(200).json(user);
+          })
+          .catch(err => {
+            response
+              .status(500)
+              .json(`errorMessage: Error username or email: ${err}`);
+          });
+      }
+    })
+    .catch(error => {
+      response.status(500).json(`errorMessage: ${error}`);
+    });
+};
 module.exports = {
-  createMember
+  createMember,
+  logInMember,
+  updateMember  
 };

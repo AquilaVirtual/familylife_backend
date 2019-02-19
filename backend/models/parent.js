@@ -23,7 +23,7 @@ const parentSchema = new mongoose.Schema({
     required: true
   
   },
-  AccountType: {
+  accountType: {
    type: String,
    default: "Primary"
   },

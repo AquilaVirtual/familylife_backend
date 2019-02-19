@@ -89,4 +89,7 @@ router.delete("/api/activity/:_id", authenticate, (request, response) => {
 router.post("/api/member/create", authenticate, (request, response) => {
   MemberController.createMember(request, response); 
 });
+router.put("/api/member/update/:username", authenticate, (request, response) => {
+  MemberController.updateMember(request, response); 
+});
 module.exports = router;
