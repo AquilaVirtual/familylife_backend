@@ -98,4 +98,7 @@ router.put("/api/member/resetpassword/:id", authenticate, (request, response) =>
 router.post("/api/member/login", (request, response) => {
   MemberController.logInMember(request, response); 
 });
+router.get("/api/member/family/:username", authenticate,(request, response) => {
+  MemberController.getAllMembers(request, response); 
+});
 module.exports = router;

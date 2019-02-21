@@ -152,6 +152,7 @@ const getAllFamilyMembers = (request, response) => {
       .then(user => {
         Member.find({ creator: user._id })
           .then(members => {
+            console.log("All family members in Parents", members)
             response.status(200).json(members);
           })
           .catch(err => {

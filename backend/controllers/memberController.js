@@ -164,9 +164,30 @@ const updateMember = (request, response) => {
       response.status(500).json(`errorMessage: ${error}`);
     });
 };
+
+const getAllMembers = (request, response) => {
+  const { username } = request.params;
+  if (request.jwtObj) {
+    Member.findOne({ username: username })
+      .then(user => {
+        Member.find({ creator: user.creator })
+          .then(members => {
+            response.status(200).json(members);
+          })
+          .catch(err => {
+            console.log("Error getting family members", err);
+          });
+      })
+      .catch(err => {});
+  } else {
+    return response.status(422).json({ errorMessage: "User Not Logged In" });
+  }
+};
+
 module.exports = {
   createMember,
   logInMember,
   updateMember,
-  resetPassword
+  resetPassword,
+  getAllMembers
 };
