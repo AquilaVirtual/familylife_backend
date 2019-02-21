@@ -86,19 +86,19 @@ const createMember = (request, response) => {
 logInMember = (request, response) => {
   const { username, password } = request.body;
   Member.findOne({ username: username })
-    .then(member => {
-      console.log("User on backend", member);
-      if (!member) {
+    .then(userFound => {
+      console.log("User on backend", userFound);
+      if (!userFound) {
         response.status(500).send({
           errorMessage: "Login Failed."
         });
       } else {
-        if (bcrypt.compareSync(password, member.password)) {
-          request.session.member = member;
-          // console.log("We found a user", member);
-          // console.log("Session business", request.session.member);
-          const token = generateToken({ member });
-          response.status(200).send({ member, token, userId: member._id });
+        if (bcrypt.compareSync(password, userFound.password)) {
+          request.session.userFound = userFound;
+          // console.log("We found a user", userFound);
+          // console.log("Session business", request.session.userFound);
+          const token = generateToken({ userFound });
+          response.status(200).send({ userFound, token, userId: userFound._id });
         } else {
           response.status(500).send({
             errorMessage: "Login Failed."

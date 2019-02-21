@@ -95,4 +95,7 @@ router.put("/api/member/update/:username", authenticate, (request, response) => 
 router.put("/api/member/resetpassword/:id", authenticate, (request, response) => {
   MemberController.resetPassword(request, response); 
 });
+router.post("/api/member/login", (request, response) => {
+  MemberController.logInMember(request, response); 
+});
 module.exports = router;

@@ -53,7 +53,8 @@ const createAssignment = (request, response) => {
 };
 const getAssignmentsByParent = (request, response) => {
   const { username } = request.params;
-  if (request.jwtObj) { //authenticate user
+  if (request.jwtObj) {
+    //authenticate user
     Parent.findOne({ username: username })
       .then(user => {
         id = user._id;
@@ -71,7 +72,9 @@ const getAssignmentsByParent = (request, response) => {
   } else {
     return response
       .status(422)
-      .json({ errorMessage: "Login is required before assignments can be viewed" });
+      .json({
+        errorMessage: "Login is required before assignments can be viewed"
+      });
   }
 };
 const getAllAssignments = (request, response) => {
@@ -122,7 +125,9 @@ const deleteAssignment = (request, response) => {
   } else {
     return response
       .status(422)
-      .json({ errorMessage: "Login is required before activity can be viewed" });
+      .json({
+        errorMessage: "Login is required before activity can be viewed"
+      });
   }
 };
 const updateAssignment = (request, response) => {
