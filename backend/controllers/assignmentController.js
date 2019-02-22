@@ -1,6 +1,6 @@
 const Assignment = require("../models/assignment");
 const Parent = require("../models/parent");
-const Child = require("../models/member");
+const Member = require("../models/member");
 
 const mongoose = require("mongoose");
 
@@ -10,13 +10,19 @@ const createAssignment = (request, response) => {
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
+        Member.findOne({ name: name})
+        .then(member => {
+          //Only create an assignment if a member exists with the provided name        
+          if (member) {
+          console.log("we're getting a member", member)
         const assignment = new Assignment({
           _id: new mongoose.Types.ObjectId(),
           name,
           title,
           due,
           description,
-          creator: user._id
+          creator: user._id,
+          createdFor: member._id,
         });
         assignment
           .save()
@@ -27,26 +33,40 @@ const createAssignment = (request, response) => {
               { $push: { assignments: id } }
             ).then(saveAssignment => {
               response.status(200).json(saveAssignment);
-            });
+            })
+            .catch(err => {
+              response
+                .status(500)
+                .json({ errorMessage: "Error pushing assignments onto Parent", err });
+            })
           })
           .catch(err => {
             response
               .status(500)
               .json({ errorMessage: "Error saving assignment", err });
           })
+        }
+        else {
+          response
+            .status(404)
+             .json({ errorMessage: "Could not find a member by that name"});
+          
+        }
+        })
           .catch(err => {
             console.log("Error here", err);
             response
-              .status(500)
-              .json({ errorMessage: "Error creating assignment", err });
+              .status(404)
+              .json({ errorMessage: "Could not find a member by that name", err });
           });
-      })
-      .catch(err => {
-        console.log("Error here", err);
-        response
+        })
+        .catch(err => {
+          console.log("Error here", err);
+          response
           .status(500)
           .json({ errorMessage: "Error creating assignment", err });
-      });
+        });
+        
   } else {
     response.status(422).json({ errorMessage: "User Not Logged In" });
   }

@@ -9,6 +9,7 @@ const generateToken = user => {
   if (typeof secret !== "string") {
     secret = process.env.secret;
   }
+  secret = "It is a family business";
   return jwt.sign(payload, secret, options);
 };
 

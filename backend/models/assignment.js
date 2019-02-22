@@ -30,6 +30,10 @@ const assignmentSchema = new mongoose.Schema({
   //   lowercase: true,
   //   required: true,
   // },
+  createdFor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Member",  
+  },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",  
