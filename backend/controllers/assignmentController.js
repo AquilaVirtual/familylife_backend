@@ -70,7 +70,7 @@ const createAssignment = (request, response) => {
     response.status(422).json({ errorMessage: "User Not Logged In" });
   }
 };
-const getAssignmentsByParent = (request, response) => {
+const getAssignments = (request, response) => {
   const { username } = request.params;
   if (request.jwtObj) {
     //authenticate user
@@ -201,7 +201,7 @@ const updateAssignment = (request, response) => {
 };
 module.exports = {
   createAssignment,
-  getAssignmentsByParent,
+  getAssignments,
   getAllAssignments,
   deleteAssignment,
   updateAssignment

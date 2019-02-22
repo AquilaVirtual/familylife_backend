@@ -57,7 +57,7 @@ router.post("/api/assignment/create", authenticate, (request, response) => {
   AssignmentController.createAssignment(request, response);
 });
 router.get("/api/assignment/:username", authenticate, (request, response) => {
-  AssignmentController.getAssignmentsByParent(request, response);
+  AssignmentController.getAssignments(request, response);
 });
 router.get("/api/assignment/all", (request, response) => {
   AssignmentController.getAllAssignments(request, response);
