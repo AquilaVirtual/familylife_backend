@@ -98,7 +98,9 @@ logInMember = (request, response) => {
           // console.log("We found a user", userFound);
           // console.log("Session business", request.session.userFound);
           const token = generateToken({ userFound });
-          response.status(200).send({ userFound, token, userId: userFound._id });
+          response
+            .status(200)
+            .send({ userFound, token, userId: userFound._id });
         } else {
           response.status(500).send({
             errorMessage: "Login Failed."
@@ -111,6 +113,25 @@ logInMember = (request, response) => {
         errorMessage: "Failed to Login: " + err
       });
     });
+};
+
+const deleteMember = (request, response) => {
+  const { _id } = request.body;
+  if (request.jwtObj) {
+  Member.findOneAndRemove({ _id: request.params.id })
+    .then(deletedMember => {
+      response
+      .status(201)
+      .json(deletedMember);
+    })
+    .catch(err => {
+      response
+      .status(500)
+      .json("errorMessage: Error deleting member:", err);
+    });
+  } else {
+    return response.status(422).json({ errorMessage: "User Not Logged In" });
+  }
 };
 
 const resetPassword = (request, response) => {
@@ -135,9 +156,7 @@ const resetPassword = (request, response) => {
       }
     })
     .catch(function(err) {
-      response
-        .status(500)
-        .json("errorMessage: something bahd! error:", err);
+      response.status(500).json("errorMessage: something bahd! error:", err);
     });
 };
 
@@ -189,5 +208,6 @@ module.exports = {
   logInMember,
   updateMember,
   resetPassword,
-  getAllMembers
+  getAllMembers,
+  deleteMember
 };

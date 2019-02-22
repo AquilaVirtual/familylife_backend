@@ -101,4 +101,7 @@ router.post("/api/member/login", (request, response) => {
 router.get("/api/member/family/:username", authenticate,(request, response) => {
   MemberController.getAllMembers(request, response); 
 });
+router.delete("/api/member/:id", authenticate,(request, response) => {
+  MemberController.deleteMember(request, response); 
+});
 module.exports = router;
