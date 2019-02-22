@@ -14,7 +14,6 @@ const createAssignment = (request, response) => {
         .then(member => {
           //Only create an assignment if a member exists with the provided name        
           if (member) {
-          console.log("we're getting a member", member)
         const assignment = new Assignment({
           _id: new mongoose.Types.ObjectId(),
           name,
@@ -77,14 +76,36 @@ const getAssignmentsByParent = (request, response) => {
     //authenticate user
     Parent.findOne({ username: username })
       .then(user => {
-        id = user._id;
-        Assignment.find({ creator: id })
-          .then(assignments => {
-            response.json(assignments);
-          })
-          .catch(err => {
-            response.status(500).json(err);
-          });
+        if(user) {
+          const parentId = user._id;
+         Assignment.find({ creator: parentId })
+            .then(assignments => {
+              console.log("Getting assignments", assignments)
+              response.json(assignments);
+            })
+            .catch(err => {
+              response.status(500).json(err);
+            }); 
+        }
+        else {
+          Member.findOne({ username: username})
+        .then(member => {
+          if(member) {
+          const memberId = member._id;
+          Assignment.find({ createdFor: memberId })
+            .then(assignments => {
+              console.log("Getting assignments", assignments)
+              response.json(assignments);
+            })
+            .catch(err => {
+              response.status(500).json(err);
+            });
+          }        
+        })
+        .catch(err => {
+          response.status(500).json(err);
+        });
+        }        
       })
       .catch(err => {
         response.status(500).json(err);
