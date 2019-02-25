@@ -34,7 +34,7 @@ const assignmentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Member"
   },
-  creator: {
+  parentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent"
   },

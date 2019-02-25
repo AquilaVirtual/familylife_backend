@@ -20,7 +20,7 @@ const createAssignment = (request, response) => {
                 title,
                 due,
                 description,
-                creator: user._id,
+                parentId: user._id,
                 createdFor: member._id
               });
               assignment
@@ -82,7 +82,7 @@ const getAssignments = (request, response) => {
       .then(user => {
         if (user) {
           const parentId = user._id;
-          Assignment.find({ creator: parentId })
+          Assignment.find({ parentId: parentId })
             .then(assignments => {
               response.json(assignments);
             })

@@ -16,7 +16,7 @@ const activitySchema = new mongoose.Schema({
     required: true,
     default: Date.now()
   },
-  creator: {
+  parentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",   
   },

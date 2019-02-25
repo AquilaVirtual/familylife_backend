@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 const generateToken = user => {
   const options = {
     expiresIn: "1h"

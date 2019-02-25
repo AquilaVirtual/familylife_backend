@@ -5,7 +5,7 @@ const Member = require("../models/member");
 const mongoose = require("mongoose");
 
 const createActivity = (request, response) => {
-  const { name, type, username, creator } = request.body;
+  const { name, type, username, parentId } = request.body;
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
@@ -13,7 +13,7 @@ const createActivity = (request, response) => {
           _id: new mongoose.Types.ObjectId(),
           name,
           type,
-          creator: user._id
+          parentId: user._id
         });
         activity
           .save()
@@ -43,7 +43,7 @@ const getActivitiesByParent = (request, response) => {
   if (request.jwtObj) { //authenticate user
     Parent.findOne({ username: username })
       .then(user => {
-        Activity.find({ creator: user._id })
+        Activity.find({ parentId: user._id })
           .then(activities => {
             response.status(200).json(activities);
           })
