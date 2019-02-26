@@ -12,7 +12,7 @@ const choreSchema = new mongoose.Schema({
     default: "not started"
   }, 
   parentId: { type: mongoose.Schema.Types.ObjectId, ref: "Parent"},
-  creatorFor: { type: mongoose.Schema.Types.ObjectId, ref: "Member"},
+  createdFor: { type: mongoose.Schema.Types.ObjectId, ref: "Member"},
   family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }]
 });
 

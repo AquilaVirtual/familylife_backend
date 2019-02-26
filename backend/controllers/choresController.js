@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const createChore = (request, response) => {
   const { title, username, name } = request.body;
   //console.log("Giving jwt", request.jwtObj);
-  if (request.jwtObj) {
+  //if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
         Member.findOne({ name: name })
@@ -30,7 +30,7 @@ const createChore = (request, response) => {
                     { username: username },
                     { $push: { chores: id } }
                   )
-                    .then(savechore => {
+                    .then(user => {
                       response.status(200).json(savechore);
                     })
                     .catch(err => {
@@ -65,9 +65,9 @@ const createChore = (request, response) => {
           .status(500)
           .json({ errorMessage: "Error creating chore", err });
       });
-  } else {
-    response.status(422).json({ errorMessage: "User Not Logged In" });
-  }
+  // } else {
+  //   response.status(422).json({ errorMessage: "User Not Logged In" });
+  // }
 };
 
 const getChoresByParent = (request, response) => {
