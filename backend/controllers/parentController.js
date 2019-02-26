@@ -168,7 +168,7 @@ const getAllFamilyMembers = (request, response) => {
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
-        Member.find({ creator: user._id })
+        Member.find({ parentId: user._id })
           .then(members => {
             console.log("All family members in Parents", members);
             response.status(200).json(members);
