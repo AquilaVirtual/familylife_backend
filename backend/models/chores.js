@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 
 const choreSchema = new mongoose.Schema({
+  name: {
+   type: String
+  },
   _id: mongoose.Schema.Types.ObjectId,
   // chore name
   title: {
-    type: String,
-    required: true
+    type: String,  
   },
   status: {
     type: String,

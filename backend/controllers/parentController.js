@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const Parent = require("../models/parent");
 const Member = require("../models/member");
+const Chores = require("../models/chores");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require("../services/generateToken");
 
@@ -36,6 +37,22 @@ const register = (request, response) => {
         user
           .save()
           .then(savedUser => {
+            //Here we initialze chore without actually adding a title with a new Primary account.
+            //The purpose of doing this is to enable creation of chores for this user whose name will 
+            //be displayed on the front end when chores component is loaded. This makes it so that
+            //chores created for this user can easily be associated.
+            const chore = new Chores({
+            _id: new mongoose.Types.ObjectId(),
+            name: savedUser.name,
+            creator: savedUser._id
+            });
+            chore
+            .save()
+            .then(savedChore => {              
+            })
+            .catch(err => {
+              console.log("Error initialing chore",err)
+            })
             console.log("User getting saved", savedUser);
             response.status(200).send(savedUser);
           })
