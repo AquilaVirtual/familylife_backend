@@ -118,17 +118,13 @@ logInMember = (request, response) => {
 const deleteMember = (request, response) => {
   const { _id } = request.body;
   if (request.jwtObj) {
-  Member.findOneAndRemove({ _id: request.params.id })
-    .then(deletedMember => {
-      response
-      .status(201)
-      .json(deletedMember);
-    })
-    .catch(err => {
-      response
-      .status(500)
-      .json("errorMessage: Error deleting member:", err);
-    });
+    Member.findOneAndRemove({ _id: request.params.id })
+      .then(deletedMember => {
+        response.status(201).json(deletedMember);
+      })
+      .catch(err => {
+        response.status(500).json("errorMessage: Error deleting member:", err);
+      });
   } else {
     return response.status(422).json({ errorMessage: "User Not Logged In" });
   }
@@ -191,7 +187,14 @@ const getAllMembers = (request, response) => {
       .then(user => {
         Member.find({ creator: user.creator })
           .then(members => {
-            response.status(200).json(members);
+            Parent.findOne({ _id: user.creator })
+              .then(parent => {
+                members.push(parent);
+                response.status(200).json(members);
+              })
+              .catch(err => {
+                console.log("Error getting primary account", err);
+              });
           })
           .catch(err => {
             console.log("Error getting family members", err);
