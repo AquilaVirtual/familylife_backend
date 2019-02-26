@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const Parent = require("../models/parent");
+const Chores = require("../models/chores");
 const Member = require("../models/member");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require("../services/generateToken");
@@ -14,7 +15,7 @@ const createMember = (request, response) => {
     email,
     password,
     accountType,
-    creator,
+    parentId,
     username_primary
   } = request.body;
   if (request.jwtObj) {
@@ -42,18 +43,36 @@ const createMember = (request, response) => {
                 token,
                 email,
                 accountType,
-                creator: primary_user._id
+                parentId: primary_user._id
               });
               newMember
                 .save()
-                .then(savedUser => {
-                  const id = savedUser._id;
+                .then(savedMember => {
+                  const id = savedMember._id;
                   Parent.findOneAndUpdate(
                     { username: username_primary },
                     {
                       $push: { family: id }
                     }
-                  ).then(savedUser => {
+                  ).then(pushedId => {
+            //Here we initialze chore without actually adding a title with a new Primary account.
+            //The purpose of doing this is to enable creation of chores for this user whose name will
+            //be displayed on the front end when chores component is loaded. This makes it so that
+            //chores created for this user can easily be associated.
+            const chore = new Chores({
+              _id: new mongoose.Types.ObjectId(),
+              name: savedMember.name,
+              createdFor: savedMember._id,
+              parentId: primary_user._id
+            });
+            chore
+              .save()
+              .then(savedChore => {
+                console.log("Creating some chores here", savedChore);
+              })
+              .catch(err => {
+                console.log("Error initialing chore", err);
+              });
                     response.status(200).send(savedUser);
                   });
                 })
@@ -185,9 +204,9 @@ const getAllMembers = (request, response) => {
   if (request.jwtObj) {
     Member.findOne({ username: username })
       .then(user => {
-        Member.find({ creator: user.creator })
+        Member.find({ parentId: user.parentId })
           .then(members => {
-            Parent.findOne({ _id: user.creator })
+            Parent.findOne({ _id: user.parentId })
               .then(parent => {
                 members.push(parent);
                 response.status(200).json(members);

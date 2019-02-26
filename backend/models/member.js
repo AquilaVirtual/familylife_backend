@@ -30,7 +30,7 @@ const memberSchema = new mongoose.Schema({
    chores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
    assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],  
    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],   
-  creator: {
+  parentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",
     required: true
