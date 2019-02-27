@@ -6,16 +6,21 @@ const choreSchema = new mongoose.Schema({
   },
   _id: mongoose.Schema.Types.ObjectId,
   // chore name
-  title: {
-    type: String,  
+  chores: [
+    {
+    title: {
+      type: String,  
+    }
   },
-  status: {
-    type: String,
-    default: "not started"
-  }, 
+  {
+    status: {
+      type: String,
+      default: "not started"
+    }, 
+  }
+  ],
   parentId: { type: mongoose.Schema.Types.ObjectId, ref: "Parent"},
-  createdFor: { type: mongoose.Schema.Types.ObjectId, ref: "Member"},
-  family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }]
+  memberId: { type: mongoose.Schema.Types.ObjectId, ref: "Member"},
 });
 
 let choredModel = mongoose.model("Chore", choreSchema);

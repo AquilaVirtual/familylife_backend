@@ -62,7 +62,7 @@ const createMember = (request, response) => {
             const chore = new Chores({
               _id: new mongoose.Types.ObjectId(),
               name: savedMember.name,
-              createdFor: savedMember._id,
+              memberId: savedMember._id,
               parentId: primary_user._id
             });
             chore
