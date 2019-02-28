@@ -19,7 +19,7 @@ const createChore = (request, response) => {
                 _id: new mongoose.Types.ObjectId(),
                 title,
                 parentId: user._id,
-                createdFor: member._id
+                memberId: member._id
               });
               chore
                 .save()
@@ -70,11 +70,35 @@ const createChore = (request, response) => {
   // }
 };
 
-const getChoresByParent = (request, response) => {
+const getChores = (request, response) => {
   const { username } = request.params;
-  Chores.findOne({ username: username })  
-    .then(res => {
-      response.status(200).json(res);
+  Parent.findOne({ username: username })  
+    .then(parent => {
+      if(parent) {
+        Member.find({
+          parentId: parent._id
+        })
+        .then(members => {
+          members.push(parent);
+          response.status(200).json(members);
+          console.log("Family members", members)
+          Chores.find({parentId: parent._id})
+          .then(chores => {
+            console.log("Here are Chores Found", chores)
+            // for (let i = 0; i < members.length; i++) {
+            //   for(let j = 0; j < chores.length; j++) {
+            //     if (members[i].parentId === chores[j].parentId) {
+            //       console.log("Found match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            //      // members[i].chore.push(chores[j])
+            //     }
+            //   }
+            // }
+         //  console.log("Members after pushing", members)
+
+          })
+
+        })
+      }
     })
     .catch(err => {
       console.log("Something bad", err);
@@ -91,6 +115,6 @@ const getAllChores = (request, response) => {
 };
 module.exports = {
   createChore,
-  getChoresByParent,
+  getChores,
   getAllChores
 };

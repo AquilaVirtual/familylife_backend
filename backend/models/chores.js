@@ -1,24 +1,16 @@
 const mongoose = require("mongoose");
 
 const choreSchema = new mongoose.Schema({
-  name: {
-   type: String
-  },
-  _id: mongoose.Schema.Types.ObjectId,
-  // chore name
-  chores: [
-    {
+  
+  _id: mongoose.Schema.Types.ObjectId,     
     title: {
-      type: String,  
-    }
+    type: String,  
+    default: "Sweep house"    
   },
-  {
     status: {
-      type: String,
-      default: "not started"
-    }, 
-  }
-  ],
+    type: String,
+    default: "not started"
+    },     
   parentId: { type: mongoose.Schema.Types.ObjectId, ref: "Parent"},
   memberId: { type: mongoose.Schema.Types.ObjectId, ref: "Member"},
 });

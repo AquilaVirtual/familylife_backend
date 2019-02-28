@@ -27,6 +27,11 @@ const memberSchema = new mongoose.Schema({
     type: String,
     default: "Child"
    },
+   chore: [
+     {
+     type: String
+     }
+   ],
    chores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
    assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],  
    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],   
