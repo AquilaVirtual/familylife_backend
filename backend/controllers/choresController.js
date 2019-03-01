@@ -8,18 +8,27 @@ const createChore = (request, response) => {
   const { title, username, name } = request.body;
   //console.log("Giving jwt", request.jwtObj);
   //if (request.jwtObj) {
+    let personId =""; 
     Parent.findOne({ username: username })
       .then(user => {
+        Parent.findOne({name: name})
+        .then(parent => {
         Member.findOne({ name: name })
           .then(member => {
             console.log("Found Member", member);
-            //Only create an assignment if a member exists with the provided name
-            if (member) {
+            //Only create a chore if a member exists with the provided name
+            if (parent) {
+              personId = parent._id;
+            }
+            else if (member) {
+              personId = member._id;
+            }
+            if (personId) {
               const chore = new Chores({
                 _id: new mongoose.Types.ObjectId(),
                 title, 
                 parentId: user._id,             
-                createdFor: member._id
+                createdFor: personId
               });
               chore
                 .save()
@@ -58,6 +67,13 @@ const createChore = (request, response) => {
               err
             });
           });
+        })
+        .catch(err => {
+          console.log("Error here", err);
+          response
+            .status(500)
+            .json({ errorMessage: "Error creating chore", err });
+        });
       })
       .catch(err => {
         console.log("Error here", err);
@@ -92,6 +108,7 @@ const getChores = (request, response) => {
               }
             }            
             console.log("Members after pushing", members)
+            members.push(parent)
             response.status(200).json(members);
           })
           .catch(err => {
