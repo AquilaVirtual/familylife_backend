@@ -17,9 +17,9 @@ const createChore = (request, response) => {
             if (member) {
               const chore = new Chores({
                 _id: new mongoose.Types.ObjectId(),
-                title,
-                parentId: user._id,
-                memberId: member._id
+                title, 
+                parentId: user._id,             
+                createdFor: member._id
               });
               chore
                 .save()
@@ -78,26 +78,29 @@ const getChores = (request, response) => {
         Member.find({
           parentId: parent._id
         })
-        .then(members => {
-          members.push(parent);
-          response.status(200).json(members);
+        .then(members => {        
           console.log("Family members", members)
           Chores.find({parentId: parent._id})
           .then(chores => {
             console.log("Here are Chores Found", chores)
-            // for (let i = 0; i < members.length; i++) {
-            //   for(let j = 0; j < chores.length; j++) {
-            //     if (members[i].parentId === chores[j].parentId) {
-            //       console.log("Found match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            //      // members[i].chore.push(chores[j])
-            //     }
-            //   }
-            // }
-         //  console.log("Members after pushing", members)
-
+            for (let i = 0; i < members.length; i++) {
+              for(let j = 0; j < chores.length; j++) {
+                if (members[i]._id.toString() === chores[j].createdFor.toString()) {
+                  console.log("Found match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                  members[i].chore.push(chores[j])
+                }
+              }
+            }            
+            console.log("Members after pushing", members)
+            response.status(200).json(members);
           })
-
+          .catch(err => {
+            console.log("Something bad", err);
+          });          
         })
+        .catch(err => {
+          console.log("Something bad", err);
+        });
       }
     })
     .catch(err => {
