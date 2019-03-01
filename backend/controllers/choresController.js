@@ -37,7 +37,7 @@ const createChore = (request, response) => {
                   const id = savechore._id;
                   Parent.findOneAndUpdate(
                     { username: username },
-                    { $push: { chores: id } }
+                    { $push: { choresIds: id } }
                   )
                     .then(user => {
                       response.status(200).json(savechore);
@@ -90,6 +90,8 @@ const getChores = (request, response) => {
   const { username } = request.params;
   Parent.findOne({ username: username })  
     .then(parent => {
+      Member.findOne({username: username})
+      .then(member => {      
       if(parent) {
         Member.find({
           parentId: parent._id
@@ -97,18 +99,23 @@ const getChores = (request, response) => {
         .then(members => {        
           console.log("Family members", members)
           Chores.find({parentId: parent._id})
-          .then(chores => {
-            console.log("Here are Chores Found", chores)
+          .then(foundChores => {
+            for(let j = 0; j < foundChores.length; j++) {
+              if(parent._id.toString() === foundChores[j].createdFor.toString()) {
+               parent.chores.push(foundChores[j])
+            }
+          }
+            console.log("Here are Chores Found", foundChores)
             for (let i = 0; i < members.length; i++) {
-              for(let j = 0; j < chores.length; j++) {
-                if (members[i]._id.toString() === chores[j].createdFor.toString()) {
+              for(let j = 0; j < foundChores.length; j++) {
+                if (members[i]._id.toString() === foundChores[j].createdFor.toString()) {
                   console.log("Found match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                  members[i].chore.push(chores[j])
+                  members[i].chores.push(foundChores[j])
                 }
               }
             }            
-            console.log("Members after pushing", members)
             members.push(parent)
+            console.log("Members after pushing", members)
             response.status(200).json(members);
           })
           .catch(err => {
@@ -119,6 +126,39 @@ const getChores = (request, response) => {
           console.log("Something bad", err);
         });
       }
+      // else if(member) {
+      //   Member.find({
+      //     parentId: parent.parentId
+      //   })
+      //   .then(members => {        
+      //     console.log("Family members", members)
+      //     Chores.find({parentId: parent._id})
+      //     .then(chores => {
+      //       console.log("Here are Chores Found", chores)
+      //       for (let i = 0; i < members.length; i++) {
+      //         for(let j = 0; j < chores.length; j++) {
+      //           if (members[i]._id.toString() === chores[j].createdFor.toString()) {
+      //             console.log("Found match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      //             members[i].chore.push(chores[j])
+      //           }
+      //         }
+      //       }            
+      //       members.push(parent)
+      //       console.log("Members after pushing", members)
+      //       response.status(200).json(members);
+      //     })
+      //     .catch(err => {
+      //       console.log("Something bad", err);
+      //     });          
+      //   })
+      //   .catch(err => {
+      //     console.log("Something bad", err);
+      //   });
+      // }
+    })
+    .catch(err => {
+      console.log("Something bad", err);
+    });
     })
     .catch(err => {
       console.log("Something bad", err);

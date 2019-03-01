@@ -27,10 +27,10 @@ const memberSchema = new mongoose.Schema({
     type: String,
     default: "Child"
    },
-   chore: [],
-   chores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
-   assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],  
-   activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],   
+   chores: [],
+   choresIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
+   assignmentsIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],  
+   activitiesIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],   
   parentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",

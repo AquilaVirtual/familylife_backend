@@ -29,7 +29,7 @@ const createAssignment = (request, response) => {
                   const id = saveAssignment._id;
                   Parent.findOneAndUpdate(
                     { username: username },
-                    { $push: { assignments: id } }
+                    { $push: { assignmentsIds: id } }
                   )
                     .then(saveAssignment => {
                       response.status(200).json(saveAssignment);
@@ -135,7 +135,7 @@ const deleteAssignment = (request, response) => {
         //Here we delete referenced id of deleted assignment from Parent
         Parent.findOneAndUpdate(
           { _id: id },
-          { $pull: { assignments: request.params._id } }
+          { $pull: { assignmentsIds: request.params._id } }
         ).then(user => {
           Assignment.findOneAndRemove({ _id: request.params._id })
             .then(assignment => {

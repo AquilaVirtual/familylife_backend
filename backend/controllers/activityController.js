@@ -20,7 +20,7 @@ const createActivity = (request, response) => {
           .then(activity => {
             const id = activity._id;
             Parent.findOneAndUpdate({username: username}, {
-              $push: { activities: id }
+              $push: { activitiesIds: id }
             }).then(activity => {
               response.status(200).json(activity);
             });
@@ -101,7 +101,7 @@ const deleteActivity = (request, response) => {
   .then(activity => {
     const id = activity.creator;
     //Here we delete referenced id of deleted activity from Parent
-    Parent.findOneAndUpdate({_id: id}, { $pull: {activities:  request.params._id}})
+    Parent.findOneAndUpdate({_id: id}, { $pull: {activitiesIds:  request.params._id}})
     .then(user => {      
       Activity.findOneAndRemove({ _id: request.params._id })
       .then(activity => {

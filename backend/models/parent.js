@@ -27,15 +27,11 @@ const parentSchema = new mongoose.Schema({
    type: String,
    default: "Primary"
   },
-  chore: [
-    {
-    type: String
-    }
-  ],
+  chores: [],
      family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }],  
-     chores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
-     assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],  
-     activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],  
+     choresIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  
+     assignmentsIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],  
+     activitiesIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],  
 });
 
 let parentModel = mongoose.model("Parent", parentSchema);
