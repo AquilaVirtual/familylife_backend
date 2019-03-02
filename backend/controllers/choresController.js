@@ -188,8 +188,20 @@ const getChores = (request, response) => {
 const deleteChore = (request, response) => {
   const { _id } = request.params;
 Chores.findOneAndRemove({_id: request.params})
-.then(deletedChore => {
-  console.log("What chore????????????", deletedChore)
+.then(deletedChore => {  
+  Parent.findOneAndUpdate(
+    { _id: deletedChore.parentId },
+    { $pull: { choresIds: deletedChore._id } }
+  )
+    .then(user => {
+      response.status(200).json(savechore);
+    })
+    .catch(err => {
+      response.status(500).json({
+        errorMessage: "Error pushing chores onto Parent",
+        err
+      });
+    });
 })
 .catch(err => {
   console.log("Something went wrong while deleting chore", err)
