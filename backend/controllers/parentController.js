@@ -18,7 +18,6 @@ const register = (request, response) => {
   }
   Parent.findOne({ username })
     .then(user => {
-      console.log("getting user here", user);
       if (user) {
         response
           .status(401)
@@ -60,7 +59,6 @@ const login = (request, response) => {
   const { username, password } = request.body;
   Parent.findOne({ username: username })
     .then(userFound => {
-      console.log("User on backend", userFound);
       if (!userFound) {
         response.status(500).send({
           errorMessage: "Login Failed."
@@ -102,7 +100,6 @@ const getParentById = (request, response) => {
 
 const deleteParentById = (request, response) => {
   const { _id } = request.body;
-  console.log("Take him out!", request.body);
   Parent.findByIdAndRemove({ id: request.params.id })
     .then(user => {
       response.status(200).json(user);
@@ -153,7 +150,6 @@ const getAllFamilyMembers = (request, response) => {
       .then(user => {
         Member.find({ parentId: user._id })
           .then(members => {
-            console.log("All family members in Parents", members);
             response.status(200).json(members);
           })
           .catch(err => {
