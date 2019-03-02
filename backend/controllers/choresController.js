@@ -126,35 +126,34 @@ const getChores = (request, response) => {
           console.log("Something bad", err);
         });
       }
-      // else if(member) {
-      //   Member.find({
-      //     parentId: parent.parentId
-      //   })
-      //   .then(members => {        
-      //     console.log("Family members", members)
-      //     Chores.find({parentId: parent._id})
-      //     .then(chores => {
-      //       console.log("Here are Chores Found", chores)
-      //       for (let i = 0; i < members.length; i++) {
-      //         for(let j = 0; j < chores.length; j++) {
-      //           if (members[i]._id.toString() === chores[j].createdFor.toString()) {
-      //             console.log("Found match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-      //             members[i].chore.push(chores[j])
-      //           }
-      //         }
-      //       }            
-      //       members.push(parent)
-      //       console.log("Members after pushing", members)
-      //       response.status(200).json(members);
-      //     })
-      //     .catch(err => {
-      //       console.log("Something bad", err);
-      //     });          
-      //   })
-      //   .catch(err => {
-      //     console.log("Something bad", err);
-      //   });
-      // }
+      else if(member) {
+       Member.find({
+          parentId: member.parentId
+        })
+        .then(members => {        
+          console.log("Family members", members)
+          Chores.find({parentId: member.parentId})
+          .then(choresFound => {
+            console.log("Here are Chores Found", choresFound)
+            for (let i = 0; i < members.length; i++) {
+              for(let j = 0; j < choresFound.length; j++) {
+                if (members[i]._id.toString() === choresFound[j].createdFor.toString()) {
+                  console.log("Found match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                  members[i].chores.push(choresFound[j])
+                }
+              }
+            }                        
+            console.log("Members after pushing", members)
+            response.status(200).json(members);
+          })
+          .catch(err => {
+            console.log("Something bad", err);
+          });          
+        })
+        .catch(err => {
+          console.log("Something bad", err);
+        });
+      }
     })
     .catch(err => {
       console.log("Something bad", err);
