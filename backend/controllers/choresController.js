@@ -184,6 +184,17 @@ const getChores = (request, response) => {
       console.log("Something bad", err);
     });
 };
+
+const deleteChore = (request, response) => {
+  const { _id } = request.params;
+Chores.findOneAndRemove({_id: request.params})
+.then(deletedChore => {
+  console.log("What chore????????????", deletedChore)
+})
+.catch(err => {
+  console.log("Something went wrong while deleting chore", err)
+})
+}
 const getAllChores = (request, response) => {
   Chores.find({})
     .then(res => {
@@ -196,5 +207,6 @@ const getAllChores = (request, response) => {
 module.exports = {
   createChore,
   getChores,
+  deleteChore,
   getAllChores
 };

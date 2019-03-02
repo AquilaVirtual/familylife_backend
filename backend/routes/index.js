@@ -51,6 +51,9 @@ router.get("/api/chore/:username", (request, response) => {
 router.get("/api/chore/all", (request, response) => {
   ChoresController.getAllChores(request, response);
 });
+router.delete("/api/chore/deletechore/:_id", (request, response) => {
+  ChoresController.deleteChore(request, response);
+});
 
 //Assignments go here
 router.post("/api/assignment/create", authenticate, (request, response) => {
