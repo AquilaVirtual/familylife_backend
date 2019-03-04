@@ -191,7 +191,13 @@ const getAllMembers = (request, response) => {
             Parent.findOne({ _id: user.parentId })
               .then(parent => {
                 members.push(parent);
-                response.status(200).json(members);
+                //Here we filter out the logged in member so they don't appear twice on dashboard
+                const filterOutLoggedInmember = members.filter(member => {
+                  return member._id !== user._id;
+                })
+                response.status(200).json(filterOutLoggedInmember);
+                console.log("Filtered out members", filterOut)
+                console.log("Logged in member", user._id)
               })
               .catch(err => {
                 console.log("Error getting primary account", err);
