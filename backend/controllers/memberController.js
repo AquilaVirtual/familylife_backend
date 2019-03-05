@@ -185,19 +185,17 @@ const getAllMembers = (request, response) => {
   const { username } = request.params;
   if (request.jwtObj) {
     Member.findOne({ username: username })
-      .then(user => {
-        Member.find({ parentId: user.parentId })
+      .then(userFound => {
+        Member.find({ parentId: userFound.parentId })
           .then(members => {
-            Parent.findOne({ _id: user.parentId })
+            Parent.findOne({ _id: userFound.parentId })
               .then(parent => {
                 members.push(parent);
                 //Here we filter out the logged in member so they don't appear twice on dashboard
                 const filterOutLoggedInmember = members.filter(member => {
-                  return member._id !== user._id;
+                  return member._id.toString() !== userFound._id.toString();
                 })
                 response.status(200).json(filterOutLoggedInmember);
-                console.log("Filtered out members", filterOut)
-                console.log("Logged in member", user._id)
               })
               .catch(err => {
                 console.log("Error getting primary account", err);
