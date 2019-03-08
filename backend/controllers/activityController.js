@@ -94,6 +94,24 @@ const updateActivity = (request, response) => {
       });
     });
 };
+
+const addMemberToActivity = (request, response) => {
+  const { username } = request.body;
+  const { _id } = request.params;
+  console.log("Add activity fired!", _id)
+  console.log("Add activity fired!", username)
+  Parent.findOne({username: username})
+  .then(parentFound => {
+    // Activity.findOne({parentId: parentFound._id})
+    // .then(activity => {
+
+    // })
+  })
+  .catch(err => {
+    console.log("Something went wrong", err)
+  })
+}
+
 const deleteActivity = (request, response) => {
   const { _id } = request.body;
  if (request.jwtObj) {  
@@ -139,5 +157,6 @@ module.exports = {
   getActivitiesByParent,
   getAllActivities,
   updateActivity,
-  deleteActivity
+  deleteActivity,
+  addMemberToActivity
 };
