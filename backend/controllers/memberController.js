@@ -18,14 +18,18 @@ const createMember = (request, response) => {
     parentId,
     username_primary
   } = request.body;
+  //Here we authenticate user to make sure user is logged-in and has a valid token
   if (request.jwtObj) {
     if (!name || !username || !email || !password) {
       response.status(400).json({
         errorMessage: "Please provide a name, username, email, and password!"
       });
     }
+    //Only a parent can add a family member, so here we query Parent to check if logged-in user
+    // is a primary account holder
     Parent.findOne({ username: username_primary })
       .then(primary_user => {
+      //Befor we add a new member, check if a member by that username already exists
         Member.findOne({ username: username })
           .then(user => {
             if (user) {
@@ -61,7 +65,7 @@ const createMember = (request, response) => {
                 .catch(err => {
                   response.status(500).send({
                     //placeholder error message
-                    errorMessage: "Level 1 Error occurred while saving: " + err
+                    errorMessage: "Error adding Id of newly added member to families array : " + err
                   });
                 });
             }
@@ -69,14 +73,14 @@ const createMember = (request, response) => {
           .catch(err => {
             response.status(500).send({
               //placeholder error message
-              errorMessage: "Level 2 Error occurred while saving: " + err
+              errorMessage: "Error saving newly added family member: " + err
             });
           });
       })
       .catch(err => {
         response.status(500).send({
           //placeholder error message
-          errorMessage: "Level 2 Error occurred while saving: " + err
+          errorMessage: "Couldn't find a user by that username: " + err
         });
       });
   } else {
@@ -198,14 +202,20 @@ const getAllMembers = (request, response) => {
                 response.status(200).json(filterOutLoggedInmember);
               })
               .catch(err => {
-                console.log("Error getting primary account", err);
-              });
+                response
+                  .status(500)
+                  .json("errorMessage: Error getting family members:", err);              });
           })
           .catch(err => {
-            console.log("Error getting family members", err);
-          });
+             response
+                  .status(404)
+                  .json("errorMessage: Couldn't find a parent by that ID:", err);          });
       })
-      .catch(err => {});
+      .catch(err => {
+            response
+                  .status(404)
+                  .json("errorMessage: Couldn't find a member by that username:", err);
+    });
   } else {
     return response.status(422).json({ errorMessage: "User Not Logged In" });
   }
