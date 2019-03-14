@@ -103,22 +103,33 @@ const addMemberToActivity = (request, response) => {
   console.log("Member name fired!", member)
   Parent.findOne({username: username})
   .then(parentFound => {
-    // Member.findOne({name: member})
-    // .then(memberFound => {
-      //console.log("Family member found", memberFound)
+    Member.findOne({name: member})
+    .then(memberFound => {
+      console.log("Family member found", memberFound)
       Activity.findOne({_id: request.params._id})
-      .then(activity => {
-        
-      Member.findOneAndUpdate({name: member},{ $push: {activitiesIds: activity._id}})
-      .then(memberFound => {
-        console.log("Member added to this activity", memberFound)
-      })
-      .catch(err => {
-        response.status(500).json({
-          errorMessage: "Something went wrong while add member to activity",
-          err
-        });
-      })
+      .then(activity => {      
+       memberFound.activitiesIds.forEach(id => {
+         //Here we check if this member's activitiesIds array contains this activity's ID, if so, they have been added to this activity already
+        if(id.toString() === activity._id.toString()) {
+          console.log("We already exist!")
+          response.status(401).json({
+            errorMessage: "This member is already added to this activity",
+            err
+          });
+        } 
+        else {
+          Member.findOneAndUpdate({name: member},{ $push: {activitiesIds: activity._id}})
+          .then(member => {
+            console.log("Member added to this activity", memberFound)
+          })
+          .catch(err => {
+            response.status(500).json({
+              errorMessage: "Something went wrong while add member to activity",
+              err
+            });
+          })
+        }
+       });
       })
       .catch( err => {
         response.status(404).json({
@@ -126,14 +137,14 @@ const addMemberToActivity = (request, response) => {
           err
         });
       })
-    // })
-    // .catch(err => {
-    //   console.log("Bad!", err);
-    //   response.status(404).json({
-    //     errorMessage: "There's no member by that name",
-    //     err
-    //   });
-    // });
+    })
+    .catch(err => {
+      console.log("Bad!", err);
+      response.status(404).json({
+        errorMessage: "There's no member by that name",
+        err
+      });
+    });
   })
   .catch(err => {
     response.status(404).json({
