@@ -108,6 +108,7 @@ const addMemberToActivity = (request, response) => {
       //console.log("Family member found", memberFound)
       Activity.findOne({_id: request.params._id})
       .then(activity => {
+        
       Member.findOneAndUpdate({name: member},{ $push: {activitiesIds: activity._id}})
       .then(memberFound => {
         console.log("Member added to this activity", memberFound)
