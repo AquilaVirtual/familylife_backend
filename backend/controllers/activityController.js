@@ -96,19 +96,49 @@ const updateActivity = (request, response) => {
 };
 
 const addMemberToActivity = (request, response) => {
-  const { username } = request.body;
+  const { username, member } = request.body;
   const { _id } = request.params;
   console.log("Add activity fired!", _id)
-  console.log("Add activity fired!", username)
+  console.log("Primary username fired!", username)
+  console.log("Member name fired!", member)
   Parent.findOne({username: username})
   .then(parentFound => {
-    // Activity.findOne({parentId: parentFound._id})
-    // .then(activity => {
-
+    // Member.findOne({name: member})
+    // .then(memberFound => {
+      //console.log("Family member found", memberFound)
+      Activity.findOne({_id: request.params._id})
+      .then(activity => {
+      Member.findOneAndUpdate({name: member},{ $push: {activitiesIds: activity._id}})
+      .then(memberFound => {
+        console.log("Member added to this activity", memberFound)
+      })
+      .catch(err => {
+        response.status(500).json({
+          errorMessage: "Something went wrong while add member to activity",
+          err
+        });
+      })
+      })
+      .catch( err => {
+        response.status(404).json({
+          errorMessage: "Activity could not be found",
+          err
+        });
+      })
     // })
+    // .catch(err => {
+    //   console.log("Bad!", err);
+    //   response.status(404).json({
+    //     errorMessage: "There's no member by that name",
+    //     err
+    //   });
+    // });
   })
   .catch(err => {
-    console.log("Something went wrong", err)
+    response.status(404).json({
+      errorMessage: "There's no primary account by that username",
+      err
+    });
   })
 }
 
