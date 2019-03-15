@@ -19,9 +19,12 @@ const createActivity = (request, response) => {
           .save()
           .then(activity => {
             const id = activity._id;
-            Parent.findOneAndUpdate({username: username}, {
-              $push: { activitiesIds: id }
-            }).then(activity => {
+            Parent.findOneAndUpdate(
+              { username: username },
+              {
+                $push: { activitiesIds: id }
+              }
+            ).then(activity => {
               response.status(200).json(activity);
             });
           })
@@ -35,12 +38,15 @@ const createActivity = (request, response) => {
   } else {
     return response
       .status(422)
-      .json({ errorMessage: "Login is required before activity can be created" });
+      .json({
+        errorMessage: "Login is required before activity can be created"
+      });
   }
 };
 const getActivitiesByParent = (request, response) => {
   const { username } = request.params;
-  if (request.jwtObj) { //authenticate user
+  if (request.jwtObj) {
+    //authenticate user
     Parent.findOne({ username: username })
       .then(user => {
         Activity.find({ parentId: user._id })
@@ -57,7 +63,9 @@ const getActivitiesByParent = (request, response) => {
   } else {
     return response
       .status(422)
-      .json({ errorMessage: "Login is required before activities can be viewed" });
+      .json({
+        errorMessage: "Login is required before activities can be viewed"
+      });
   }
 };
 const getAllActivities = (request, response) => {
@@ -72,7 +80,7 @@ const getAllActivities = (request, response) => {
 const updateActivity = (request, response) => {
   const { _id, name, type } = request.body;
   Activity.findById({ _id: request.params._id })
-    .then(activity => {      
+    .then(activity => {
       if (activity) {
         (activity.name = name), (activity.type = type);
         Activity.findByIdAndUpdate({ _id: request.params._id }, activity, {
@@ -98,100 +106,130 @@ const updateActivity = (request, response) => {
 const addMemberToActivity = (request, response) => {
   const { username, member } = request.body;
   const { _id } = request.params;
-  console.log("Add activity fired!", _id)
-  console.log("Primary username fired!", username)
-  console.log("Member name fired!", member)
-  Parent.findOne({username: username})
-  .then(parentFound => {
-    Member.findOne({name: member})
-    .then(memberFound => {
-      console.log("Family member found", memberFound)
-      Activity.findOne({_id: request.params._id})
-      .then(activity => {      
-       memberFound.activitiesIds.forEach(id => {
-         //Here we check if this member's activitiesIds array contains this activity's ID, if so, they have been added to this activity already
-        if(id.toString() === activity._id.toString()) {
-          console.log("We already exist!")
-          response.status(401).json({
-            errorMessage: "This member is already added to this activity",
+  console.log("Add activity fired!", _id);
+  console.log("Primary username fired!", username);
+  console.log("Member name fired!", member);
+  Parent.findOne({ username: username })
+    .then(parentFound => {
+      Member.findOne({ name: member })
+        .then(memberFound => {
+          console.log("Family member found", memberFound);
+          Activity.findOne({ _id: request.params._id })
+            .then(activity => {
+              //check if member's activitiesIds array is not empty, otherwise, don't iterate through it
+              if (memberFound.activitiesIds.length > 0) {
+                memberFound.activitiesIds.forEach(id => {
+                  //Here we check if this member's activitiesIds array contains this activity's ID, if so, they have been added to this activity already
+                  if (id.toString() === activity._id.toString()) {
+                    console.log("We already exist!");
+                    response.status(401).json({
+                      errorMessage:
+                        "This member is already added to this activity",
+                      err
+                    });
+                  } else {
+                    Member.findOneAndUpdate(
+                      { name: member },
+                      { $push: { activitiesIds: activity._id } }
+                    )
+                      .then(member => {
+                        console.log(
+                          "Member added to this activity",
+                          memberFound
+                        );
+                      })
+                      .catch(err => {
+                        response.status(500).json({
+                          errorMessage:
+                            "Something went wrong while add member to activity",
+                          err
+                        });
+                      });
+                  }
+                });
+                //If member's activities array is empty, push this ID onto it
+              } else {
+                Member.findOneAndUpdate(
+                  { name: member },
+                  { $push: { activitiesIds: activity._id } }
+                )
+                  .then(member => {
+                    console.log("Member added to this activity", memberFound);
+                  })
+                  .catch(err => {
+                    response.status(500).json({
+                      errorMessage:
+                        "Something went wrong while add member to activity",
+                      err
+                    });
+                  });
+              }
+            })
+            .catch(err => {
+              response.status(404).json({
+                errorMessage: "Activity could not be found",
+                err
+              });
+            });
+        })
+        .catch(err => {
+          console.log("Bad!", err);
+          response.status(404).json({
+            errorMessage: "There's no member by that name",
             err
           });
-        } 
-        else {
-          Member.findOneAndUpdate({name: member},{ $push: {activitiesIds: activity._id}})
-          .then(member => {
-            console.log("Member added to this activity", memberFound)
-          })
-          .catch(err => {
-            response.status(500).json({
-              errorMessage: "Something went wrong while add member to activity",
-              err
-            });
-          })
-        }
-       });
-      })
-      .catch( err => {
-        response.status(404).json({
-          errorMessage: "Activity could not be found",
-          err
         });
-      })
     })
     .catch(err => {
-      console.log("Bad!", err);
       response.status(404).json({
-        errorMessage: "There's no member by that name",
+        errorMessage: "There's no primary account by that username",
         err
       });
     });
-  })
-  .catch(err => {
-    response.status(404).json({
-      errorMessage: "There's no primary account by that username",
-      err
-    });
-  })
-}
+};
 
 const deleteActivity = (request, response) => {
   const { _id } = request.body;
- if (request.jwtObj) {  
-  Activity.findOne({_id: request.params._id})
-  .then(activity => {
-    const id = activity.creator;
-    //Here we delete referenced id of deleted activity from Parent
-    Parent.findOneAndUpdate({_id: id}, { $pull: {activitiesIds:  request.params._id}})
-    .then(user => {      
-      Activity.findOneAndRemove({ _id: request.params._id })
+  if (request.jwtObj) {
+    Activity.findOne({ _id: request.params._id })
       .then(activity => {
-        response.status(200).json(activity);
-      })
-      .catch(err => {
-        aresponse.status(500).json({
-          errorMessage: "Something went wrong while deleting activity",
-          err
+        const id = activity.creator;
+        //Here we delete referenced id of deleted activity from Parent
+        Parent.findOneAndUpdate(
+          { _id: id },
+          { $pull: { activitiesIds: request.params._id } }
+        ).then(user => {
+          Activity.findOneAndRemove({ _id: request.params._id })
+            .then(activity => {
+              response.status(200).json(activity);
+            })
+            .catch(err => {
+              aresponse.status(500).json({
+                errorMessage: "Something went wrong while deleting activity",
+                err
+              });
+            })
+            .catch(err => {
+              response.status(500).json({
+                errorMessage: "Something went wrong while finding activity",
+                err
+              });
+            });
         });
       })
       .catch(err => {
         response.status(500).json({
-          errorMessage: "Something went wrong while finding activity",
+          errorMessage:
+            "Something went wrong while deleting activity from activities array",
           err
         });
-      })   
-    })
-      })
-    .catch(err => {
-      response.status(500).json({
-        errorMessage: "Something went wrong while deleting activity from activities array",
-        err
       });
-    });
-
   } else {
     return response
       .status(422)
-      .json({ errorMessage: "Login is required before activity can be viewed" });
+      .json({
+        errorMessage: "Login is required before activity can be viewed"
+      });
   }
 };
 module.exports = {
