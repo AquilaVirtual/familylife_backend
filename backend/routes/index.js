@@ -77,7 +77,7 @@ router.post("/api/activity/create", authenticate, (request, response) => {
   ActivityController.createActivity(request, response); 
 });
 router.get("/api/activity/:username", authenticate, (request, response) => {
-  ActivityController.getActivitiesByParent(request, response);
+  ActivityController.getActivitiesForPrimaryAccount(request, response);
 });
 router.get("/api/activity/all", (request, response) => {
   ActivityController.getAllActivities(request, response);

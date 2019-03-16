@@ -43,7 +43,7 @@ const createActivity = (request, response) => {
       });
   }
 };
-const getActivitiesByParent = (request, response) => {
+const getActivitiesForPrimaryAccount = (request, response) => {
   const { username } = request.params;
   if (request.jwtObj) {
     //authenticate user
@@ -105,15 +105,11 @@ const updateActivity = (request, response) => {
 
 const addMemberToActivity = (request, response) => {
   const { username, member } = request.body;
-  const { _id } = request.params;
-  console.log("Add activity fired!", _id);
-  console.log("Primary username fired!", username);
-  console.log("Member name fired!", member);
+  const { _id } = request.params;  
   Parent.findOne({ username: username })
     .then(parentFound => {
       Member.findOne({ name: member })
         .then(memberFound => {
-          console.log("Family member found", memberFound);
           Activity.findOne({ _id: request.params._id })
             .then(activity => {
               //check if member's activitiesIds array is not empty, otherwise, don't iterate through it
@@ -135,7 +131,7 @@ const addMemberToActivity = (request, response) => {
                       .then(member => {
                         console.log(
                           "Member added to this activity",
-                          memberFound
+                          member
                         );
                       })
                       .catch(err => {
@@ -154,7 +150,7 @@ const addMemberToActivity = (request, response) => {
                   { $push: { activitiesIds: activity._id } }
                 )
                   .then(member => {
-                    console.log("Member added to this activity", memberFound);
+                    console.log("Member added to this activity", member);
                   })
                   .catch(err => {
                     response.status(500).json({
@@ -234,7 +230,7 @@ const deleteActivity = (request, response) => {
 };
 module.exports = {
   createActivity,
-  getActivitiesByParent,
+  getActivitiesForPrimaryAccount,
   getAllActivities,
   updateActivity,
   deleteActivity,
