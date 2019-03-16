@@ -64,12 +64,30 @@ const getActivityForPrimaryAccount = (request, response) => {
     });
   }
 };
-const getActivityForMember = () => {
+const getActivityForMember = (request, response) => {
   const { username } = request.params;
+  let activityArray = [];
   Member.findOne({ username: username })
-    .then(member => {})
+    .then(member => {
+      Activity.find({})
+        .then(activities => {
+          if (member.activitiesIds) {
+            member.activitiesIds.forEach(activityId => {
+              activities.forEach(activity => {
+              if(activityId.toString() === activity._id.toString()) {
+                activityArray.push(activity)
+              }
+               });
+            });
+          }
+          response.status(200).json(activityArray);
+        })
+        .catch(err => {
+          console.log("No activity found", err);
+        });
+    })
     .catch(err => {
-      console.log("No user found", err);
+      console.log("Error finding user", err);
     });
 };
 const getAllActivities = (request, response) => {
@@ -144,7 +162,7 @@ const addMemberToActivity = (request, response) => {
                       });
                   }
                 });
-                //If member's activities array is empty, push this ID onto it
+                //If member's activitiesIds array is empty, push this ID onto it
               } else {
                 Member.findOneAndUpdate(
                   { name: member },
