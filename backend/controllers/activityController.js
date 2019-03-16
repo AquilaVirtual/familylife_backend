@@ -36,11 +36,9 @@ const createActivity = (request, response) => {
         console.log("Error here", err);
       });
   } else {
-    return response
-      .status(422)
-      .json({
-        errorMessage: "Login is required before activity can be created"
-      });
+    return response.status(422).json({
+      errorMessage: "Login is required before activity can be created"
+    });
   }
 };
 const getActivityForPrimaryAccount = (request, response) => {
@@ -61,25 +59,19 @@ const getActivityForPrimaryAccount = (request, response) => {
         console.log("No user found", err);
       });
   } else {
-    return response
-      .status(422)
-      .json({
-        errorMessage: "Login is required before activities can be viewed"
-      });
+    return response.status(422).json({
+      errorMessage: "Login is required before activities can be viewed"
+    });
   }
 };
 const getActivityForMember = () => {
-
-  const { username } = request.params;      
-    Member.findOne({ username: username })
-      .then(member => {
-
-      })
-      .catch(err => {
-        console.log("No user found", err);
-      });
-
-}
+  const { username } = request.params;
+  Member.findOne({ username: username })
+    .then(member => {})
+    .catch(err => {
+      console.log("No user found", err);
+    });
+};
 const getAllActivities = (request, response) => {
   Activity.find({})
     .then(res => {
@@ -117,7 +109,7 @@ const updateActivity = (request, response) => {
 
 const addMemberToActivity = (request, response) => {
   const { username, member } = request.body;
-  const { _id } = request.params;  
+  const { _id } = request.params;
   Parent.findOne({ username: username })
     .then(parentFound => {
       Member.findOne({ name: member })
@@ -141,10 +133,7 @@ const addMemberToActivity = (request, response) => {
                       { $push: { activitiesIds: activity._id } }
                     )
                       .then(member => {
-                        console.log(
-                          "Member added to this activity",
-                          member
-                        );
+                        console.log("Member added to this activity", member);
                       })
                       .catch(err => {
                         response.status(500).json({
@@ -233,11 +222,9 @@ const deleteActivity = (request, response) => {
         });
       });
   } else {
-    return response
-      .status(422)
-      .json({
-        errorMessage: "Login is required before activity can be viewed"
-      });
+    return response.status(422).json({
+      errorMessage: "Login is required before activity can be viewed"
+    });
   }
 };
 module.exports = {
