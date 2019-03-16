@@ -43,7 +43,7 @@ const createActivity = (request, response) => {
       });
   }
 };
-const getActivitiesForPrimaryAccount = (request, response) => {
+const getActivityForPrimaryAccount = (request, response) => {
   const { username } = request.params;
   if (request.jwtObj) {
     //authenticate user
@@ -68,6 +68,18 @@ const getActivitiesForPrimaryAccount = (request, response) => {
       });
   }
 };
+const getActivityForMember = () => {
+
+  const { username } = request.params;      
+    Member.findOne({ username: username })
+      .then(member => {
+
+      })
+      .catch(err => {
+        console.log("No user found", err);
+      });
+
+}
 const getAllActivities = (request, response) => {
   Activity.find({})
     .then(res => {
@@ -230,9 +242,10 @@ const deleteActivity = (request, response) => {
 };
 module.exports = {
   createActivity,
-  getActivitiesForPrimaryAccount,
+  getActivityForPrimaryAccount,
   getAllActivities,
   updateActivity,
   deleteActivity,
-  addMemberToActivity
+  addMemberToActivity,
+  getActivityForMember
 };
