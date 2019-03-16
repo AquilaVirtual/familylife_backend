@@ -82,10 +82,10 @@ router.get("/api/activity/:username", authenticate, (request, response) => {
 router.get("/api/activity/all", (request, response) => {
   ActivityController.getAllActivities(request, response);
 });
-router.put("/api/activity/:_id", (request, response) => {
+router.put("/api/activity/edit/:_id", (request, response) => {
   ActivityController.updateActivity(request, response);
 });
-router.delete("/api/activity/:_id", authenticate, (request, response) => {
+router.delete("/api/activity/delete/:_id", authenticate, (request, response) => {
   ActivityController.deleteActivity(request, response);
 });
 router.put("/api/activity/add_member_to_activity/:_id", (request, response) => {
