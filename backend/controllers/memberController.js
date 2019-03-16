@@ -59,7 +59,7 @@ const createMember = (request, response) => {
                       $push: { family: id }
                     }
                   ).then(pushedId => {
-                    response.status(200).send(savedUser);
+                    response.status(200).send(pushedId);
                   });
                 })
                 .catch(err => {
