@@ -69,6 +69,8 @@ const getActivityForMember = (request, response) => {
   let activityArray = [];
   Member.findOne({ username: username })
     .then(member => {
+      //This is not a very efficient way for getting activities for a member account, in terms of time complexity
+      //will work to improve on it      
       Activity.find({})
         .then(activities => {
           if (member.activitiesIds) {
