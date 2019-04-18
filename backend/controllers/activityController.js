@@ -17,15 +17,15 @@ const createActivity = (request, response) => {
         });
         activity
           .save()
-          .then(activity => {
-            const id = activity._id;
+          .then(saveActivity => {
+            const id = saveActivity._id;
             Parent.findOneAndUpdate(
               { username: username },
               {
                 $push: { activitiesIds: id }
               }
             ).then(activity => {
-              response.status(200).json(activity);
+              response.status(200).json(saveActivity);
             });
           })
           .catch(err => {
@@ -70,16 +70,16 @@ const getActivityForMember = (request, response) => {
   Member.findOne({ username: username })
     .then(member => {
       //This is not a very efficient way for getting activities for a member account, in terms of time complexity
-      //will work to improve on it      
+      //will work to improve on it
       Activity.find({})
         .then(activities => {
           if (member.activitiesIds) {
             member.activitiesIds.forEach(activityId => {
               activities.forEach(activity => {
-              if(activityId.toString() === activity._id.toString()) {
-                activityArray.push(activity)
-              }
-               });
+                if (activityId.toString() === activity._id.toString()) {
+                  activityArray.push(activity);
+                }
+              });
             });
           }
           response.status(200).json(activityArray);
