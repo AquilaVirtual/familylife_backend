@@ -31,7 +31,7 @@ const createAssignment = (request, response) => {
                     { username: username },
                     { $push: { assignmentsIds: id } }
                   )
-                    .then(saveAssignment => {
+                    .then(parent => {
                       response.status(200).json(saveAssignment);
                     })
                     .catch(err => {
