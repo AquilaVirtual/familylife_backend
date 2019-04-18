@@ -27,6 +27,10 @@ const parentSchema = new mongoose.Schema({
    type: String,
    default: "Primary"
   },
+  userImage: {
+    type: String,
+    default: "https://png.icons8.com/ios/100/000000/gender-neutral-user.png",     
+      },
   chores: [],
      family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }],  
      choresIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chore' }],  

@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-        "start": "nodemon ./bin/www"   
+        "start": "nodemon ./bin/www"
     },
     "repository": "https://github.com/AquilaVirtual/familylife_backend.git",
     "author": "David Loveday <davemech@yahoo.com>",
@@ -11,6 +11,7 @@
     "dependencies": {
         "bcrypt": "^2.0.1",
         "body-parser": "^1.18.3",
+        "cloudinary": "^1.13.2",
         "cors": "^2.8.5",
         "dotenv": "^6.2.0",
         "express": "^4.16.4",
