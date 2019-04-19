@@ -194,7 +194,7 @@ Chores.findOneAndRemove({_id: request.params})
     { $pull: { choresIds: deletedChore._id } }
   )
     .then(user => {
-      response.status(200).json(savechore);
+      response.status(200).json(deletedChore);
     })
     .catch(err => {
       response.status(500).json({
