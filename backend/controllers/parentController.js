@@ -4,6 +4,7 @@ const Member = require("../models/member");
 const Chores = require("../models/chores");
 const jwt = require("jsonwebtoken");
 const cloudinary = require("cloudinary");
+require("../services/cloudinary");
 const { generateToken } = require("../services/generateToken");
 
 const mongoose = require("mongoose");
