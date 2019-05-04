@@ -1,3 +1,4 @@
+require('dotenv').config()
 const jwt = require("jsonwebtoken");
 const generateToken = user => {
   const options = {
@@ -6,7 +7,7 @@ const generateToken = user => {
   const payload = { name: user.username };
   secret = process.env.REACT_APP_SECRET;
   if (typeof secret !== "string") {
-    secret = process.env.secret;
+    secret = process.env.secret;  
   }
   return jwt.sign(payload, secret, options);
 };

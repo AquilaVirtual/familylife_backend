@@ -1,7 +1,8 @@
-var cloudinary = require('cloudinary');
+require('dotenv').config()
+let cloudinary = require('cloudinary');
 
 cloudinary.config({ 
-    cloud_name: 'AquilaVirtual', 
-    api_key: '465172916158642', 
-    api_secret: 'GiGg2Y0s3Hx96lGsh0RWeTbyB4U' 
+    cloud_name: process.env.CLOUDINARY_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET  
   });

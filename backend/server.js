@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyparser = require("body-parser");
 const routes = require("./routes");
 const session = require("express-session");
+require('dotenv').config()
 
 //Instantiate Server
 const server = express();

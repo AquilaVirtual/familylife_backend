@@ -1,5 +1,7 @@
+require('dotenv').config()
+
 const jwt = require("jsonwebtoken");
- secret = process.env.REACT_APP_SECRET;
+ secret = process.env.REACT_APP_SECRET; 
 const authenticate = (request, response, next) => {
   const token = request.get("Authorization");
   console.log("Got some token", token);
