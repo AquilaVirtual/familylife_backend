@@ -7,6 +7,7 @@ const MemberController = require("../controllers/memberController");
 const  { authenticate }  = require("../services/authenticate")
 
 const router = express.Router();
+const cloudinary = require("cloudinary");
 
 //Insanity check
 router.get("/", (request, response) => {
@@ -39,6 +40,9 @@ router.get("api/user/logout", (request, response) => {
 })
 router.get("/api/user/family/:username", authenticate, (request, response) => {
   ParentController.getAllFamilyMembers(request, response);
+})
+router.post("/api/user/image/:id", async (request, response) => {
+  ParentController.imageUpload(request, response);
 })
 
 //Chores go here

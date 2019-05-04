@@ -22,7 +22,7 @@ mongoose
 
 //Security
 server.use(helmet());
-server.use(session({secret: "family life session", resave: false, saveUninitialized: true}))
+server.use(session({secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true}))
 
 //Permissions
 server.use(cors());

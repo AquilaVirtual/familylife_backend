@@ -3,6 +3,7 @@ const Parent = require("../models/parent");
 const Member = require("../models/member");
 const Chores = require("../models/chores");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary");
 const { generateToken } = require("../services/generateToken");
 
 const mongoose = require("mongoose");
@@ -161,6 +162,12 @@ const getAllFamilyMembers = (request, response) => {
     return response.status(422).json({ errorMessage: "User Not Logged In" });
   }
 };
+
+const imageUpload = (request, response ) => {
+  const { _id } = request.params;
+  console.log("Image result", request.body)
+  const result = cloudinary.v2.uploader.upload(request.file)
+}
 module.exports = {
   register,
   login,
@@ -168,5 +175,6 @@ module.exports = {
   deleteParentById,
   updateParent,
   getAllParents,
-  getAllFamilyMembers
+  getAllFamilyMembers,
+  imageUpload
 };
