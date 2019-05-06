@@ -2,8 +2,11 @@ const bcrypt = require("bcrypt");
 const Parent = require("../models/parent");
 const Member = require("../models/member");
 const Chores = require("../models/chores");
+
+const upload = require("../services/multer")
+const cloudinary = require("cloudinary").v2;
 const jwt = require("jsonwebtoken");
-const cloudinary = require("cloudinary");
+const multer = require('multer')
 require("../services/cloudinary");
 const { generateToken } = require("../services/generateToken");
 
@@ -164,11 +167,18 @@ const getAllFamilyMembers = (request, response) => {
   }
 };
 
-const imageUpload = (request, response ) => {
-  const { _id } = request.params;
-  console.log("Image result", request.body)
-  const result = cloudinary.v2.uploader.upload(request.file)
-}
+
+// const imageUpload = (req, res, next) => {
+//   const upload = multer({ storage }).single('name-of-input-key')
+//   //console.log("This is upload", upload)
+//   upload(req, res, function(err) {
+//     if (err) {
+//       return res.send(err)
+//     }
+//     console.log("This is file body", req.body)
+//     res.json(req.file)
+//   })
+// }
 module.exports = {
   register,
   login,
@@ -177,5 +187,5 @@ module.exports = {
   updateParent,
   getAllParents,
   getAllFamilyMembers,
-  imageUpload
+  // imageUpload
 };

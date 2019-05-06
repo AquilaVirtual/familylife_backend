@@ -1,4 +1,5 @@
 const express = require("express");
+const cloudinary = require("cloudinary").v2;
 const ParentController = require("../controllers/parentController");
 const ChoresController = require("../controllers/choresController");
 const AssignmentController = require("../controllers/assignmentController");
@@ -6,8 +7,9 @@ const ActivityController = require("../controllers/ActivityController");
 const MemberController = require("../controllers/memberController");
 const  { authenticate }  = require("../services/authenticate")
 
+const upload = require("../services/multer")
+
 const router = express.Router();
-const cloudinary = require("cloudinary");
 
 //Insanity check
 router.get("/", (request, response) => {
@@ -41,8 +43,10 @@ router.get("api/user/logout", (request, response) => {
 router.get("/api/user/family/:username", authenticate, (request, response) => {
   ParentController.getAllFamilyMembers(request, response);
 })
-router.post("/api/user/image/:id", async (request, response) => {
-  ParentController.imageUpload(request, response);
+router.post("/api/user/image/:id", upload.single("image"), async (request, response) => {
+  console.log(request.file)
+  const result = await cloudinary.uploader.upload(request.file);
+  response.send(result)
 })
 
 //Chores go here

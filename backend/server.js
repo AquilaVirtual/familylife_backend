@@ -29,7 +29,7 @@ server.use(cors());
 
 //Enable to parse Json object
 server.use(express.json());
-server.use(bodyparser.json()); //express.jason;
+server.use(bodyparser.json()); //express.json;
 server.use("/", routes);
 
 server.use(require("body-parser").text());
