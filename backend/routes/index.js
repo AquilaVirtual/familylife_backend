@@ -2,7 +2,7 @@ const express = require("express");
 const ParentController = require("../controllers/parentController");
 const ChoresController = require("../controllers/choresController");
 const AssignmentController = require("../controllers/assignmentController");
-const ActivityController = require("../controllers/ActivityController");
+const ActivityController = require("../controllers/activityController");
 const MemberController = require("../controllers/memberController");
 const  { authenticate }  = require("../services/authenticate")
 
