@@ -4,7 +4,6 @@ const cors = require("cors");
 const bodyparser = require("body-parser");
 const routes = require("./routes");
 const session = require("express-session");
-require('dotenv').config()
 
 //Instantiate Server
 const server = express();
@@ -22,14 +21,14 @@ mongoose
 
 //Security
 server.use(helmet());
-server.use(session({secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true}))
+server.use(session({secret: "family life session", resave: false, saveUninitialized: true}))
 
 //Permissions
 server.use(cors());
 
 //Enable to parse Json object
 server.use(express.json());
-server.use(bodyparser.json()); //express.json;
+server.use(bodyparser.json()); //express.jason;
 server.use("/", routes);
 
 server.use(require("body-parser").text());
