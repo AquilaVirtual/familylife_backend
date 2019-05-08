@@ -3,11 +3,11 @@
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-        "start": "nodemon server.js"
+        "start": "node server.js"
     },
     "engines": {
-        "node": "8.11.1"
-    },
+        "node": "10.x"
+      },
     "repository": "https://github.com/AquilaVirtual/familylife_backend.git",
     "author": "David Loveday <davemech@yahoo.com>",
     "license": "MIT",
