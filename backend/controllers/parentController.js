@@ -6,7 +6,7 @@ const Chores = require("../models/chores");
 const upload = require("../services/multer")
 const cloudinary = require("cloudinary").v2;
 const jwt = require("jsonwebtoken");
-const multer = require('multer')
+// const multer = require('multer')
 require("../services/cloudinary");
 const { generateToken } = require("../services/generateToken");
 
