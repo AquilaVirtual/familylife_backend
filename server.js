@@ -2,7 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const bodyparser = require("body-parser");
-const routes = require("./routes");
+//const routes = require("./backend/routes");
 const session = require("express-session");
 
 //Instantiate Server
@@ -21,7 +21,6 @@ mongoose
 
 //Security
 server.use(helmet());
-server.use(session({secret: "family life session", resave: false, saveUninitialized: true}))
 
 //Permissions
 server.use(cors());
@@ -29,7 +28,7 @@ server.use(cors());
 //Enable to parse Json object
 server.use(express.json());
 server.use(bodyparser.json()); //express.jason;
-server.use("/", routes);
+//server.use("/", routes);
 
 server.use(require("body-parser").text());
 
