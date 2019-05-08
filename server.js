@@ -2,7 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const bodyparser = require("body-parser");
-//const routes = require("./backend/routes");
+const routes = require("./backend/routes");
 const session = require("express-session");
 
 //Instantiate Server
@@ -28,7 +28,7 @@ server.use(cors());
 //Enable to parse Json object
 server.use(express.json());
 server.use(bodyparser.json()); //express.jason;
-//server.use("/", routes);
+server.use("/", routes);
 
 server.use(require("body-parser").text());
 
