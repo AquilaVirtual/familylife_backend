@@ -58,13 +58,13 @@ const login = (request, response) => {
   const { username, password } = request.body;
   Parent.findOne({ username: username })
     .then(userFound => {
+      console.log("We found a user", userFound)
       if (!userFound) {
         response.status(500).send({
-          errorMessage: "Login Failed."
+          errorMessage: "Login Failed: user not found."
         });
       } else {
         if (bcrypt.compareSync(password, userFound.password)) {
-          request.session.userFound = userFound;
           // console.log("We found a user", userFound);
           // console.log("Session business", request.session.userFound);
           const token = generateToken({ userFound });
