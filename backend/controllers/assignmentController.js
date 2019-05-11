@@ -6,13 +6,13 @@ const mongoose = require("mongoose");
 
 const createAssignment = (request, response) => {
   const { name, title, due, description, username, creator } = request.body;
-  console.log("Giving jwt", request.jwtObj);
+  //console.log("Giving jwt", request.jwtObj);
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
         Member.findOne({ name: name })
           .then(member => {
-            //Only create an assignment if a member exists with the provided name
+            //Only create assignment if a member exists with the provided name
             if (member) {
               const assignment = new Assignment({
                 _id: new mongoose.Types.ObjectId(),

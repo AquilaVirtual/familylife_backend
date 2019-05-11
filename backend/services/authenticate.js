@@ -1,17 +1,18 @@
 require('dotenv').config()
 
 const jwt = require("jsonwebtoken");
- secret = process.env.REACT_APP_SECRET; 
+secret = process.env.REACT_APP_SECRET;
 const authenticate = (request, response, next) => {
   const token = request.get("Authorization");
-  console.log("Got some token", token);
+  //console.log("Got some token", token);
   if (token) {
     jwt.verify(token, secret, (err, jwtObj) => {
       if (err)
         return response
           .status(422)
           .json({ errorMessage: "Authentication error", err });
-      request.jwtObj = jwtObj;     
+      request.jwtObj = jwtObj;  
+     // console.log("Request JWT object", request.jwtObj)   
       next();
     });
   } else {

@@ -58,15 +58,13 @@ const login = (request, response) => {
   const { username, password } = request.body;
   Parent.findOne({ username: username })
     .then(userFound => {
-      console.log("We found a user", userFound)
+      //console.log("We found Primary user", userFound)
       if (!userFound) {
         response.status(500).send({
-          errorMessage: "Login Failed: user not found."
+          errorMessage: "Invalid Email or Password."
         });
       } else {
-        if (bcrypt.compareSync(password, userFound.password)) {
-          // console.log("We found a user", userFound);
-          // console.log("Session business", request.session.userFound);
+        if (bcrypt.compareSync(password, userFound.password)) {     
           const token = generateToken({ userFound });
           response
             .status(200)
@@ -144,6 +142,7 @@ const getAllParents = (request, response) => {
 };
 const getAllFamilyMembers = (request, response) => {
   const { username } = request.params;
+  console.log("Getting this username", username)
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {

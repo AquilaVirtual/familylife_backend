@@ -29,7 +29,7 @@ const createMember = (request, response) => {
     // is a primary account holder
     Parent.findOne({ username: username_primary })
       .then(primary_user => {
-      //Befor we add a new member, check if a member by that username already exists
+        //Befor we add a new member, check if a member by that username already exists
         Member.findOne({ username: username })
           .then(user => {
             if (user) {
@@ -59,14 +59,15 @@ const createMember = (request, response) => {
                       $push: { family: id }
                     }
                   ).then(pushedId => {
-                    console.log("Newly added member", savedMember)
                     response.status(200).send(savedMember);
                   });
                 })
                 .catch(err => {
                   response.status(500).send({
                     //placeholder error message
-                    errorMessage: "Error adding Id of newly added member to families array : " + err
+                    errorMessage:
+                      "Error adding Id of newly added member to families array : " +
+                      err
                   });
                 });
             }
@@ -93,16 +94,12 @@ logInMember = (request, response) => {
   const { username, password } = request.body;
   Member.findOne({ username: username })
     .then(userFound => {
-      console.log("User on backend", userFound);
       if (!userFound) {
         response.status(500).send({
           errorMessage: "Login Failed."
         });
       } else {
         if (bcrypt.compareSync(password, userFound.password)) {
-          request.session.userFound = userFound;
-          // console.log("We found a user", userFound);
-          // console.log("Session business", request.session.userFound);
           const token = generateToken({ userFound });
           response
             .status(200)
@@ -199,24 +196,26 @@ const getAllMembers = (request, response) => {
                 //Here we filter out the logged in member so they don't appear twice on dashboard
                 const filterOutLoggedInmember = members.filter(member => {
                   return member._id.toString() !== userFound._id.toString();
-                })
+                });
                 response.status(200).json(filterOutLoggedInmember);
               })
               .catch(err => {
                 response
                   .status(500)
-                  .json("errorMessage: Error getting family members:", err);              });
+                  .json("errorMessage: Error getting family members:", err);
+              });
           })
           .catch(err => {
-             response
-                  .status(404)
-                  .json("errorMessage: Couldn't find a parent by that ID:", err);          });
+            response
+              .status(404)
+              .json("errorMessage: Couldn't find a parent by that ID:", err);
+          });
       })
       .catch(err => {
-            response
-                  .status(404)
-                  .json("errorMessage: Couldn't find a member by that username:", err);
-    });
+        response
+          .status(404)
+          .json("errorMessage: Couldn't find a member by that username:", err);
+      });
   } else {
     return response.status(422).json({ errorMessage: "User Not Logged In" });
   }
