@@ -73,6 +73,7 @@ const getActivityForMember = (request, response) => {
       //will work to improve on it
       Activity.find({})
         .then(activities => {
+          //Here we check if this member's activitiesIds array contains activity ID(s)
           if (member.activitiesIds) {
             member.activitiesIds.forEach(activityId => {
               activities.forEach(activity => {

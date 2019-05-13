@@ -21,7 +21,7 @@ const register = (request, response) => {
       if (user) {
         response
           .status(401)
-          .json({ errorMessage: "This username already exists" });
+          .json({ errorMessage: "This username is taken." });
       } else {
         const encryptedPassword = bcrypt.hashSync(password, bcryptRounds);
         const token = generateToken({ username });
@@ -40,17 +40,15 @@ const register = (request, response) => {
             response.status(200).send(savedUser);
           })
           .catch(err => {
-            response.status(500).send({
-              //placeholder error message
-              errorMessage: "Level 1 Error occurred while saving: " + err
+            response.status(500).send({             
+              errorMessage: "Something went wrong while saving information."
             });
           });
       }
     })
     .catch(err => {
-      response.status(500).send({
-        //placeholder error message
-        errorMessage: "Level 2 Error occurred while saving: " + err
+      response.status(500).send({        
+        errorMessage: "Something went wrong while creating an account. "
       });
     });
 };
@@ -71,14 +69,14 @@ const login = (request, response) => {
             .send({ userFound, token, userId: userFound._id });
         } else {
           response.status(500).send({
-            errorMessage: "Login Failed."
+            errorMessage: "Invalid Email or Password."
           });
         }
       }
     })
     .catch(err => {
       response.status(500).send({
-        errorMessage: "Failed to Login: " + err
+        errorMessage: "Invalid Email or Password." 
       });
     });
 };

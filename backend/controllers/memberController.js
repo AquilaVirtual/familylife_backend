@@ -96,7 +96,7 @@ logInMember = (request, response) => {
     .then(userFound => {
       if (!userFound) {
         response.status(500).send({
-          errorMessage: "Login Failed."
+          errorMessage: "Invalid Email or Password."
         });
       } else {
         if (bcrypt.compareSync(password, userFound.password)) {
@@ -106,14 +106,14 @@ logInMember = (request, response) => {
             .send({ userFound, token, userId: userFound._id });
         } else {
           response.status(500).send({
-            errorMessage: "Login Failed."
+            errorMessage: "Invalid Email or Password."
           });
         }
       }
     })
     .catch(err => {
       response.status(500).send({
-        errorMessage: "Failed to Login: " + err
+        errorMessage: "Invalid Email or Password"
       });
     });
 };
