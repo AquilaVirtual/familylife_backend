@@ -5,6 +5,8 @@ const Member = require("../models/member");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
+require('dotenv').config()
+
 const { generateToken } = require("../services/generateToken");
 const mongoose = require("mongoose");
 
@@ -63,19 +65,37 @@ const createMember = (request, response) => {
                   ).then(pushedId => {
                     response.status(200).send(savedMember);
                   });
-                
+                 
+                 const output =`
+                 <p>Hi ${name},</p>
+                 <br>
+                 <p>Welcome to Family Life! You were added to Family Life by ${primary_user.name}. </p> 
+                 <br>                 
+                 <p>To login, please visit <a>www.familylife.netlify.com/login</a></p>
+                 <br>
+                 <p>Here is your login credentials:</p>
+                 <ul>
+                 <li>Username: ${username}</li>
+                 <li>Password: ${password}</li>
+                 <li>Account Type: other</li>
+                 </ul>
+                 <br>
+                  Thanks!
+                 <br>
+                 Famliy Life
+                 ` 
                 let transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                      user: '',
-                      pass: ''
+                      user: process.env.NODEMAILER_USER,
+                      pass: process.env.NODEMAILER_PASS
                     }
                   });                  
                 let mailOptions = {
-                    from: 'Family Life <>',
-                    to: '',
+                    from: 'Family Life <familylifeorganizer@gmail.com>',
+                    to: `${email}`,
                     subject: 'Family Life Membership',
-                    text: ''
+                    html: output
                   };
                   
                   transporter.sendMail(mailOptions, function(error, info){
