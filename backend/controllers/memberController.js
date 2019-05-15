@@ -3,6 +3,8 @@ const Parent = require("../models/parent");
 const Chores = require("../models/chores");
 const Member = require("../models/member");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+
 const { generateToken } = require("../services/generateToken");
 const mongoose = require("mongoose");
 
@@ -19,7 +21,7 @@ const createMember = (request, response) => {
     username_primary
   } = request.body;
   //Here we authenticate user to make sure user is logged-in and has a valid token
-  if (request.jwtObj) {
+  // if (request.jwtObj) {
     if (!name || !username || !email || !password) {
       response.status(400).json({
         errorMessage: "Please provide a name, username, email, and password!"
@@ -61,6 +63,29 @@ const createMember = (request, response) => {
                   ).then(pushedId => {
                     response.status(200).send(savedMember);
                   });
+                
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                      user: '',
+                      pass: ''
+                    }
+                  });                  
+                let mailOptions = {
+                    from: 'Family Life <>',
+                    to: '',
+                    subject: 'Family Life Membership',
+                    text: ''
+                  };
+                  
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                  });
+
                 })
                 .catch(err => {
                   response.status(500).send({
@@ -85,9 +110,9 @@ const createMember = (request, response) => {
           errorMessage: "Couldn't find a user by that username: " + err
         });
       });
-  } else {
-    response.status(422).json({ message: "User Not Logged In" });
-  }
+  // } else {
+  //   response.status(422).json({ message: "User Not Logged In" });
+  // }
 };
 
 logInMember = (request, response) => {
