@@ -86,7 +86,7 @@ const createMember = (request, response) => {
                  ` 
                 let transporter = nodemailer.createTransport({
                     service: 'gmail',
-                    port: 465,
+                    port: 587,
                     auth: {
                       user: process.env.NODEMAILER_USER,
                       pass: process.env.NODEMAILER_PASS 
