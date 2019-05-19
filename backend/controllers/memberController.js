@@ -23,7 +23,7 @@ const createMember = (request, response) => {
     username_primary
   } = request.body;
   //Here we authenticate user to make sure user is logged-in and has a valid token
-  // if (request.jwtObj) {
+    if (request.jwtObj) {
     if (!name || !username || !email || !password) {
       response.status(400).json({
         errorMessage: "Please provide a name, username, email, and password!"
@@ -66,8 +66,8 @@ const createMember = (request, response) => {
                     response.status(200).send(savedMember);
                   });
                  
-                 const output =`
-                 <p>Hi ${name},</p>
+                 const output =`               
+                 <p>Hi ${name.split(" ")[0]},</p>
                  <br>
                  <p>Welcome to Family Life! You were added to Family Life by ${primary_user.name}. </p> 
                  <br>                 
@@ -86,9 +86,10 @@ const createMember = (request, response) => {
                  ` 
                 let transporter = nodemailer.createTransport({
                     service: 'gmail',
+                    port: 465,
                     auth: {
                       user: process.env.NODEMAILER_USER,
-                      pass: process.env.NODEMAILER_PASS
+                      pass: process.env.NODEMAILER_PASS 
                     }
                   });                  
                 let mailOptions = {
@@ -130,9 +131,9 @@ const createMember = (request, response) => {
           errorMessage: "Couldn't find a user by that username: " + err
         });
       });
-  // } else {
-  //   response.status(422).json({ message: "User Not Logged In" });
-  // }
+  } else {
+    response.status(422).json({ message: "User Not Logged In" });
+  }
 };
 
 logInMember = (request, response) => {
