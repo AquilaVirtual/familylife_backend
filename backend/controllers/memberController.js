@@ -93,7 +93,7 @@ const createMember = (request, response) => {
                       pass: process.env.NODEMAILER_PASS 
                     },
                     tls: {
-                      rejectUnauthorized: true
+                      rejectUnauthorized: false
                     }
                   });                  
                 let mailOptions = {
