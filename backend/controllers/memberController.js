@@ -85,9 +85,9 @@ const createMember = (request, response) => {
                  Famliy Life
                  ` 
                 let transporter = nodemailer.createTransport({
-                    host: 'gsmpt.gmail.com',
-                    port: 465,
-                    secure: true,
+                    service: 'gmail.com',
+                    port: 587,
+                    secure: false,
                     auth: {
                       user: process.env.NODEMAILER_USER,
                       pass: process.env.NODEMAILER_PASS 
