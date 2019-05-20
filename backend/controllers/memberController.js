@@ -5,7 +5,7 @@ const Member = require("../models/member");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
-require('dotenv').config()
+require("dotenv").config();
 
 const { generateToken } = require("../services/generateToken");
 const mongoose = require("mongoose");
@@ -23,7 +23,7 @@ const createMember = (request, response) => {
     username_primary
   } = request.body;
   //Here we authenticate user to make sure user is logged-in and has a valid token
-    if (request.jwtObj) {
+  if (request.jwtObj) {
     if (!name || !username || !email || !password) {
       response.status(400).json({
         errorMessage: "Please provide a name, username, email, and password!"
@@ -65,11 +65,13 @@ const createMember = (request, response) => {
                   ).then(pushedId => {
                     response.status(200).send(savedMember);
                   });
-                 
-                 const output =`               
+
+                  const output = `               
                  <p>Hi ${name.split(" ")[0]},</p>
                  <br>
-                 <p>Welcome to Family Life! You were added to Family Life by ${primary_user.name}. </p> 
+                 <p>Welcome to Family Life! You were added to Family Life by ${
+                   primary_user.name
+                 }. </p> 
                  <br>                 
                  <p>To login, please visit <a>www.familylife.netlify.com/login</a></p>
                  <br>
@@ -83,34 +85,33 @@ const createMember = (request, response) => {
                   Thanks!
                  <br>
                  Famliy Life
-                 ` 
-                let transporter = nodemailer.createTransport({
-                    service: 'gmail',
+                 `;
+                  let transporter = nodemailer.createTransport({
+                    service: "gmail",
                     port: 465,
                     secure: true,
                     auth: {
                       user: process.env.NODEMAILER_USER,
-                      pass: process.env.NODEMAILER_PASS 
+                      pass: process.env.NODEMAILER_PASS
                     },
-                    tls: {                    
+                    tls: {
                       rejectUnauthorized: false
-                  }
-                  });                  
-                let mailOptions = {
-                    from: 'Family Life <familylifeorganizer@gmail.com>',
+                    }
+                  });
+                  let mailOptions = {
+                    from: "Family Life <familylifeorganizer@gmail.com>",
                     to: `${email}`,
-                    subject: 'Family Life Membership',
+                    subject: "Family Life Membership",
                     html: output
                   };
-                  
-                  transporter.sendMail(mailOptions, function(error, info){
+
+                  transporter.sendMail(mailOptions, function(error, info) {
                     if (error) {
                       console.log(error);
                     } else {
-                      console.log('Email sent: ' + info.response);
+                      console.log("Email sent: " + info.response);
                     }
                   });
-
                 })
                 .catch(err => {
                   response.status(500).send({
