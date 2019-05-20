@@ -85,16 +85,16 @@ const createMember = (request, response) => {
                  Famliy Life
                  ` 
                 let transporter = nodemailer.createTransport({
-                    service: 'smpt.gmail.com',
-                    port: 587,
-                    secure: false,
+                    host: 'smpt.gmail.com',
+                    port: 465,
+                    secure: true,
                     auth: {
                       user: process.env.NODEMAILER_USER,
                       pass: process.env.NODEMAILER_PASS 
                     },
-                    tls: {
+                    tls: {                    
                       rejectUnauthorized: false
-                    }
+                  }
                   });                  
                 let mailOptions = {
                     from: 'Family Life <familylifeorganizer@gmail.com>',
