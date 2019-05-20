@@ -89,8 +89,8 @@ const createMember = (request, response) => {
                     port: 465,
                     secure: true,
                     auth: {
-                      user: process.env.NODEMAILER_USER,
-                      pass: process.env.NODEMAILER_PASS 
+                      user: 'familylifeorganizer@gmail.com',
+                      pass: 'familylife123' 
                     },
                     tls: {                    
                       rejectUnauthorized: false
