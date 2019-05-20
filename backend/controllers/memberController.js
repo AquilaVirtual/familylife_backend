@@ -177,7 +177,7 @@ const deleteMember = (request, response) => {
         response.status(201).json(deletedMember);
       })
       .catch(err => {
-        response.status(500).json("errorMessage: Error deleting member:", err);
+        response.status(500).json({ errorMessage: "Error deleting member" });
       });
   } else {
     return response.status(422).json({ errorMessage: "User Not Logged In" });
@@ -225,12 +225,12 @@ const updateMember = (request, response) => {
           .catch(err => {
             response
               .status(500)
-              .json(`errorMessage: Error username or email: ${err}`);
+              .json({ errorMessage: "Error updating member." });
           });
       }
     })
     .catch(error => {
-      response.status(500).json(`errorMessage: ${error}`);
+      response.status(500).json({ errorMessage: "Member could not be found." });
     });
 };
 
@@ -265,7 +265,7 @@ const getAllMembers = (request, response) => {
       .catch(err => {
         response
           .status(404)
-          .json("errorMessage: Couldn't find a member by that username:", err);
+          .json({ errorMessage: "Couldn't find a member by that username" });
       });
   } else {
     return response.status(422).json({ errorMessage: "User Not Logged In" });

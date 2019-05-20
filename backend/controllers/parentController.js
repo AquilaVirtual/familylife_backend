@@ -19,9 +19,7 @@ const register = (request, response) => {
   Parent.findOne({ username })
     .then(user => {
       if (user) {
-        response
-          .status(401)
-          .json({ errorMessage: "This username is taken." });
+        response.status(401).json({ errorMessage: "This username is taken." });
       } else {
         const encryptedPassword = bcrypt.hashSync(password, bcryptRounds);
         const token = generateToken({ username });
@@ -40,14 +38,14 @@ const register = (request, response) => {
             response.status(200).send(savedUser);
           })
           .catch(err => {
-            response.status(500).send({             
+            response.status(500).send({
               errorMessage: "Something went wrong while saving information."
             });
           });
       }
     })
     .catch(err => {
-      response.status(500).send({        
+      response.status(500).send({
         errorMessage: "Something went wrong while creating an account. "
       });
     });
@@ -62,7 +60,7 @@ const login = (request, response) => {
           errorMessage: "Invalid Email or Password."
         });
       } else {
-        if (bcrypt.compareSync(password, userFound.password)) {     
+        if (bcrypt.compareSync(password, userFound.password)) {
           const token = generateToken({ userFound });
           response
             .status(200)
@@ -76,7 +74,7 @@ const login = (request, response) => {
     })
     .catch(err => {
       response.status(500).send({
-        errorMessage: "Invalid Email or Password." 
+        errorMessage: "Invalid Email or Password."
       });
     });
 };
@@ -88,7 +86,7 @@ const getParentById = (request, response) => {
     })
     .catch(error => {
       response.status(500).json({
-        error: "The user could not be retrieved."
+        errorMessage: "The user could not be retrieved."
       });
     });
 };
@@ -118,12 +116,12 @@ const updateParent = (request, response) => {
           .catch(err => {
             response
               .status(500)
-              .json(`message: Error username or email: ${err}`);
+              .json({ erroMessage: "The user could not be updated." });
           });
       }
     })
     .catch(error => {
-      response.status(500).json(`message: Error username or email: ${error}`);
+      response.status(500).json({ errorMessage: "User not found." });
     });
 };
 
@@ -134,13 +132,13 @@ const getAllParents = (request, response) => {
     })
     .catch(error => {
       response.status(500).json({
-        error: "The information could not be retrieved."
+        errorMessage: "The information could not be retrieved."
       });
     });
 };
 const getAllFamilyMembers = (request, response) => {
   const { username } = request.params;
-  console.log("Getting this username", username)
+  //console.log("Getting this username", username)
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
