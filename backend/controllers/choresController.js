@@ -198,9 +198,7 @@ Chores.findOneAndRemove({_id: request.params})
     })
     .catch(err => {
       response.status(500).json({
-        errorMessage: "Error pushing chores onto Parent",
-        err
-      });
+        errorMessage: "Error saving chore ID"});
     });
 })
 .catch(err => {
@@ -213,6 +211,9 @@ const getAllChores = (request, response) => {
       response.status(200).json(res);
     })
     .catch(err => {
+      response.status(500).json({
+        errorMessage: "Error getting all chores"        
+      });
       console.log("Something bad", err);
     });
 };

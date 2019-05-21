@@ -99,7 +99,7 @@ const deleteParentById = (request, response) => {
     })
     .catch(error => {
       response.status(500).json({
-        error: "The user could not be removed."
+        errorMessage: "The user could not be removed."
       });
     });
 };

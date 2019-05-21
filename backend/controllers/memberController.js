@@ -69,7 +69,7 @@ const createMember = (request, response) => {
                   const output = `               
                  <p>Hi ${name.split(" ")[0]},</p>
                  <br>
-                 <p>Welcome to Family Life! You were added to Family Life by ${
+                 <p>Welcome to Family Life! You've been added to Family Life by ${
                    primary_user.name
                  }. </p> 
                  <br>                 
@@ -133,7 +133,7 @@ const createMember = (request, response) => {
       .catch(err => {
         response.status(500).send({
           //placeholder error message
-          errorMessage: "Couldn't find a user by that username: " + err
+          errorMessage: "Error finding user: " + err
         });
       });
   } else {
@@ -199,7 +199,7 @@ const resetPassword = (request, response) => {
               .catch(err => {
                 response
                   .status(500)
-                  .json("errorMessage: Error reseting password:", err);
+                  .json({errorMessage: "Error reseting password"});
               });
           }
         }
