@@ -169,6 +169,17 @@ logInMember = (request, response) => {
     });
 };
 
+const getMember = (request, response) => {
+  const { _id } = request.params._id;
+  Member.findOne({ _id: _id})
+  .then(userFound => {
+    response.status(200).json(userFound)
+  })
+  .catch(err => {
+    console.log("Error getting user", err)
+  })
+}
+
 const deleteMember = (request, response) => {
   const { _id } = request.body;
   if (request.jwtObj) {
@@ -278,5 +289,6 @@ module.exports = {
   updateMember,
   resetPassword,
   getAllMembers,
-  deleteMember
+  deleteMember,
+  getMember
 };
