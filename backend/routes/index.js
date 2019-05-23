@@ -24,7 +24,7 @@ router.post("/api/user/login", (request, response) => {
   ParentController.login(request, response);
 });
 
-router.post("/api/user/get/:id", (request, response) => {
+router.get("/api/user/get/:id", (request, response) => {
   ParentController.getParent(request, response);
 });
 

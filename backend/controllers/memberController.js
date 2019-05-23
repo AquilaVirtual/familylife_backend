@@ -170,8 +170,7 @@ logInMember = (request, response) => {
 };
 
 const getMember = (request, response) => {
-  const { _id } = request.params._id;
-  Member.findOne({ _id: _id})
+  Member.findOne({ _id: request.params._id})
   .then(userFound => {
     response.status(200).json(userFound)
   })
