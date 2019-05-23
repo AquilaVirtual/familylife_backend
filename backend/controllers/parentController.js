@@ -79,8 +79,8 @@ const login = (request, response) => {
     });
 };
 
-const getParentById = (request, response) => {
-  Parent.findById({ _id: request.params.id })
+const getParent = (request, response) => {
+  Parent.findOne({ _id: request.params.id })
     .then(user => {
       response.status(200).json(user);
     })
@@ -158,7 +158,7 @@ const getAllFamilyMembers = (request, response) => {
 module.exports = {
   register,
   login,
-  getParentById,
+  getParent,
   deleteParentById,
   updateParent,
   getAllParents,

@@ -24,8 +24,8 @@ router.post("/api/user/login", (request, response) => {
   ParentController.login(request, response);
 });
 
-router.post("/api/user/:id", (request, response) => {
-  ParentController.getParentById(request, response);
+router.post("/api/user/get/:id", (request, response) => {
+  ParentController.getParent(request, response);
 });
 
 router.delete("/api/user/:id", (request, response) => {
