@@ -129,11 +129,11 @@ const updateActivity = (request, response) => {
 };
 
 const addMemberToActivity = (request, response) => {
-  const { username, member } = request.body;
+  const { parentUsername, memberUsername } = request.body;
   const { _id } = request.params;
-  Parent.findOne({ username: username })
+  Parent.findOne({ username: parentUsername })
     .then(parentFound => {
-      Member.findOne({ name: member })
+      Member.findOne({ username: memberUsername })
         .then(memberFound => {
           Activity.findOne({ _id: request.params._id })
             .then(activity => {
@@ -142,15 +142,14 @@ const addMemberToActivity = (request, response) => {
                 memberFound.activitiesIds.forEach(id => {
                   //Here we check if this member's activitiesIds array contains this activity's ID, if so, they have been added to this activity already
                   if (id.toString() === activity._id.toString()) {
-                    console.log("We already exist!");
-                    response.status(401).json({
+                   // console.log("Member already exist!");
+                    response.status(400).json({
                       errorMessage:
-                        "This member is already added to this activity",
-                      err
-                    });
+                        "This member is already added to this activity"                      
+                    });                
                   } else {
                     Member.findOneAndUpdate(
-                      { name: member },
+                      { username: memberUsername },
                       { $push: { activitiesIds: activity._id } }
                     )
                       .then(member => {
@@ -159,7 +158,7 @@ const addMemberToActivity = (request, response) => {
                       .catch(err => {
                         response.status(500).json({
                           errorMessage:
-                            "Something went wrong while add member to activity",
+                            "Something went wrong while adding member to activity",
                           err
                         });
                       });
@@ -168,7 +167,7 @@ const addMemberToActivity = (request, response) => {
                 //If member's activitiesIds array is empty, push this ID onto it
               } else {
                 Member.findOneAndUpdate(
-                  { name: member },
+                  { username: memberUsername },
                   { $push: { activitiesIds: activity._id } }
                 )
                   .then(member => {
