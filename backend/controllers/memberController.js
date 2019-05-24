@@ -170,13 +170,15 @@ logInMember = (request, response) => {
 };
 
 const getMember = (request, response) => {
-  Member.findOne({ _id: request.params._id})
-  .then(userFound => {
-    response.status(200).json(userFound)
-  })
-  .catch(err => {
-    console.log("Error getting user", err)
-  })
+  Member.findOne({ _id: request.params.id })
+    .then(user => {
+      response.status(200).json(user);
+    })
+    .catch(error => {
+      response.status(500).json({
+        errorMessage: "The user could not be retrieved."
+      });
+    });
 }
 
 const deleteMember = (request, response) => {
