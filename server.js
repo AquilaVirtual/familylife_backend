@@ -4,6 +4,8 @@ const cors = require("cors");
 const bodyparser = require("body-parser");
 const routes = require("./backend/routes");
 const session = require("express-session");
+require('dotenv').config()
+
 
 //Instantiate Server
 const server = express();
@@ -11,7 +13,7 @@ const server = express();
 //Bringin Mongoose Database
 const mongoose = require("mongoose");
 
- const db = "mongodb://aquila:familylife123@ds048319.mlab.com:48319/family-life";
+ const db = process.env.DATABASE;
  
 //Connect Database
 mongoose
