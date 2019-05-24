@@ -91,7 +91,7 @@ router.put("/api/activity/edit/:_id", (request, response) => {
 router.delete("/api/activity/delete/:_id", authenticate, (request, response) => {
   ActivityController.deleteActivity(request, response);
 });
-router.put("/api/activity/addmembertoactivity/:_id", (request, response) => {
+router.put("/api/activity/add_member_to_activity/:_id", (request, response) => {
   ActivityController.addMemberToActivity(request, response);
 });
 //Members go here
