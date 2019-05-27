@@ -13,14 +13,14 @@ router.get("/", (request, response) => {
   response.status(200).json({ API: "Server running OK." });
 });
 //Users go here
-router.get("/api/user", authenticate, (request, response) => {
+router.get("/api/user", (request, response) => {
   ParentController.getAllParents(request, response);
 });
-router.post("/api/user/register", authenticate, (request, response) => {
+router.post("/api/user/register", (request, response) => {
   ParentController.register(request, response);
 });
 
-router.post("/api/user/login", authenticate, (request, response) => {
+router.post("/api/user/login", (request, response) => {
   ParentController.login(request, response);
 });
 
