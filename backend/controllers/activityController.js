@@ -43,7 +43,7 @@ const createActivity = (request, response) => {
 };
 const getActivityForPrimaryAccount = (request, response) => {
   const { username } = request.params;
-  if (request.jwtObj) {
+  //if (request.jwtObj) {
     //authenticate user
     Parent.findOne({ username: username })
       .then(user => {
@@ -58,11 +58,11 @@ const getActivityForPrimaryAccount = (request, response) => {
       .catch(err => {
         console.log("No user found", err);
       });
-  } else {
-    return response.status(422).json({
-      errorMessage: "Login is required before activities can be viewed"
-    });
-  }
+  // } else {
+  //   return response.status(422).json({
+  //     errorMessage: "Login is required before activities can be viewed"
+  //   });
+  // }
 };
 const getActivityForMember = (request, response) => {
   const { username } = request.params;
