@@ -145,7 +145,7 @@ const addMemberToActivity = (request, response) => {
                    // console.log("Member already exist!");
                     response.status(400).json({
                       errorMessage:
-                        "This member is already added to this activity"                      
+                        "This member is already exists in this activity"                      
                     });                
                   } else {
                     Member.findOneAndUpdate(
