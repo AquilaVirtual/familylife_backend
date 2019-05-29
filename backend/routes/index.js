@@ -42,18 +42,17 @@ router.get("/api/user/family/:username", authenticate, (request, response) => {
 });
 
 //Chores go here
-router.post("/api/chore/create", authenticate, (request, response) => {
+router.post("/api/chore/create",  (request, response) => {
   ChoresController.createChore(request, response);
 });
-router.get("/api/chore/:username", authenticate, (request, response) => {
+router.get("/api/chore/:username",  (request, response) => {
   ChoresController.getChores(request, response);
 });
-router.get("/api/chore/all", authenticate, (request, response) => {
+router.get("/api/chore/all", (request, response) => {
   ChoresController.getAllChores(request, response);
 });
 router.delete(
-  "/api/chore/deletechore/:_id",
-  authenticate,
+  "/api/chore/deletechore/:_id",  
   (request, response) => {
     ChoresController.deleteChore(request, response);
   }
