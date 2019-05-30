@@ -130,6 +130,7 @@ const updateActivity = (request, response) => {
 
 const addMemberToActivity = (request, response) => {
   const { parentUsername, memberUsername } = request.body;
+  console.log("Payload", request.body)
   const { _id } = request.params;
   Parent.findOne({ username: parentUsername })
     .then(parentFound => {
@@ -138,14 +139,14 @@ const addMemberToActivity = (request, response) => {
           Activity.findOne({ _id: request.params._id })
             .then(activity => {
               //check if member's activitiesIds array is not empty, otherwise, don't iterate through it
-              if (memberFound.activitiesIds.length > 0) {
+              if (memberFound.activitiesIds && memberFound.activitiesIds.length > 0) {
                 memberFound.activitiesIds.forEach(id => {
                   //Here we check if this member's activitiesIds array contains this activity's ID, if so, they have been added to this activity already
                   if (id.toString() === activity._id.toString()) {
                    // console.log("Member already exist!");
                     response.status(400).json({
                       errorMessage:
-                        "This member is already exists in this activity"                      
+                        "This member already exists in this activity"                      
                     });                
                   } else {
                     Member.findOneAndUpdate(
@@ -174,6 +175,7 @@ const addMemberToActivity = (request, response) => {
                     console.log("Member added to this activity", member);
                   })
                   .catch(err => {
+                    console.log("Error here", err)
                     response.status(500).json({
                       errorMessage:
                         "Something went wrong while add member to activity",
@@ -183,6 +185,7 @@ const addMemberToActivity = (request, response) => {
               }
             })
             .catch(err => {
+              console.log("Error here: Can't find activity", err)
               response.status(404).json({
                 errorMessage: "Activity could not be found",
                 err
@@ -190,16 +193,17 @@ const addMemberToActivity = (request, response) => {
             });
         })
         .catch(err => {
-          console.log("Bad!", err);
+          console.log("Error here", err)
           response.status(404).json({
-            errorMessage: "There's no member by that name",
+            errorMessage: "There's no member by that username",
             err
           });
         });
     })
     .catch(err => {
+      console.log("Error here", err)
       response.status(404).json({
-        errorMessage: "There's no primary account by that username",
+        errorMessage: "There's no user by that username",
         err
       });
     });
