@@ -194,10 +194,10 @@ const addMemberToActivity = (request, response) => {
         })
         .catch(err => {
           console.log("Error here: can't find member", err)
-          response.status(404).json({
-            errorMessage: "There's no member by that username",
-            err
-          });
+          // response.status(404).json({
+          //   errorMessage: "There's no member by that username",
+          //   err
+          // });
         });
     })
     .catch(err => {
