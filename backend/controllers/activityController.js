@@ -186,10 +186,10 @@ const addMemberToActivity = (request, response) => {
             })
             .catch(err => {
               console.log("Error here: Can't find activity", err)
-              response.status(404).json({
-                errorMessage: "Activity could not be found",
-                err
-              });
+              // response.status(404).json({
+              //   errorMessage: "Activity could not be found",
+              //   err
+              // });
             });
         })
         .catch(err => {
@@ -202,10 +202,10 @@ const addMemberToActivity = (request, response) => {
     })
     .catch(err => {
       console.log("Error here: can't user", err)
-      response.status(404).json({
-        errorMessage: "There's no user by that username",
-        err
-      });
+      // response.status(404).json({
+      //   errorMessage: "There's no user by that username",
+      //   err
+      // });
     });
 };
 
