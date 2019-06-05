@@ -59,10 +59,10 @@ router.delete(
 );
 
 //Assignments go here
-router.post("/api/assignment/create", authenticate, (request, response) => {
+router.post("/api/assignment/create", (request, response) => {
   AssignmentController.createAssignment(request, response);
 });
-router.get("/api/assignment/:username", authenticate, (request, response) => {
+router.get("/api/assignment/:username",  (request, response) => {
   AssignmentController.getAssignments(request, response);
 });
 router.get("/api/assignment/all", authenticate, (request, response) => {
@@ -76,7 +76,7 @@ router.put("/api/assignment/:_id", authenticate, (request, response) => {
 });
 
 //Activities go here
-router.post("/api/activity/create", authenticate,  (request, response) => {
+router.post("/api/activity/create", (request, response) => {
   ActivityController.createActivity(request, response);
 });
 router.get(

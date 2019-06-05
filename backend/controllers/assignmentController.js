@@ -75,8 +75,9 @@ const createAssignment = (request, response) => {
   }
 };
 const getAssignments = (request, response) => {
-  const { username } = request.params;yy
-  if (request.jwtObj) {
+  const { username } = request.params;
+  //authenticate user
+  // if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
         if (user) {
@@ -110,11 +111,11 @@ const getAssignments = (request, response) => {
       .catch(err => {
         response.status(500).json(err);
       });
-  } else {
-    return response.status(422).json({
-      errorMessage: "Login is required before assignments can be viewed"
-    });
-  }
+  // } else {
+  //   return response.status(422).json({
+  //     errorMessage: "Login is required before assignments can be viewed"
+  //   });
+  // }
 };
 const getAllAssignments = (request, response) => {
   Assignment.find({})
@@ -184,7 +185,7 @@ const updateAssignment = (request, response) => {
             response.status(200).json(assignment);
           })
           .catch(err => {
-            response.status(500).json({ errorMessage: "Editing error"});
+            response.status(500).json({ errorMessage: "Editing error", err });
           });
       }
     })
