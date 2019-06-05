@@ -84,7 +84,7 @@ const createMember = (request, response) => {
                  <br>
                   Thanks!
                  <br>
-                 Famliy Life
+                 Famliy Life Team
                  `;
                   let transporter = nodemailer.createTransport({
                     service: "gmail",

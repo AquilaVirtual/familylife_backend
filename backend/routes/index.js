@@ -76,12 +76,12 @@ router.put("/api/assignment/:_id", authenticate, (request, response) => {
 });
 
 //Activities go here
-router.post("/api/activity/create", authenticate, (request, response) => {
+router.post("/api/activity/create", authenticate,  (request, response) => {
   ActivityController.createActivity(request, response);
 });
 router.get(
   "/api/activity/get/primary/:username",
-  authenticate,
+  //authenticate,
   (request, response) => {
     ActivityController.getActivityForPrimaryAccount(request, response);
   }
@@ -96,7 +96,7 @@ router.get(
 router.get("/api/activity/all", authenticate, (request, response) => {
   ActivityController.getAllActivities(request, response);
 });
-router.put("/api/activity/edit/:_id", authenticate, (request, response) => {
+router.put("/api/activity/edit/:_id",  (request, response) => {
   ActivityController.updateActivity(request, response);
 });
 router.delete(

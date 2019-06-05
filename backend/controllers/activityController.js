@@ -43,8 +43,7 @@ const createActivity = (request, response) => {
 };
 const getActivityForPrimaryAccount = (request, response) => {
   const { username } = request.params;
-  //if (request.jwtObj) {
-    //authenticate user
+  if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
         Activity.find({ parentId: user._id })
@@ -58,11 +57,11 @@ const getActivityForPrimaryAccount = (request, response) => {
       .catch(err => {
         console.log("No user found", err);
       });
-  // } else {
-  //   return response.status(422).json({
-  //     errorMessage: "Login is required before activities can be viewed"
-  //   });
-  // }
+  } else {
+    return response.status(422).json({
+      errorMessage: "Login is required before activities can be viewed"
+    });
+  }
 };
 const getActivityForMember = (request, response) => {
   const { username } = request.params;
@@ -104,6 +103,7 @@ const getAllActivities = (request, response) => {
 };
 const updateActivity = (request, response) => {
   const { _id, name, type } = request.body;
+  console.log("Update payload", request.body)
   Activity.findById({ _id: request.params._id })
     .then(activity => {
       if (activity) {
@@ -139,7 +139,7 @@ const addMemberToActivity = (request, response) => {
           Activity.findOne({ _id: request.params._id })
             .then(activity => {
               //check if member's activitiesIds array is not empty, otherwise, don't iterate through it
-              if (memberFound.activitiesIds && memberFound.activitiesIds.length > 0) {
+              if (memberFound.activitiesIds.length) {
                 memberFound.activitiesIds.forEach(id => {
                   //Here we check if this member's activitiesIds array contains this activity's ID, if so, they have been added to this activity already
                   if (id.toString() === activity._id.toString()) {
@@ -186,26 +186,26 @@ const addMemberToActivity = (request, response) => {
             })
             .catch(err => {
               console.log("Error here: Can't find activity", err)
-              // response.status(404).json({
-              //   errorMessage: "Activity could not be found",
-              //   err
-              // });
+              response.status(404).json({
+                errorMessage: "Activity could not be found",
+                err
+              });
             });
         })
         .catch(err => {
           console.log("Error here: can't find member", err)
-          // response.status(404).json({
-          //   errorMessage: "There's no member by that username",
-          //   err
-          // });
+          response.status(404).json({
+            errorMessage: "There's no member by that username",
+            err
+          });
         });
     })
     .catch(err => {
       console.log("Error here: can't user", err)
-      // response.status(404).json({
-      //   errorMessage: "There's no user by that username",
-      //   err
-      // });
+      response.status(404).json({
+        errorMessage: "There's no user by that username",
+        err
+      });
     });
 };
 
