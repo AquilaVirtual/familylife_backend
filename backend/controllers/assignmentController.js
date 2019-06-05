@@ -75,8 +75,7 @@ const createAssignment = (request, response) => {
   }
 };
 const getAssignments = (request, response) => {
-  const { username } = request.params;
-  authenticate user
+  const { username } = request.params;yy
   if (request.jwtObj) {
     Parent.findOne({ username: username })
       .then(user => {
