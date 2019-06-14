@@ -41,6 +41,10 @@ router.get("/api/user/family/:username", authenticate, (request, response) => {
   ParentController.getAllFamilyMembers(request, response);
 });
 
+router.put("api/user/password_reset/:_id", (request, response) => {
+  ParentController.resetPassword(request, response);
+})
+
 //Chores go here
 router.post("/api/chore/create",  (request, response) => {
   ChoresController.createChore(request, response);

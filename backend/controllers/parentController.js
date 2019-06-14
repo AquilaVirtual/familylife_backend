@@ -137,9 +137,9 @@ const getAllParents = (request, response) => {
     });
 };
 
-const resetPassword= (request, response) => {
+const resetPassword = (request, response) => {
   const { _id, newPassword, verifyPassword, password } = req.body;
-  User.findById({ _id: req.params._id })
+  Parent.findById({ _id: req.params._id })
     .then(function(user) {
       if (user) {
         if (bcrypt.compareSync(password, user.password)) {
@@ -189,5 +189,6 @@ module.exports = {
   deleteParentById,
   updateParent,
   getAllParents,
-  getAllFamilyMembers
+  getAllFamilyMembers,
+  resetPassword
 };
