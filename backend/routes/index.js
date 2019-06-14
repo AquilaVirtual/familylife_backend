@@ -31,9 +31,6 @@ router.get("/api/user/get/:id", (request, response) => {
 router.delete("/api/user/:id", authenticate, (request, response) => {
   ParentController.deleteParentById(request, response);
 });
-router.put("/api/user/:id", authenticate, (request, response) => {
-  ParentController.updateParent(request, response);
-});
 router.get("api/user/logout", authenticate, (request, response) => {
   ParentController.logoutParent(request, response);
 });

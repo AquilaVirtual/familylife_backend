@@ -119,25 +119,25 @@ const getAllParents = (request, response) => {
 const updateEmailandUsername = (request, response) => {
   const { username, email } = request.body;
   console.log("Request body", request.body)
-  Parent.findById({ _id: request.params.id })
-    .then(user => {
-      console.log("Back user", user);
-      if (user) {
-        (user.username = username), (user.email = email);
-        User.findByIdAndUpdate({ _id: request.params.id }, user)
-          .then(user => {
-            response.status(200).json(user);
-          })
-          .catch(err => {
-            response
-              .status(500)
-              .json({ errorMessage: "Error username or email" });
-          });
-      }
-    })
-    .catch(err => {
-      response.status(500).json({ errorMessage: "Error username or email" });
-    });
+  // Parent.findById({ _id: request.params.id })
+  //   .then(user => {
+  //     console.log("Back user", user);
+  //     if (user) {
+  //       (user.username = username), (user.email = email);
+  //       User.findByIdAndUpdate({ _id: request.params.id }, user)
+  //         .then(user => {
+  //           response.status(200).json(user);
+  //         })
+  //         .catch(err => {
+  //           response
+  //             .status(500)
+  //             .json({ errorMessage: "Error username or email" });
+  //         });
+  //     }
+  //   })
+  //   .catch(err => {
+  //     response.status(500).json({ errorMessage: "Error username or email" });
+  //   });
 };
 
 const changePassword = (request, response) => {
@@ -201,7 +201,6 @@ module.exports = {
   login,
   getParent,
   deleteParentById,
-  updateParent,
   getAllParents,
   getAllFamilyMembers,
   changePassword,
