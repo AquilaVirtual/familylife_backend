@@ -41,8 +41,11 @@ router.get("/api/user/family/:username", authenticate, (request, response) => {
   ParentController.getAllFamilyMembers(request, response);
 });
 
-router.put("api/user/password_reset/:_id", (request, response) => {
-  ParentController.resetPassword(request, response);
+router.put("api/user/password_change/:_id", (request, response) => {
+  ParentController.changePassword(request, response);
+})
+router.put("api/user/update_email_username/:_id", (request, response) => {
+  ParentController.updateEmailandUsername(request, response);
 })
 
 //Chores go here

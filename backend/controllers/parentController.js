@@ -137,10 +137,31 @@ const getAllParents = (request, response) => {
     });
 };
 
-const resetPassword = (request, response) => {
+const updateEmailandUsername = (req, res) => {
+  const { _id, username, email } = req.body;
+  Parent.findById({ _id: req.params.id })
+    .then(user => {
+      console.log("Back user", user);
+      if (user) {
+        (user.username = username), (user.email = email);
+        User.findByIdAndUpdate({ _id: req.params.id }, user)
+          .then(user => {
+            response.status(200).json(user);
+          })
+          .catch(err => {
+            res.status(500).json(`message: Error username or email: ${err}`);
+          });
+      }
+    })
+    .catch(function(error) {
+      res.status(500).json(`{Put message: something bahd! error: ${error}}`);
+    });
+};
+
+const changePassword = (request, response) => {
   const { _id, newPassword, verifyPassword, password } = req.body;
   Parent.findById({ _id: req.params._id })
-    .then(function(user) {
+    .then(user => {
       if (user) {
         if (bcrypt.compareSync(password, user.password)) {
           if (newPassword === verifyPassword) {
@@ -152,14 +173,14 @@ const resetPassword = (request, response) => {
               .catch(err => {
                 res
                   .status(500)
-                  .json(`message: Error reseting password: ${err}`);
+                  .json({ errorMessage: "Error reseting password" });
               });
           }
         }
       }
     })
     .catch(function(error) {
-      res.status(500).json(`Reset message: something bahd! error: ${error}`);
+      res.status(500).json({ errorMessage: "Error resetting password" });
     });
 };
 
@@ -190,5 +211,6 @@ module.exports = {
   updateParent,
   getAllParents,
   getAllFamilyMembers,
-  resetPassword
+  changePassword,
+  updateEmailandUsername
 };
