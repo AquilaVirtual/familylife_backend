@@ -118,26 +118,28 @@ const getAllParents = (request, response) => {
 
 const updateEmailandUsername = (request, response) => {
   const { username, email } = request.body;
-  console.log("Request body", request.body)
-  // Parent.findById({ _id: request.params.id })
-  //   .then(user => {
-  //     console.log("Back user", user);
-  //     if (user) {
-  //       (user.username = username), (user.email = email);
-  //       User.findByIdAndUpdate({ _id: request.params.id }, user)
-  //         .then(user => {
-  //           response.status(200).json(user);
-  //         })
-  //         .catch(err => {
-  //           response
-  //             .status(500)
-  //             .json({ errorMessage: "Error username or email" });
-  //         });
-  //     }
-  //   })
-  //   .catch(err => {
-  //     response.status(500).json({ errorMessage: "Error username or email" });
-  //   });
+  Parent.findById({ _id: request.params._id })
+    .then(user => {
+      if (user) {      
+        if (email) {
+          user.email = email;
+        } else if (username) {
+          user.username = username;
+        }    
+        Parent.findByIdAndUpdate({ _id: request.params._id }, user, {new: true})
+          .then(updateUser => {        
+            response.status(200).json(updateUser);
+          })
+          .catch(err => {
+            response
+              .status(500)
+              .json({ errorMessage: "Error updating info." });
+          });
+      }
+    })
+    .catch(err => {
+      response.status(500).json({ errorMessage: "Error updating info." });
+    });
 };
 
 const changePassword = (request, response) => {
