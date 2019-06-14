@@ -137,50 +137,63 @@ const getAllParents = (request, response) => {
     });
 };
 
-const updateEmailandUsername = (req, res) => {
-  const { _id, username, email } = req.body;
-  Parent.findById({ _id: req.params.id })
+const updateEmailandUsername = (request, response) => {
+  const { username, email } = request.body;
+  Parent.findById({ _id: request.params.id })
     .then(user => {
       console.log("Back user", user);
       if (user) {
         (user.username = username), (user.email = email);
-        User.findByIdAndUpdate({ _id: req.params.id }, user)
+        User.findByIdAndUpdate({ _id: request.params.id }, user)
           .then(user => {
             response.status(200).json(user);
           })
           .catch(err => {
-            res.status(500).json(`message: Error username or email: ${err}`);
+            response
+              .status(500)
+              .json({ errorMessage: "Error username or email" });
           });
       }
     })
-    .catch(function(error) {
-      res.status(500).json(`{Put message: something bahd! error: ${error}}`);
+    .catch(err => {
+      response.status(500).json({ errorMessage: "Error username or email" });
     });
 };
 
 const changePassword = (request, response) => {
-  const { _id, newPassword, verifyPassword, password } = req.body;
-  Parent.findById({ _id: req.params._id })
+  console.log(request.body);
+  const { newPassword, verifyPassword, password } = request.body;
+  Parent.findById({ _id: request.params._id })
     .then(user => {
       if (user) {
         if (bcrypt.compareSync(password, user.password)) {
           if (newPassword === verifyPassword) {
+            console.log("We're getting here");
             user.password = bcrypt.hashSync(newPassword, 11);
-            User.findByIdAndUpdate({ _id: req.params._id }, user)
+            console.log("Hashed password", user.password);
+            Parent.findByIdAndUpdate({ _id: request.params._id }, user, {
+              new: true
+            })
               .then(user => {
-                res.status(200).json(user);
+                console.log("Updated user", user);
+                response.status(200).json(user);
               })
               .catch(err => {
-                res
+                response
                   .status(500)
                   .json({ errorMessage: "Error reseting password" });
               });
+          } else {
+            response
+              .status(406)
+              .json({ errorMessage: "Passwords don't match" });
           }
         }
+        response.status(406).json({ errorMessage: "Password is incorrect" });
       }
     })
-    .catch(function(error) {
-      res.status(500).json({ errorMessage: "Error resetting password" });
+    .catch(err => {
+      response.status(500).json({ errorMessage: "Error resetting password" });
     });
 };
 
