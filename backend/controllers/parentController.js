@@ -136,6 +136,33 @@ const getAllParents = (request, response) => {
       });
     });
 };
+
+const resetPassword= (request, response) => {
+  const { _id, newPassword, verifyPassword, password } = req.body;
+  User.findById({ _id: req.params._id })
+    .then(function(user) {
+      if (user) {
+        if (bcrypt.compareSync(password, user.password)) {
+          if (newPassword === verifyPassword) {
+            user.password = bcrypt.hashSync(newPassword, 11);
+            User.findByIdAndUpdate({ _id: req.params._id }, user)
+              .then(user => {
+                res.status(200).json(user);
+              })
+              .catch(err => {
+                res
+                  .status(500)
+                  .json(`message: Error reseting password: ${err}`);
+              });
+          }
+        }
+      }
+    })
+    .catch(function(error) {
+      res.status(500).json(`Reset message: something bahd! error: ${error}`);
+    });
+};
+
 const getAllFamilyMembers = (request, response) => {
   const { username } = request.params;
   //console.log("Getting this username", username)
