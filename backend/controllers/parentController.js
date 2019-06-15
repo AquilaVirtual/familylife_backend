@@ -149,15 +149,12 @@ const changePassword = (request, response) => {
     .then(user => {
       if (user) {
         if (bcrypt.compareSync(password, user.password)) {
-          if (newPassword === verifyPassword) {
-            console.log("We're getting here");
-            user.password = bcrypt.hashSync(newPassword, 11);
-            console.log("Hashed password", user.password);
+          if (newPassword === verifyPassword) {          
+            user.password = bcrypt.hashSync(newPassword, 11);           
             Parent.findByIdAndUpdate({ _id: request.params._id }, user, {
               new: true
             })
-              .then(user => {
-                console.log("Updated user", user);
+              .then(user => {               
                 response.status(200).json(user);
               })
               .catch(err => {
@@ -171,7 +168,10 @@ const changePassword = (request, response) => {
               .json({ errorMessage: "Passwords don't match" });
           }
         }
-        response.status(406).json({ errorMessage: "Password is incorrect" });
+        else {
+          
+          response.status(406).json({ errorMessage: "Password is incorrect" });
+        }
       }
     })
     .catch(err => {
