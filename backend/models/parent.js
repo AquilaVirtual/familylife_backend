@@ -22,7 +22,8 @@ const parentSchema = new mongoose.Schema({
     type: String,
     required: true  
   },
-  resetPassword: {
+  //for resetting password
+  tempPassword: {
     type: String,    
   },
   accountType: {

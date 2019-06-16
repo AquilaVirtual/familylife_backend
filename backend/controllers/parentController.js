@@ -120,20 +120,20 @@ const updateEmailandUsername = (request, response) => {
   const { username, email } = request.body;
   Parent.findById({ _id: request.params._id })
     .then(user => {
-      if (user) {      
+      if (user) {
         if (email) {
           user.email = email;
         } else if (username) {
           user.username = username;
-        }    
-        Parent.findByIdAndUpdate({ _id: request.params._id }, user, {new: true})
-          .then(updateUser => {        
+        }
+        Parent.findByIdAndUpdate({ _id: request.params._id }, user, {
+          new: true
+        })
+          .then(updateUser => {
             response.status(200).json(updateUser);
           })
           .catch(err => {
-            response
-              .status(500)
-              .json({ errorMessage: "Error updating info." });
+            response.status(500).json({ errorMessage: "Error updating info." });
           });
       }
     })
@@ -145,35 +145,41 @@ const updateEmailandUsername = (request, response) => {
 const resetPassword = (request, response) => {
   const { email } = request.body;
   let user = {};
-  Parent.findOne({email: email})
-  .then(primaryUserFound => { 
-    if(primaryUserFound) {
-      user = primaryUserFound;
-    }
-    else {
-      Member.findOne({email: email})
-      .then(memberFound => {
-        if(memberFound) {
-          user = memberFound
-        }
-      })
-      .catch(err => {
-        console.log("Error resetting password", err);
-      })
-    }    
-    if(user.email) {
-      let tempPass = "WqJ" + Math.floor(Math.random() * 100000);
-      console.log("Found User", tempPass)
-    }
-    else {
-      console.log("User not Found", user)
-    }
-  })
-  .catch(err => {
-    console.log("Error resetting password", err);
-  })
-}
-
+  Parent.findOne({ email: email })
+    .then(primaryUserFound => {
+      if (primaryUserFound) {
+        user = primaryUserFound;
+      } else {
+        Member.findOne({ email: email })
+          .then(memberFound => {
+            if (memberFound) {
+              user = memberFound;
+            }
+          })
+          .catch(err => {
+            console.log("Error resetting password", err);
+          });
+      }
+      if (user.email) {
+        //Generate a temporary password
+        let tempPass = "WqJ" + Math.floor(Math.random() * 100000);
+        user.tempPassword = bcrypt.hashSync(tempPass, 11);
+        Parent.findOneAndUpdate({ email: user.email }, user, { new: true })
+          .then(updateUser => {
+            console.log("UPdated user with new tempPass", updateUser);
+          })
+          .catch(err => {
+            console.log("Error adding tempPass", err);
+          });
+        console.log("Found User", tempPass);
+      } else {
+        console.log("User not Found", user);
+      }
+    })
+    .catch(err => {
+      console.log("Error resetting password", err);
+    });
+};
 
 const changePassword = (request, response) => {
   console.log(request.body);
@@ -182,12 +188,12 @@ const changePassword = (request, response) => {
     .then(user => {
       if (user) {
         if (bcrypt.compareSync(password, user.password)) {
-          if (newPassword === verifyPassword) {          
-            user.password = bcrypt.hashSync(newPassword, 11);           
+          if (newPassword === verifyPassword) {
+            user.password = bcrypt.hashSync(newPassword, 11);
             Parent.findByIdAndUpdate({ _id: request.params._id }, user, {
               new: true
             })
-              .then(user => {               
+              .then(user => {
                 response.status(200).json(user);
               })
               .catch(err => {
@@ -200,9 +206,7 @@ const changePassword = (request, response) => {
               .status(406)
               .json({ errorMessage: "Passwords don't match" });
           }
-        }
-        else {
-          
+        } else {
           response.status(406).json({ errorMessage: "Password is incorrect" });
         }
       }
