@@ -72,9 +72,9 @@ const createMember = (request, response) => {
                  <p>Welcome to Family Life! You've been added to Family Life by ${
                    primary_user.name
                  }. </p> 
-                 <br>                 
-                 <p>To login, please visit <a>www.familylife.netlify.com/login</a></p>
-                 <br>
+                               
+                 <p>To login, please go to <a>www.familylife.netlify.com/login</a></p>
+                
                  <p>Here is your login credentials:</p>
                  <ul>
                  <li>Username: ${username}</li>
