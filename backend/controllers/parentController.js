@@ -144,14 +144,37 @@ const updateEmailandUsername = (request, response) => {
 
 const resetPassword = (request, response) => {
   const { email } = request.body;
+  let user = {};
   Parent.findOne({email: email})
-  .then(userFound => {    
-    console.log("Body", userFound)
+  .then(primaryUserFound => { 
+    if(primaryUserFound) {
+      user = primaryUserFound;
+    }
+    else {
+      Member.findOne({email: email})
+      .then(memberFound => {
+        if(memberFound) {
+          user = memberFound
+        }
+      })
+      .catch(err => {
+        console.log("Error resetting password", err);
+      })
+    }    
+    if(user.email) {
+      let tempPass = "WqJ" + Math.floor(Math.random() * 100000);
+      console.log("Found User", tempPass)
+    }
+    else {
+      console.log("User not Found", user)
+    }
   })
   .catch(err => {
     console.log("Error resetting password", err);
   })
 }
+
+
 const changePassword = (request, response) => {
   console.log(request.body);
   const { newPassword, verifyPassword, password } = request.body;

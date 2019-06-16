@@ -20,8 +20,10 @@ const parentSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
-  
+    required: true  
+  },
+  resetPassword: {
+    type: String,    
   },
   accountType: {
    type: String,

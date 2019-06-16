@@ -23,6 +23,9 @@ const memberSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  resetPassword: {
+    type: String,    
+  },
   accountType: {
     type: String,
     default: "Child"
