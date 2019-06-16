@@ -117,7 +117,7 @@ router.put("/api/activity/addmember/:_id", (request, response) => {
   ActivityController.addMemberToActivity(request, response);
 });
 //Members go here
-router.post("/api/member/create", authenticate, (request, response) => {
+router.post("/api/member/create",  (request, response) => {
   MemberController.createMember(request, response);
 });
 router.get("/api/member/get/:id", (request, response) => {

@@ -23,7 +23,7 @@ const createMember = (request, response) => {
     username_primary
   } = request.body;
   //Here we authenticate user to make sure user is logged-in and has a valid token
-  if (request.jwtObj) {
+  // if (request.jwtObj) {
     if (!name || !username || !email || !password) {
       response.status(400).json({
         errorMessage: "Please provide a name, username, email, and password!"
@@ -136,9 +136,9 @@ const createMember = (request, response) => {
           errorMessage: "Error finding user: " + err
         });
       });
-  } else {
-    response.status(422).json({ message: "User Not Logged In" });
-  }
+  // } else {
+  //   response.status(422).json({ message: "User Not Logged In" });
+  // }
 };
 
 logInMember = (request, response) => {

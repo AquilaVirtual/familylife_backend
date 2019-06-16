@@ -3,9 +3,12 @@ const Parent = require("../models/parent");
 const Member = require("../models/member");
 const Chores = require("../models/chores");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const { generateToken } = require("../services/generateToken");
 
 const mongoose = require("mongoose");
+
+require("dotenv").config();
 
 const bcryptRounds = 10;
 
@@ -170,7 +173,54 @@ const resetPassword = (request, response) => {
           })
           .catch(err => {
             console.log("Error adding tempPass", err);
-          });
+          });          
+          
+          const output = `               
+          <p>Hi ${user.name.split(" ")[0]},</p>
+          <br>
+          <p>You requested to reset your password, if this was not you, please disregard this message 
+           </p> 
+          <br>                 
+          <p>To reset your password, please visit <a href="www.familylife.netlify.com/login" target="blank">www.familylife.netlify.com/login</a></p>
+          <br>
+          <p>Here is your temporary password:</p>
+          <ul>         
+          <li>Password: ${tempPass}</li>       
+          </ul>
+          <p>Please use it to login and change your password to something you can remember.</p>
+          <br>
+           Thanks!
+          <br>
+          Famliy Life Team
+          `;
+           let transporter = nodemailer.createTransport({
+             service: "gmail",
+             port: 465,
+             secure: true,
+             auth: {
+               user: process.env.NODEMAILER_USER,
+               pass: process.env.NODEMAILER_PASS
+             },
+             tls: {
+               rejectUnauthorized: false
+             }
+           });
+           let mailOptions = {
+             from: "Family Life <familylifeorganizer@gmail.com>",
+             to: `${user.email}`,
+             subject: "Password Reset",
+             html: output
+           };
+
+           transporter.sendMail(mailOptions, function(error, info) {
+             if (error) {
+               console.log(error);
+             } else {
+               console.log("Email sent: " + info.response);
+             }
+           });
+
+
         console.log("Found User", tempPass);
       } else {
         console.log("User not Found", user);
