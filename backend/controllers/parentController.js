@@ -142,6 +142,16 @@ const updateEmailandUsername = (request, response) => {
     });
 };
 
+const resetPassword = (request, response) => {
+  const { email } = request.body;
+  Parent.findOne({email: email})
+  then(userFound => {
+  
+  })
+  .catch(err => {
+    console.log("Error resetting password", err);
+  })
+}
 const changePassword = (request, response) => {
   console.log(request.body);
   const { newPassword, verifyPassword, password } = request.body;
@@ -206,5 +216,6 @@ module.exports = {
   getAllParents,
   getAllFamilyMembers,
   changePassword,
-  updateEmailandUsername
+  updateEmailandUsername,
+  resetPassword
 };

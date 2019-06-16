@@ -44,6 +44,9 @@ router.put("/api/user/password_change/:_id", (request, response) => {
 router.put("/api/user/update_email_username/:_id", (request, response) => {
   ParentController.updateEmailandUsername(request, response);
 })
+router.post("/api/user/reset_password", (request, response) => {
+  ParentController.resetPassword(request, response);
+})
 
 //Chores go here
 router.post("/api/chore/create",  (request, response) => {
