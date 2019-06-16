@@ -178,11 +178,11 @@ const resetPassword = (request, response) => {
           const output = `               
           <p>Hi ${user.name.split(" ")[0]},</p>
           <br>
-          <p>You requested to reset your password, if this was not you, please disregard this message 
+          <p>You've requested to reset your password. If this was not you, please disregard this message. 
            </p> 
-          <br>                 
-          <p>To reset your password, please visit <a href="www.familylife.netlify.com/login" target="blank">www.familylife.netlify.com/login</a></p>
-          <br>
+                          
+          <p>To reset your password, please visit <a href="https:/www.familylife.netlify.com/login">www.familylife.netlify.com/login</a></p>
+         
           <p>Here is your temporary password:</p>
           <ul>         
           <li>Password: ${tempPass}</li>       
