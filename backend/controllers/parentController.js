@@ -145,8 +145,8 @@ const updateEmailandUsername = (request, response) => {
 const resetPassword = (request, response) => {
   const { email } = request.body;
   Parent.findOne({email: email})
-  then(userFound => {
-  
+  .then(userFound => {    
+    console.log("Body", userFound)
   })
   .catch(err => {
     console.log("Error resetting password", err);
