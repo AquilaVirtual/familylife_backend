@@ -170,6 +170,7 @@ const resetPassword = (request, response) => {
         Parent.findOneAndUpdate({ email: user.email }, user, { new: true })
           .then(updateUser => {
             console.log("UPdated user with new tempPass", updateUser);
+            response.status(200).json(updateUser)
           })
           .catch(err => {
             console.log("Error adding tempPass", err);
