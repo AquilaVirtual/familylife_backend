@@ -182,7 +182,7 @@ const resetPassword = (request, response) => {
           <p>You've requested to reset your password. If this was not you, please disregard this message. 
            </p> 
                           
-          <p>To reset your password, please go to <a href="https:/www.familylife.netlify.com/login">www.familylife.netlify.com/login</a></p>
+          <p>To reset your password, please go to <a href="https://familylife.netlify.com/login">www.familylife.netlify.com/login</a></p>
          
           <p>Here is your temporary password:</p>
           <ul>         
