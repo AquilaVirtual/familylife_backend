@@ -56,19 +56,26 @@ const register = (request, response) => {
 const login = (request, response) => {
   const { username, password } = request.body;
   Parent.findOne({ username: username })
-    .then(userFound => {
-      //console.log("We found Primary user", userFound)
-      if (!userFound) {
+    .then(user => {
+      //console.log("We found Primary user", user)
+      if (!user) {
         response.status(500).send({
           errorMessage: "Invalid Email or Password."
         });
       } else {        
-        if (bcrypt.compareSync(password, userFound.password)) {
-          userFound.tempPassword = "";
-          const token = generateToken({ userFound });
-          response
-            .status(200)
-            .send({ userFound, token, userId: userFound._id });
+        if (bcrypt.compareSync(password, user.password)) {
+          user.tempPassword = "";
+          const token = generateToken({ user });        
+            Parent.findByIdAndUpdate({_id: user._id}, user, {new: true})
+            .then(userFound=>{
+              response
+              .status(200)
+              .send({ userFound, token, userId: userFound._id });
+            }).catch(err => {
+              response.status(500).send({
+                errorMessage: "Invalid Email or Password."
+              });
+            })
         } 
         else if(bcrypt.compareSync(password, userFound.tempPassword)) {
           userFound.password = userFound.tempPassword;
