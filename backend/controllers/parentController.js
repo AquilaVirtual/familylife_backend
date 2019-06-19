@@ -62,13 +62,23 @@ const login = (request, response) => {
         response.status(500).send({
           errorMessage: "Invalid Email or Password."
         });
-      } else {
+      } else {        
         if (bcrypt.compareSync(password, userFound.password)) {
+          userFound.tempPassword = "";
           const token = generateToken({ userFound });
           response
             .status(200)
             .send({ userFound, token, userId: userFound._id });
-        } else {
+        } 
+        else if(bcrypt.compareSync(password, userFound.tempPassword)) {
+          userFound.password = userFound.tempPassword;
+          userFound.tempPassword = "";
+          const token = generateToken({ userFound });
+          response
+            .status(200)
+            .send({ userFound, token, userId: userFound._id });
+        }
+        else {
           response.status(500).send({
             errorMessage: "Invalid Email or Password."
           });
