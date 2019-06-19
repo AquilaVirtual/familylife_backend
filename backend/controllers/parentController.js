@@ -239,7 +239,7 @@ const resetPassword = (request, response) => {
         let mailOptions = {
           from: "Family Life <familylifeorganizer@gmail.com>",
           to: `${user.email}`,
-          subject: "Password Reset",
+          subject: "Critical security alert for your Family Life Account",
           html: output
         };
 
