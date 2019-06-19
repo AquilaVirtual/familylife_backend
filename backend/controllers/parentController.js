@@ -62,30 +62,37 @@ const login = (request, response) => {
         response.status(500).send({
           errorMessage: "Invalid Email or Password."
         });
-      } else {        
+      } else {
         if (bcrypt.compareSync(password, user.password)) {
           user.tempPassword = "";
-          const token = generateToken({ user });        
-            Parent.findByIdAndUpdate({_id: user._id}, user, {new: true})
-            .then(userFound=>{
+          const token = generateToken({ user });
+          Parent.findByIdAndUpdate({ _id: user._id }, user, { new: true })
+            .then(userFound => {
               response
-              .status(200)
-              .send({ userFound, token, userId: userFound._id });
-            }).catch(err => {
+                .status(200)
+                .send({ userFound, token, userId: userFound._id });
+            })
+            .catch(err => {
               response.status(500).send({
                 errorMessage: "Invalid Email or Password."
               });
+            });
+        } else if (bcrypt.compareSync(password, user.tempPassword)) {
+          user.password = user.tempPassword;
+          user.tempPassword = "";
+          const token = generateToken({ user });
+          Parent.findByIdAndUpdate({ _id: user._id }, user, { new: true })
+            .then(userFound => {
+              response
+                .status(200)
+                .send({ userFound, token, userId: userFound._id });
             })
-        } 
-        else if(bcrypt.compareSync(password, userFound.tempPassword)) {
-          userFound.password = userFound.tempPassword;
-          userFound.tempPassword = "";
-          const token = generateToken({ userFound });
-          response
-            .status(200)
-            .send({ userFound, token, userId: userFound._id });
-        }
-        else {
+            .catch(err => {
+              response.status(500).send({
+                errorMessage: "Invalid Email or Password."
+              });
+            });
+        } else {
           response.status(500).send({
             errorMessage: "Invalid Email or Password."
           });
@@ -187,13 +194,13 @@ const resetPassword = (request, response) => {
         Parent.findOneAndUpdate({ email: user.email }, user, { new: true })
           .then(updateUser => {
             console.log("UPdated user with new tempPass", updateUser);
-            response.status(200).json(updateUser)
+            response.status(200).json(updateUser);
           })
           .catch(err => {
             console.log("Error adding tempPass", err);
-          });          
-          
-          const output = `               
+          });
+
+        const output = `               
           <p>Hi ${user.name.split(" ")[0]},</p>
           <br>
           <p>You've requested to reset your password. If this was not you, please disregard this message. 
@@ -211,33 +218,32 @@ const resetPassword = (request, response) => {
           <br>
           Famliy Life Team
           `;
-           let transporter = nodemailer.createTransport({
-             service: "gmail",
-             port: 465,
-             secure: true,
-             auth: {
-               user: process.env.NODEMAILER_USER,
-               pass: process.env.NODEMAILER_PASS
-             },
-             tls: {
-               rejectUnauthorized: false
-             }
-           });
-           let mailOptions = {
-             from: "Family Life <familylifeorganizer@gmail.com>",
-             to: `${user.email}`,
-             subject: "Password Reset",
-             html: output
-           };
+        let transporter = nodemailer.createTransport({
+          service: "gmail",
+          port: 465,
+          secure: true,
+          auth: {
+            user: process.env.NODEMAILER_USER,
+            pass: process.env.NODEMAILER_PASS
+          },
+          tls: {
+            rejectUnauthorized: false
+          }
+        });
+        let mailOptions = {
+          from: "Family Life <familylifeorganizer@gmail.com>",
+          to: `${user.email}`,
+          subject: "Password Reset",
+          html: output
+        };
 
-           transporter.sendMail(mailOptions, function(error, info) {
-             if (error) {
-               console.log(error);
-             } else {
-               console.log("Email sent: " + info.response);
-             }
-           });
-
+        transporter.sendMail(mailOptions, function(error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        });
 
         console.log("Found User", tempPass);
       } else {
