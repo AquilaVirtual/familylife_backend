@@ -190,6 +190,7 @@ const resetPassword = (request, response) => {
           })
           .catch(err => {
             console.log("Error resetting password", err);
+            response.status(500).json({ errorMessage: "*** Invalid Account Information. Please Try Again. ***" });            
           });
       }
       if (user.email) {
@@ -202,7 +203,7 @@ const resetPassword = (request, response) => {
             response.status(200).json(updateUser);
           })
           .catch(err => {
-            console.log("Error adding tempPass", err);
+            response.status(500).json({ errorMessage: "*** Invalid Account Information. Please Try Again. ***" });  
           });
 
         const output = `               
@@ -252,11 +253,11 @@ const resetPassword = (request, response) => {
 
         console.log("Found User", tempPass);
       } else {
-        console.log("User not Found", user);
+        response.status(500).json({ errorMessage: "*** Invalid Account Information. Please Try Again. ***" });  
       }
     })
     .catch(err => {
-      console.log("Error resetting password", err);
+      response.status(500).json({ errorMessage: "*** Invalid Account Information. Please Try Again. ***" });  
     });
 };
 
