@@ -62,8 +62,11 @@ const login = (request, response) => {
         response.status(500).send({
           errorMessage: "Invalid Email or Password."
         });
-      } else {
+      } else {        
         if (bcrypt.compareSync(password, user.password)) {
+          //in case someone other than user used user's email to request password change,
+         // we want to set tempPassword to an empty string when user logs in, since
+         // this would hold temporary password for reset.
           user.tempPassword = "";
           const token = generateToken({ user });
           Parent.findByIdAndUpdate({ _id: user._id }, user, { new: true })
@@ -78,6 +81,8 @@ const login = (request, response) => {
               });
             });
         } else if (bcrypt.compareSync(password, user.tempPassword)) {
+          //here, we're assigning temporary password to password to enable user to login
+          //and change it to what they'd like
           user.password = user.tempPassword;
           user.tempPassword = "";
           const token = generateToken({ user });
