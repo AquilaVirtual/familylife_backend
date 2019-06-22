@@ -62,11 +62,11 @@ const login = (request, response) => {
         response.status(500).send({
           errorMessage: "Invalid Email or Password."
         });
-      } else {        
+      } else {
         if (bcrypt.compareSync(password, user.password)) {
           //in case someone other than user used user's email to request password change,
-         // we want to set tempPassword to an empty string when user logs in, since
-         // this would hold temporary password for reset.
+          // we want to set tempPassword to an empty string when user logs in, since
+          // this would hold temporary password for reset.
           user.tempPassword = "";
           const token = generateToken({ user });
           Parent.findByIdAndUpdate({ _id: user._id }, user, { new: true })
@@ -179,7 +179,8 @@ const resetPassword = (request, response) => {
   let user = {};
   Parent.findOne({ email: email })
     .then(primaryUserFound => {
-      if (primaryUserFound) {
+      Member.findOne({ email: email }).then(memberFound => {});
+      if (primarityUserFound) {
         user = primaryUserFound;
       } else {
         Member.findOne({ email: email })
@@ -190,7 +191,10 @@ const resetPassword = (request, response) => {
           })
           .catch(err => {
             console.log("Error resetting password", err);
-            response.status(500).json({ errorMessage: "*** Invalid Account Information. Please Try Again. ***" });            
+            response.status(500).json({
+              errorMessage:
+                "*** Invalid Account Information. Please Try Again. ***"
+            });
           });
       }
       if (user.email) {
@@ -203,7 +207,10 @@ const resetPassword = (request, response) => {
             response.status(200).json(updateUser);
           })
           .catch(err => {
-            response.status(500).json({ errorMessage: "*** Invalid Account Information. Please Try Again. ***" });  
+            response.status(500).json({
+              errorMessage:
+                "*** Invalid Account Information. Please Try Again. ***"
+            });
           });
 
         const output = `               
@@ -253,11 +260,15 @@ const resetPassword = (request, response) => {
 
         console.log("Found User", tempPass);
       } else {
-        response.status(500).json({ errorMessage: "*** Invalid Account Information. Please Try Again. ***" });  
+        response.status(500).json({
+          errorMessage: "*** Invalid Account Information. Please Try Again. ***"
+        });
       }
     })
     .catch(err => {
-      response.status(500).json({ errorMessage: "*** Invalid Account Information. Please Try Again. ***" });  
+      response.status(500).json({
+        errorMessage: "*** Invalid Account Information. Please Try Again. ***"
+      });
     });
 };
 
